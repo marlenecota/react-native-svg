@@ -35,6 +35,7 @@ Windows::UI::Xaml::FrameworkElement RenderableViewManager::CreateView() {
 IMapView<hstring, ViewManagerPropertyType> RenderableViewManager::NativeProps() {
   auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
+  nativeProps.Insert(L"id", ViewManagerPropertyType::String);
   nativeProps.Insert(L"fill", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"fillRule", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"fillOpacity", ViewManagerPropertyType::Number);

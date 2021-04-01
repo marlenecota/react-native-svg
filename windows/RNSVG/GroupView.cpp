@@ -108,7 +108,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   }
 
   if (invalidate) {
-    InvalidateCanvas();
+    SvgRoot().InvalidateCanvas();
   }
 }
 

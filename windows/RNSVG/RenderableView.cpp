@@ -27,7 +27,11 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
 
     auto prop{RNSVG::BaseProp::Unknown};
 
-    if (propertyName == "strokeWidth") {
+    if (propertyName == "id" && forceUpdate) {
+      // id is not a prop we want to propagate to child elements
+      // so we only set it when forceUpdate = true
+      m_id = propertyValue.IsNull() ? L"" : to_hstring(propertyValue.AsString());
+    } else if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
         if (propertyValue.IsNull()) {
@@ -200,12 +204,10 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
 
   m_recreateResources = true;
 
-  if (invalidate) {
-    InvalidateCanvas();
+  if (invalidate && SvgParent()) {
+    SvgRoot().InvalidateCanvas();
   }
 }
-
-void RenderableView::CreateGeometry(UI::Xaml::CanvasControl const &/*canvas*/) {}
 
 void RenderableView::Render(
     UI::Xaml::CanvasControl const &canvas,
@@ -239,13 +241,15 @@ void RenderableView::Render(
   }
 }
 
-void RenderableView::InvalidateCanvas() {
+RNSVG::SvgView RenderableView::SvgRoot() {
   if (SvgParent()) {
     if (auto svgView{SvgParent().try_as<RNSVG::SvgView>()}) {
-      svgView.InvalidateCanvas();
+      return svgView;
     } else if (auto renderable{SvgParent().try_as<RNSVG::RenderableView>()}) {
-      renderable.InvalidateCanvas();
+      return renderable.SvgRoot();
     }
   }
+
+  return {nullptr};
 }
 } // namespace winrt::RNSVG::implementation

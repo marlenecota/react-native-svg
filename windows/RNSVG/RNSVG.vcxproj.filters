@@ -5,10 +5,7 @@
     <Midl Include="SvgViewManager.idl">
       <Filter>ViewManagers</Filter>
     </Midl>
-    <Midl Include="SvgView.idl">
-      <Filter>Views</Filter>
-    </Midl>
-    <Midl Include="RenderableView.idl">
+    <Midl Include="Views.idl">
       <Filter>Views</Filter>
     </Midl>
     <Midl Include="RenderableViewManager.idl">
@@ -70,6 +67,12 @@
     <ClCompile Include="LineView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -127,6 +130,12 @@
       <Filter>ViewManagers</Filter>
     </ClInclude>
     <ClInclude Include="LineView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgView.h">
       <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
