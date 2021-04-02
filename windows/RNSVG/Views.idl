@@ -176,6 +176,18 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass DefsView : GroupView
+  {
+    DefsView();
+  };
+
+  [default_interface]
+  runtimeclass LinearGradientView : GroupView, IDefinitionView
+  {
+    LinearGradientView();
+  };
+
+  [default_interface]
   runtimeclass SymbolView : GroupView, IDefinitionView
   {
     SymbolView();
