@@ -100,6 +100,9 @@
     <ClCompile Include="LinearGradientView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
+    <ClCompile Include="BrushView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="LinearGradientView.h">
       <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushView.h">
+      <Filter>Views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

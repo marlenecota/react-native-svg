@@ -110,6 +110,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BrushView.h" />
     <ClInclude Include="CircleView.h" />
     <ClInclude Include="CircleViewManager.h" />
     <ClInclude Include="DefsView.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BrushView.cpp" />
     <ClCompile Include="CircleView.cpp" />
     <ClCompile Include="CircleViewManager.cpp" />
     <ClCompile Include="DefsView.cpp" />
