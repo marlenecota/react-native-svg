@@ -5,46 +5,45 @@
 #endif
 
 #include "JSValueXaml.h"
-#include "SVGLength.h"
 #include "SvgView.h"
 #include "Utils.h"
-
-#define _USE_MATH_DEFINES
-#include <math.h>
 
 using namespace winrt;
 using namespace Microsoft::Graphics::Canvas;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap = JSValue::ReadObjectFrom(reader);
-  auto const &parent = SvgParent().try_as<RNSVG::RenderableView>();
+void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate){
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+  auto const &parent{SvgParent().try_as<RNSVG::RenderableView>()};
 
   for (auto const &pair : propertyMap) {
-    auto const &propertyName = pair.first;
-    auto const &propertyValue = pair.second;
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
 
     auto prop{RNSVG::BaseProp::Unknown};
 
-    if (propertyName == "id" && forceUpdate) {
-      // id is not a prop we want to propagate to child elements
-      // so we only set it when forceUpdate = true
+    // name is not a prop we want to propagate to child elements
+    // so we only set it when forceUpdate = true
+    if (propertyName == "name" && forceUpdate) {
       m_id = to_hstring(Utils::JSValueAsString(propertyValue));
     } else if (propertyName == "strokeWidth") {
       prop = RNSVG::BaseProp::StrokeWidth;
       if (forceUpdate || !m_propSetMap[prop]) {
-        m_strokeWidth = Utils::JSValueAsSVGLength(propertyValue, parent.StrokeWidth());
+        auto const &fallbackValue{parent ? parent.StrokeWidth() : RNSVG::SVGLength()};
+        m_strokeWidth = Utils::JSValueAsSVGLength(propertyValue, fallbackValue);
       }
     } else if (propertyName == "strokeOpacity") {
       prop = RNSVG::BaseProp::StrokeOpacity;
       if (forceUpdate || !m_propSetMap[prop]) {
-        m_strokeOpacity = Utils::JSValueAsFloat(propertyValue, parent.StrokeOpacity());
+        float fallbackValue{parent ? parent.StrokeOpacity() : 1.0f};
+        m_strokeOpacity = Utils::JSValueAsFloat(propertyValue, fallbackValue);
       }
     } else if (propertyName == "fillOpacity") {
       prop = RNSVG::BaseProp::FillOpacity;
       if (forceUpdate || !m_propSetMap[prop]) {
-        m_fillOpacity = Utils::JSValueAsFloat(propertyValue, parent.FillOpacity());
+        float fallbackValue{parent ? parent.FillOpacity() : 1.0f};
+        m_fillOpacity = Utils::JSValueAsFloat(propertyValue, fallbackValue);
       }
     } else if (propertyName == "stroke") {
       prop = RNSVG::BaseProp::Stroke;
@@ -121,12 +120,14 @@ void RenderableView::UpdateProperties(IJSValueReader const &reader, bool forceUp
     } else if (propertyName == "strokeDashoffset") {
       prop = RNSVG::BaseProp::StrokeDashOffset;
       if (forceUpdate || !m_propSetMap[prop]) {
-        m_strokeDashOffset = Utils::JSValueAsFloat(propertyValue, parent.StrokeDashOffset());
+        float fallbackValue{parent ? parent.StrokeDashOffset() : 0.0f};
+        m_strokeDashOffset = Utils::JSValueAsFloat(propertyValue, fallbackValue);
       }
     } else if (propertyName == "strokeMiterlimit") {
       prop = RNSVG::BaseProp::StrokeMiterLimit;
       if (forceUpdate || !m_propSetMap[prop]) {
-        m_strokeMiterLimit = Utils::JSValueAsFloat(propertyValue, parent.StrokeMiterLimit());
+        float fallbackValue{parent ? parent.StrokeMiterLimit() : 0.0f};
+        m_strokeMiterLimit = Utils::JSValueAsFloat(propertyValue, fallbackValue);
       }
     } else if (propertyName == "strokeDasharray") {
       prop = RNSVG::BaseProp::StrokeDashArray;

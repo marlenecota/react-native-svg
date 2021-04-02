@@ -34,7 +34,9 @@ namespace RNSVG
   runtimeclass SvgView : Windows.UI.Xaml.Controls.Panel
   {
     SvgView(Microsoft.ReactNative.IReactContext context);
+    Single SvgScale{ get; };
     Windows.Foundation.Collections.IVector<Windows.UI.Xaml.UIElement> Views { get; };
+    Windows.Foundation.Collections.IMap<String, RenderableView> Templates{ get; };
     void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader);
     void InvalidateCanvas();
   };
@@ -67,6 +69,7 @@ namespace RNSVG
   interface IDefinitionView
   {
     void SaveDefinition();
+    void RemoveDefinition();
   };
 
   [default_interface]
@@ -130,6 +133,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass UseView : RenderableView
+  {
+    UseView();
+  };
+
+  [default_interface]
   unsealed runtimeclass GroupView : RenderableView
   {
     GroupView(Microsoft.ReactNative.IReactContext context);
@@ -162,5 +171,17 @@ namespace RNSVG
     TSpanView();
 
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
+  };
+
+  [default_interface]
+  runtimeclass SymbolView : GroupView, IDefinitionView
+  {
+    SymbolView();
+    Single MinX{ get; };
+    Single MinY{ get; };
+    Single VbWidth{ get; };
+    Single VbHeight{ get; };
+    String Align{ get; };
+    MeetOrSlice MeetOrSlice{ get; };
   };
   }
