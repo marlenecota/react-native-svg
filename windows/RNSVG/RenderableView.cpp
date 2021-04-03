@@ -288,4 +288,12 @@ RNSVG::SvgView RenderableView::SvgRoot() {
 
   return {nullptr};
 }
+
+void RenderableView::Unload() {
+  m_parent = nullptr;
+  m_reactContext = nullptr;
+  m_geometry = nullptr;
+  m_propSetMap.clear();
+  m_strokeDashArray.Clear();
+}
 } // namespace winrt::RNSVG::implementation

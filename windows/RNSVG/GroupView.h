@@ -35,6 +35,8 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
 
+  virtual void Unload();
+
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Windows::Foundation::Collections::IVector<RNSVG::RenderableView> m_children{

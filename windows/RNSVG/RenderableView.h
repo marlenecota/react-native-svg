@@ -41,6 +41,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  virtual void Unload();
 
  protected:
   std::map<RNSVG::BaseProp, bool> m_propSetMap{

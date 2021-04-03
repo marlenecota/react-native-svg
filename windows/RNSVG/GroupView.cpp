@@ -162,4 +162,17 @@ void GroupView::RenderGroup(UI::Xaml::CanvasControl const &canvas, CanvasDrawing
     child.Render(canvas, session);
   }
 }
+
+void GroupView::Unload() {
+  for (auto const &child : Children()) {
+    child.Unload();
+  }
+
+  m_reactContext = nullptr;
+  m_props = nullptr;
+  m_fontPropMap.clear();
+  m_children.Clear();
+
+  __super::Unload();
+}
 } // namespace winrt::RNSVG::implementation
