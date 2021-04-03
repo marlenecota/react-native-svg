@@ -61,7 +61,30 @@ void UseView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession
       symbol.RenderGroup(canvas, session);
       session.Transform(transform);
     } else {
-      view.Render(canvas, session);
+      auto const &originalTransform{session.Transform()};
+
+      float x{Utils::GetSvgLengthValue(m_x, canvas.Size().Width)};
+      float y{Utils::GetSvgLengthValue(m_y, canvas.Size().Height)};
+      Numerics::float3x2 transform{Numerics::make_float3x2_translation({x, y})};
+
+      if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+        transform = transform * SvgTransform();
+      }
+
+      session.Transform(transform);
+
+      view.MergeProperties(*this);
+
+      if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+        view.Render(canvas, session);
+        opacityLayer.Close();
+      }
+
+      if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
+        view.MergeProperties(parent);
+      }
+
+      session.Transform(originalTransform);
     }
   } else {
     throw hresult_not_implemented(L"'Use' element expected a pre-defined svg template as 'href' prop. Template named: " + m_href + L" is not defined");

@@ -47,7 +47,6 @@ namespace RNSVG
 
   enum BaseProp
   {
-    Matrix,
     Fill,
     FillOpacity,
     FillRule,
@@ -101,6 +100,7 @@ namespace RNSVG
     void Render(
       Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas,
       Microsoft.Graphics.Canvas.CanvasDrawingSession session);
+    void MergeProperties(RenderableView other);
   };
 
   [default_interface]

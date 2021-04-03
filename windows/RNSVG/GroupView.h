@@ -25,6 +25,8 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
 
   virtual void SaveDefinition();
 
+  virtual void MergeProperties(RNSVG::RenderableView const &other);
+
   virtual void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
