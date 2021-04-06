@@ -11,7 +11,11 @@ import {PolygonPage} from './examples/Polygon';
 import {PolylinePage} from './examples/Polyline';
 import {ReusablePage} from './examples/Reusable';
 import {GradientsPage} from './examples/Gradients';
+<<<<<<< HEAD
 import {StrokingPage} from './examples/Stroking';
+=======
+import {PatternPage} from './examples/Pattern';
+>>>>>>> a359d8e... Implement Pattern
 
 interface ISVGExample {
   key: string;
@@ -66,6 +70,10 @@ export const SVGExampleList: Array<ISVGExample> = [
   {
     key: 'Stroking',
     component: StrokingPage,
+  },
+  {
+    key: 'Pattern',
+    component: PatternPage,
   },
 ];
 
