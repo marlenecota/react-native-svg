@@ -64,13 +64,14 @@ void SvgViewManager::UpdateProperties(FrameworkElement const &view, IJSValueRead
 
 // IViewManagerWithChildren
 void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
-  if (auto const &view{parent.try_as<RNSVG::SvgView>()}) {
+  auto const &svgView{parent.try_as<RNSVG::SvgView>()};
+  auto const &group{child.try_as<RNSVG::GroupView>()};
 
+  if (svgView && group) {
     // Every SvgView has exactly one child - a Group that gets
     // all of Svg's children piped through.
-    if (auto const &group{child.try_as<RNSVG::GroupView>()}) {
-      group.SvgParent(parent);
-    }
+    group.SvgParent(parent);
+    svgView.Group(group);
   }
 }
 
