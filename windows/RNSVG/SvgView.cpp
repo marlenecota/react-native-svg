@@ -33,7 +33,11 @@ void SvgView::UpdateProperties(IJSValueReader const &reader) {
     auto const &propertyName{pair.first};
     auto const &propertyValue{pair.second};
 
-    if (propertyName == "bbWidth") {
+    if (propertyName == "width") {
+      m_width = SVGLength::From(propertyValue);
+    } else if (propertyName == "height") {
+      m_height = SVGLength::From(propertyValue);
+    } else if (propertyName == "bbWidth") {
       m_bbWidth = SVGLength::From(propertyValue);
       Width(m_bbWidth.Value());
     } else if (propertyName == "bbHeight") {
@@ -87,16 +91,9 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
     args.DrawingSession().Transform(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
   }
 
-  for (auto const &child : Views()) {
-    if (auto const &group{child.try_as<IRenderableView>()}) {
-      group.SaveDefinition();
-    }
-  }
-
-  for (auto const &child : Views()) {
-    if (auto const &group{child.try_as<IRenderableView>()}) {
-      group.Render(sender, args.DrawingSession());
-    }
+  if (m_group) {
+    m_group.SaveDefinition();
+    m_group.Render(sender, args.DrawingSession());
   }
 
   layer.Close();
@@ -119,16 +116,13 @@ void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::Rout
     m_reactContext = nullptr;
     m_templates.Clear();
     m_brushes.Clear();
-    m_canvas.RemoveFromVisualTree();
-    m_canvas = nullptr;
 
-    for (auto const &child : m_views) {
-      if (auto const &renderable{child.try_as<RNSVG::RenderableView>()}) {
-        renderable.Unload();
-      }
+    if (m_group) {
+      m_group.Unload();
     }
 
-    m_views.Clear();
+    m_canvas.RemoveFromVisualTree();
+    m_canvas = nullptr;
   }
 }
 } // namespace winrt::RNSVG::implementation

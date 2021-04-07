@@ -65,33 +65,25 @@ void SvgViewManager::UpdateProperties(FrameworkElement const &view, IJSValueRead
 // IViewManagerWithChildren
 void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
   if (auto const &view{parent.try_as<RNSVG::SvgView>()}) {
-    view.Views().Append(child);
 
-    if (auto const &childView{child.try_as<RNSVG::RenderableView>()}) {
-      childView.SvgParent(parent);
+    // Every SvgView has exactly one child - a Group that gets
+    // all of Svg's children piped through.
+    if (auto const &group{child.try_as<RNSVG::GroupView>()}) {
+      group.SvgParent(parent);
     }
   }
 }
 
 void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent) {
-  if (auto const &view{parent.try_as<RNSVG::SvgView>()}) {
-    for (auto const &child : view.Views()) {
-      if (auto const &childView{child.try_as<RNSVG::RenderableView>()}) {
-        childView.SvgParent(nullptr);
-      }
-    }
-    view.Views().Clear();
+  auto const &svgView{parent.try_as<RNSVG::SvgView>()};
+  if (svgView && svgView.Group()) {
+    svgView.Group().Unload();
   }
+  svgView.Group(nullptr);
 }
 
-void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t index) {
-  if (auto const &view{parent.try_as<RNSVG::SvgView>()}) {
-    auto const &child{view.Views().GetAt(static_cast<uint32_t>(index))};
-    if (auto const &childView{child.try_as<RNSVG::RenderableView>()}) {
-      childView.SvgParent(nullptr);
-    }
-    view.Views().RemoveAt(static_cast<uint32_t>(index));
-  }
+void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t /*index*/) {
+  RemoveAllChildren(parent);
 }
 
 void SvgViewManager::ReplaceChild(
@@ -99,17 +91,14 @@ void SvgViewManager::ReplaceChild(
     UIElement const &oldChild,
     UIElement const &newChild) {
   auto const &svgView{parent.try_as<RNSVG::SvgView>()};
-  auto const &oldChildView{oldChild.try_as<RNSVG::RenderableView>()};
-  auto const &newChildView{newChild.try_as<RNSVG::RenderableView>()};
+  auto const &oldGroup{oldChild.try_as<RNSVG::GroupView>()};
+  auto const &newGroup{newChild.try_as<RNSVG::GroupView>()};
 
-  if (svgView && oldChildView && newChildView) {
-    uint32_t index;
-
-    if (svgView.Views().IndexOf(oldChild, index)) {
-      svgView.Views().SetAt(index, newChild);
-      oldChildView.SvgParent(nullptr);
-      newChildView.SvgParent(parent);
-    }
+  if (svgView && oldGroup && newGroup) {
+    newGroup.MergeProperties(oldGroup);
+    oldGroup.Unload();
+    newGroup.SvgParent(parent);
+    svgView.Group(newGroup);
   }
 }
 } // namespace winrt::RNSVG::implementation
