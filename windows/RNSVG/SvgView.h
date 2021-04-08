@@ -47,7 +47,6 @@ struct SvgView : SvgViewT<SvgView> {
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
   RNSVG::GroupView m_group{nullptr};
-  float m_opacity{1.0f};
   float m_scale{0.0f};
   float m_minX{0.0f};
   float m_minY{0.0f};

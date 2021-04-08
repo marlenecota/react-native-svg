@@ -55,8 +55,6 @@ void SvgView::UpdateProperties(IJSValueReader const &reader) {
       m_align = Utils::JSValueAsString(propertyValue);
     } else if (propertyName == "meetOrSlice") {
       m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
-    } else if (propertyName == "opacity") {
-      m_opacity = Utils::JSValueAsFloat(propertyValue, 1.0f);
     }
   }
 
@@ -82,8 +80,6 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
     m_hasRendered = true;
   }
 
-  auto layer{args.DrawingSession().CreateLayer(m_opacity)};
-
   if (m_align != "") {
     Rect vbRect{m_minX * m_scale, m_minY * m_scale, m_vbWidth * m_scale, m_vbHeight * m_scale};
     Rect elRect{0, 0, static_cast<float>(sender.ActualWidth()), static_cast<float>(sender.ActualHeight())};
@@ -95,8 +91,6 @@ void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::Canva
     m_group.SaveDefinition();
     m_group.Render(sender, args.DrawingSession());
   }
-
-  layer.Close();
 }
 
 void SvgView::Canvas_SizeChanged(
