@@ -91,6 +91,12 @@ namespace RNSVG
   };
 
   [default_interface]
+  runtimeclass ImageView : RenderableView
+  {
+    ImageView();
+  };
+
+  [default_interface]
   unsealed runtimeclass GroupView : RenderableView
   {
     GroupView(Microsoft.ReactNative.IReactContext context);
