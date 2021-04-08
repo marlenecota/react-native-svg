@@ -49,6 +49,8 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
   nativeProps.Insert(L"minY", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"vbWidth", ViewManagerPropertyType::Number);
   nativeProps.Insert(L"vbHeight", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"bbWidth", ViewManagerPropertyType::Number);
+  nativeProps.Insert(L"bbHeight", ViewManagerPropertyType::Number);
 
   // preserveAspectRatio
   nativeProps.Insert(L"align", ViewManagerPropertyType::String);

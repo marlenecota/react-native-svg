@@ -12,7 +12,7 @@ struct SvgView : SvgViewT<SvgView> {
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl Canvas() { return m_canvas; }
 
   Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
-  void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
+  void SvgParent(Windows::UI::Xaml::FrameworkElement const &value);
 
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
@@ -64,6 +64,7 @@ struct SvgView : SvgViewT<SvgView> {
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
   Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
   RNSVG::GroupView m_group{nullptr};
+  hstring m_id{L""};
   float m_scale{0.0f};
   float m_minX{0.0f};
   float m_minY{0.0f};
@@ -81,7 +82,7 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
-  Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvaSizeChangedRevoker{};
+  Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::SizeChanged_revoker m_canvasSizeChangedRevoker{};
   Windows::UI::Xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
 };
 } // namespace winrt::RNSVG::implementation
