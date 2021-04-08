@@ -30,16 +30,12 @@ struct SvgView : SvgViewT<SvgView> {
   }
 
   // IRenderable
-  void MergeProperties(RNSVG::RenderableView const &other);
-  void UpdateProperties(
-      Microsoft::ReactNative::IJSValueReader const &reader,
-      bool forceUpdate = true,
-      bool invalidate = true);
-  void SaveDefinition();
-  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
   void Render(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
       Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void MergeProperties(RNSVG::RenderableView const &other);
+  void SaveDefinition();
   void Unload();
 
   // Overrides

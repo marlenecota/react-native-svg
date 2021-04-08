@@ -52,7 +52,6 @@ namespace RNSVG
     Microsoft.Graphics.Canvas.Geometry.CanvasFilledRegionDetermination FillRule{ get; };
 
     void CreateGeometry(Microsoft.Graphics.Canvas.UI.Xaml.CanvasControl canvas);
-
   };
 
   [default_interface]
