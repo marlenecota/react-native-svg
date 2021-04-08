@@ -33,6 +33,7 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
         if (key == "uri") {
           m_source.uri = to_hstring(Utils::JSValueAsString(value));
+          m_source.sourceType = ImageSourceType::Uri;
 
           if (SvgParent()) {
             LoadImageSourceAsync(SvgRoot().Canvas(), true);
@@ -122,7 +123,9 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
   }
 
   if (invalidate) {
-
+    if (auto strong_this{weak_this.get()}) {
+      strong_this->SvgRoot().InvalidateCanvas();
+    }
   }
 }
 
