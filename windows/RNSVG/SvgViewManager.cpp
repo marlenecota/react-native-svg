@@ -58,8 +58,8 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
 }
 
 void SvgViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader) {
-  if (auto const &svgView{view.try_as<RNSVG::SvgView>()}) {
-    svgView.UpdateProperties(propertyMapReader);
+  if (auto const &svgView{view.try_as<SvgView>()}) {
+    svgView->UpdateProperties(propertyMapReader);
   }
 }
 

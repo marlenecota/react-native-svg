@@ -26,7 +26,7 @@ SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   Children().Append(m_canvas);
 }
 
-void SvgView::UpdateProperties(IJSValueReader const &reader) {
+void SvgView::UpdateProperties(IJSValueReader const &reader, bool /*forceUpdate*/, bool /*invalidate*/) {
   auto const &propertyMap{JSValueObject::ReadFrom(reader)};
 
   for (auto const &pair : propertyMap) {
@@ -61,6 +61,23 @@ void SvgView::UpdateProperties(IJSValueReader const &reader) {
   InvalidateCanvas();
 }
 
+void SvgView::SaveDefinition() {}
+
+void SvgView::Unload() {
+  m_reactContext = nullptr;
+  m_templates.Clear();
+  m_brushes.Clear();
+
+  if (m_group) {
+    m_group.Unload();
+  }
+
+  m_canvas.RemoveFromVisualTree();
+  m_canvas = nullptr;
+}
+
+void SvgView::MergeProperties(RNSVG::RenderableView const &/*other*/) {}
+
 Size SvgView::MeasureOverride(Size availableSize) {
   for (auto const &child : Children()) {
     child.Measure(availableSize);
@@ -73,6 +90,12 @@ Size SvgView::ArrangeOverride(Size finalSize) {
     child.Arrange({0, 0, finalSize.Width, finalSize.Height});
   }
   return finalSize;
+}
+
+void SvgView::Render(
+    Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/,
+    Microsoft::Graphics::Canvas::CanvasDrawingSession const & /*session*/) {
+
 }
 
 void SvgView::Canvas_Draw(UI::Xaml::CanvasControl const &sender, UI::Xaml::CanvasDrawEventArgs const &args) {
@@ -107,16 +130,7 @@ void SvgView::InvalidateCanvas() {
 
 void SvgView::Panel_Unloaded(IInspectable const &sender, Windows::UI::Xaml::RoutedEventArgs const & /*args*/) {
   if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    m_reactContext = nullptr;
-    m_templates.Clear();
-    m_brushes.Clear();
-
-    if (m_group) {
-      m_group.Unload();
-    }
-
-    m_canvas.RemoveFromVisualTree();
-    m_canvas = nullptr;
+    svgView.Unload();
   }
 }
 } // namespace winrt::RNSVG::implementation

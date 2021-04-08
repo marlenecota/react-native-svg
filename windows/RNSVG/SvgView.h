@@ -11,19 +11,36 @@ struct SvgView : SvgViewT<SvgView> {
 
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl Canvas() { return m_canvas; }
 
+  Windows::UI::Xaml::FrameworkElement SvgParent() { return m_parent; }
+  void SvgParent(Windows::UI::Xaml::FrameworkElement const &value) { m_parent = value; }
+
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }
 
+  Microsoft::Graphics::Canvas::Geometry::CanvasGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
+  void Geometry(Microsoft::Graphics::Canvas::Geometry::CanvasGeometry /*value*/) { }
+
   float SvgScale() { return m_scale; }
 
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> Templates() {
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
     return m_templates;
   }
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> Brushes() {
     return m_brushes;
   }
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader);
+  // IRenderable
+  void MergeProperties(RNSVG::RenderableView const &other);
+  void UpdateProperties(
+      Microsoft::ReactNative::IJSValueReader const &reader,
+      bool forceUpdate = true,
+      bool invalidate = true);
+  void SaveDefinition();
+  void CreateGeometry(Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const & /*canvas*/) {}
+  void Render(
+      Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &canvas,
+      Microsoft::Graphics::Canvas::CanvasDrawingSession const &session);
+  void Unload();
 
   // Overrides
   Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size availableSize);
@@ -33,7 +50,6 @@ struct SvgView : SvgViewT<SvgView> {
   void Canvas_Draw(
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl const &sender,
       Microsoft::Graphics::Canvas::UI::Xaml::CanvasDrawEventArgs const &args);
-
   void Canvas_SizeChanged(
       Windows::Foundation::IInspectable const &sender,
       Windows::UI::Xaml::SizeChangedEventArgs const &args);
@@ -46,6 +62,7 @@ struct SvgView : SvgViewT<SvgView> {
   bool m_hasRendered{false};
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl m_canvas{};
+  Windows::UI::Xaml::FrameworkElement m_parent{nullptr};
   RNSVG::GroupView m_group{nullptr};
   float m_scale{0.0f};
   float m_minX{0.0f};
@@ -59,8 +76,8 @@ struct SvgView : SvgViewT<SvgView> {
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::RenderableView> m_templates{
-      winrt::single_threaded_map<hstring, RNSVG::RenderableView>()};
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
+      winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};
   Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
       winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
   Microsoft::Graphics::Canvas::UI::Xaml::CanvasControl::Draw_revoker m_canvasDrawRevoker{};
