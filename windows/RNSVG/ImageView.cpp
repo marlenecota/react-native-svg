@@ -170,11 +170,9 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
     stream = co_await GetImageMemoryStreamAsync(m_source);
 
     if (fromStream && !stream) {
-      // throw?
       co_return;
     }
   } catch (winrt::hresult_error const &) {
-    // throw?
     co_return;
   }
 
@@ -235,8 +233,7 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(Image
 
       co_return memoryStream;
     }
-  } catch (hresult_error const &/*e*/) {
-    // ??
+  } catch (hresult_error const &) {
   }
 
   co_return nullptr;

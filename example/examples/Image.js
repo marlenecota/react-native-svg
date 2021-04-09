@@ -15,7 +15,7 @@ export const ImagePage: React.FunctionComponent<{}> = () => {
             </ClipPath>
           </Defs> */}
           <Rect x="0" y="0" width="100%" height="100%" fill="red" />
-          <Rect x="5%" y="5%" width="50%" height="90%" />
+          <Rect x="5%" y="5%" width="50%" height="90%" fill="black" />
           <Image
             x="5%"
             y="5%"
