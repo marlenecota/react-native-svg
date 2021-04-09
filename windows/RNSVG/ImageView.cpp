@@ -106,6 +106,11 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
 
   if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
     if (m_source.format == ImageSourceFormat::Bitmap && m_bitmap) {
+      auto const &transform{session.Transform()};
+      if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
+        session.Transform(SvgTransform());
+      }
+
       if (m_align != "" && transformEffect) {
         transformEffect.Source(m_bitmap);
         Effects::CropEffect cropEffect{};
@@ -115,6 +120,8 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
       } else {
         session.DrawImage(m_bitmap, {x, y, width, height});
       }
+
+      session.Transform(transform);
     }
 
     opacityLayer.Close();
