@@ -78,8 +78,13 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
 void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   if (m_source.width == 0 || m_source.height == 0) {
-    m_source.width = canvas.Size().Width;
-    m_source.height = canvas.Size().Height;
+    if (m_bitmap) {
+      m_source.width = m_bitmap.Size().Width;
+      m_source.height = m_bitmap.Size().Height;
+    } else {
+      m_source.width = canvas.Size().Width;
+      m_source.height = canvas.Size().Height;
+    }
   }
 
   float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
