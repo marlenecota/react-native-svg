@@ -2,6 +2,8 @@
 #include "ImageView.h"
 #include "ImageView.g.cpp"
 
+#include <winrt/Microsoft.Graphics.Canvas.Svg.h>
+#include <winrt/Microsoft.Graphics.Canvas.Effects.h>
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
 #include <winrt/Windows.Web.Http.Headers.h>
@@ -33,7 +35,8 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
         if (key == "uri") {
           m_source.uri = to_hstring(Utils::JSValueAsString(value));
-          m_source.sourceType = ImageSourceType::Uri;
+          m_source.type = ImageSourceType::Uri;
+          m_source.format = ImageSourceFormat::Bitmap;
 
           if (SvgParent()) {
             LoadImageSourceAsync(SvgRoot().Canvas(), true);
@@ -51,6 +54,8 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
           for (auto const &header : value.AsObject()) {
             m_source.headers.push_back(std::make_pair(to_hstring(header.first), to_hstring(Utils::JSValueAsString(header.second))));
           }
+        } else if (key == "__packager_asset") {
+          m_source.packagerAsset = value.AsBoolean();
         }
       }
     } else if (propertyName == "x") {
@@ -72,13 +77,59 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 }
 
 void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
+  if (m_source.width == 0 || m_source.height == 0) {
+    m_source.width = canvas.Size().Width;
+    m_source.height = canvas.Size().Height;
+  }
+
   float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
   float y{Utils::GetAbsoluteLength(m_y, canvas.Size().Height)};
   float width{Utils::GetAbsoluteLength(m_width, canvas.Size().Width)};
   float height{Utils::GetAbsoluteLength(m_height, canvas.Size().Height)};
 
-  if (m_bitmap) {
-    session.DrawImage(m_bitmap, {x, y, width, height});
+  if (width == 0) {
+    width = m_source.width * m_source.scale;
+  }
+
+  if (height == 0) {
+    height = m_source.height * m_source.scale;
+  }
+
+  Effects::Transform2DEffect transformEffect{nullptr};
+  if (m_align != "") {
+    Rect elRect{x, y, width, height};
+    Rect vbRect{0, 0, m_source.width, m_source.height};
+    transformEffect = Effects::Transform2DEffect{};
+    transformEffect.TransformMatrix(Utils::GetViewBoxTransform(vbRect, elRect, m_align, m_meetOrSlice));
+  }
+
+  if (auto const &opacityLayer{session.CreateLayer(m_opacity)}) {
+    if (m_source.format == ImageSourceFormat::Bitmap && m_bitmap) {
+      if (m_align != "" && transformEffect) {
+        transformEffect.Source(m_bitmap);
+        Effects::CropEffect cropEffect{};
+        cropEffect.SourceRectangle({x, y, width, height});
+        cropEffect.Source(transformEffect);
+        session.DrawImage(cropEffect);
+      } else {
+        session.DrawImage(m_bitmap, {x, y, width, height});
+      }
+
+      if (m_svgDoc) {
+        m_svgDoc.Close();
+        m_svgDoc = nullptr;
+      }
+
+    } else if (m_source.format == ImageSourceFormat::Svg && m_svgDoc) {
+      session.DrawSvg(m_svgDoc, canvas.Size());
+
+      if (m_bitmap) {
+        m_bitmap.Close();
+        m_bitmap = nullptr;
+      }
+    }
+
+    opacityLayer.Close();
   }
 }
 
@@ -86,17 +137,37 @@ void ImageView::CreateResources(ICanvasResourceCreator const &resourceCreator, U
   args.TrackAsyncAction(LoadImageSourceAsync(resourceCreator, false));
 }
 
+void ImageView::Unload() {
+  if (m_bitmap) {
+    m_bitmap.Close();
+    m_bitmap = nullptr;
+  }
+
+  if (m_svgDoc) {
+    m_svgDoc.Close();
+    m_svgDoc = nullptr;
+  }
+}
+
 IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCreator, bool invalidate) {
   Uri uri{m_source.uri};
   hstring scheme{uri ? uri.SchemeName() : L""};
+  hstring ext{uri ? uri.Extension() : L""};
 
-  if (((scheme == L"http") || (scheme == L"https")) && !m_source.headers.empty()) {
-    m_source.sourceType = ImageSourceType::Download;
+  if (scheme == L"http" || scheme == L"https") {
+    m_source.type = ImageSourceType::Download;
   } else if (scheme == L"data") {
-    m_source.sourceType = ImageSourceType::InlineData;
+    m_source.type = ImageSourceType::InlineData;
+    if (to_string(m_source.uri).find("image/svg+xml;base64") != std::string::npos) {
+      m_source.format = ImageSourceFormat::Svg;
+    }
   }
 
-  const bool fromStream{m_source.sourceType == ImageSourceType::Download || m_source.sourceType == ImageSourceType::InlineData};
+  if (ext == L".svg" || ext == L".svgz") {
+    m_source.format = ImageSourceFormat::Svg;
+  }
+
+  const bool fromStream{m_source.type == ImageSourceType::Download || m_source.type == ImageSourceType::InlineData};
 
   InMemoryRandomAccessStream stream{nullptr};
 
@@ -106,7 +177,6 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
   try {
     stream = co_await GetImageMemoryStreamAsync(m_source);
 
-    // Fire failed load event if we're not loading from URI and the memory stream is null.
     if (fromStream && !stream) {
       // throw?
       co_return;
@@ -116,10 +186,15 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
     co_return;
   }
 
-  if (stream) {
-    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, stream);
+  if (m_source.format == ImageSourceFormat::Bitmap) {
+    if (stream) {
+      m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, stream);
+    } else {
+      m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, uri);
+    }
   } else {
-    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, uri);
+    m_svgDoc = Svg::CanvasSvgDocument(resourceCreator);
+    co_await m_svgDoc.LoadAsync(resourceCreator, stream);
   }
 
   if (invalidate) {
@@ -130,7 +205,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
 }
 
 IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(ImageSource source) {
-  switch (source.sourceType) {
+  switch (source.type) {
     case ImageSourceType::Download:
       co_return co_await GetImageStreamAsync(source);
     case ImageSourceType::InlineData:
@@ -171,7 +246,7 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(Image
       co_return memoryStream;
     }
   } catch (hresult_error const &/*e*/) {
-    //DEBUG_HRESULT_ERROR(e);
+    // ??
   }
 
   co_return nullptr;

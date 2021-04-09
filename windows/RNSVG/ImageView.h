@@ -4,6 +4,7 @@
 
 namespace winrt::RNSVG::implementation {
 enum class ImageSourceType { Uri = 0, Download = 1, InlineData = 2 };
+enum class ImageSourceFormat { Bitmap = 0, Svg = 1 };
 struct ImageSource {
   hstring uri{L""};
   hstring method{L""};
@@ -12,7 +13,8 @@ struct ImageSource {
   float height{0.0f};
   float scale{1.0f};
   bool packagerAsset{false};
-  ImageSourceType sourceType{ImageSourceType::Uri};
+  ImageSourceType type{ImageSourceType::Uri};
+  ImageSourceFormat format{ImageSourceFormat::Bitmap};
 };
 
 struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> {
@@ -26,6 +28,7 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   void CreateResources(
       Microsoft::Graphics::Canvas::ICanvasResourceCreator const &resourceCreator,
       Microsoft::Graphics::Canvas::UI::CanvasCreateResourcesEventArgs const &args);
+  void Unload();
 
  private:
   RNSVG::SVGLength m_x{};
@@ -37,8 +40,9 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
-  Microsoft::Graphics::Canvas::CanvasBitmap m_bitmap{nullptr};
   ImageSource m_source{};
+  Microsoft::Graphics::Canvas::CanvasBitmap m_bitmap{nullptr};
+  Microsoft::Graphics::Canvas::Svg::CanvasSvgDocument m_svgDoc{nullptr};
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator, bool invalidate);
   winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>
