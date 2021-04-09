@@ -42,7 +42,6 @@ struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> 
 
   ImageSource m_source{};
   Microsoft::Graphics::Canvas::CanvasBitmap m_bitmap{nullptr};
-  Microsoft::Graphics::Canvas::Svg::CanvasSvgDocument m_svgDoc{nullptr};
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(Microsoft::Graphics::Canvas::ICanvasResourceCreator resourceCreator, bool invalidate);
   winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Storage::Streams::InMemoryRandomAccessStream>

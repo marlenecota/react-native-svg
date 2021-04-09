@@ -2,7 +2,6 @@
 #include "ImageView.h"
 #include "ImageView.g.cpp"
 
-#include <winrt/Microsoft.Graphics.Canvas.Svg.h>
 #include <winrt/Microsoft.Graphics.Canvas.Effects.h>
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
@@ -37,6 +36,8 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
           m_source.uri = to_hstring(Utils::JSValueAsString(value));
           m_source.type = ImageSourceType::Uri;
           m_source.format = ImageSourceFormat::Bitmap;
+          m_source.width = 0;
+          m_source.height = 0;
 
           if (SvgParent()) {
             LoadImageSourceAsync(SvgRoot().Canvas(), true);
@@ -78,13 +79,8 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
 
 void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSession const &session) {
   if (m_source.width == 0 || m_source.height == 0) {
-    if (m_bitmap) {
-      m_source.width = m_bitmap.Size().Width;
-      m_source.height = m_bitmap.Size().Height;
-    } else {
-      m_source.width = canvas.Size().Width;
-      m_source.height = canvas.Size().Height;
-    }
+    m_source.width = canvas.Size().Width;
+    m_source.height = canvas.Size().Height;
   }
 
   float x{Utils::GetAbsoluteLength(m_x, canvas.Size().Width)};
@@ -119,19 +115,6 @@ void ImageView::Render(UI::Xaml::CanvasControl const &canvas, CanvasDrawingSessi
       } else {
         session.DrawImage(m_bitmap, {x, y, width, height});
       }
-
-      if (m_svgDoc) {
-        m_svgDoc.Close();
-        m_svgDoc = nullptr;
-      }
-
-    } else if (m_source.format == ImageSourceFormat::Svg && m_svgDoc) {
-      session.DrawSvg(m_svgDoc, canvas.Size());
-
-      if (m_bitmap) {
-        m_bitmap.Close();
-        m_bitmap = nullptr;
-      }
     }
 
     opacityLayer.Close();
@@ -147,11 +130,6 @@ void ImageView::Unload() {
     m_bitmap.Close();
     m_bitmap = nullptr;
   }
-
-  if (m_svgDoc) {
-    m_svgDoc.Close();
-    m_svgDoc = nullptr;
-  }
 }
 
 IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCreator, bool invalidate) {
@@ -159,17 +137,19 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
   hstring scheme{uri ? uri.SchemeName() : L""};
   hstring ext{uri ? uri.Extension() : L""};
 
+  if (ext == L".svg" || ext == L".svgz") {
+    m_source.format = ImageSourceFormat::Svg;
+    co_return;
+  }
+
   if (scheme == L"http" || scheme == L"https") {
     m_source.type = ImageSourceType::Download;
   } else if (scheme == L"data") {
     m_source.type = ImageSourceType::InlineData;
-    if (to_string(m_source.uri).find("image/svg+xml;base64") != std::string::npos) {
+    if (to_string(m_source.uri).find("image/svg+xml") != std::string::npos) {
       m_source.format = ImageSourceFormat::Svg;
+      co_return;
     }
-  }
-
-  if (ext == L".svg" || ext == L".svgz") {
-    m_source.format = ImageSourceFormat::Svg;
   }
 
   const bool fromStream{m_source.type == ImageSourceType::Download || m_source.type == ImageSourceType::InlineData};
@@ -191,16 +171,14 @@ IAsyncAction ImageView::LoadImageSourceAsync(ICanvasResourceCreator resourceCrea
     co_return;
   }
 
-  if (m_source.format == ImageSourceFormat::Bitmap) {
-    if (stream) {
-      m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, stream);
-    } else {
-      m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, uri);
-    }
+  if (stream) {
+    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, stream);
   } else {
-    m_svgDoc = Svg::CanvasSvgDocument(resourceCreator);
-    co_await m_svgDoc.LoadAsync(resourceCreator, stream);
+    m_bitmap = co_await CanvasBitmap::LoadAsync(resourceCreator, uri);
   }
+
+  m_source.width = m_bitmap.Size().Width;
+  m_source.height = m_bitmap.Size().Height;
 
   if (invalidate) {
     if (auto strong_this{weak_this.get()}) {
