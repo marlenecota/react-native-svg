@@ -52,4 +52,33 @@ void RadialGradientView::Unload() {
   __super::Unload();
 }
 
+void RadialGradientView::CreateBrush() {
+  auto const &canvas{SvgRoot().Canvas()};
+  auto const &resourceCreator{canvas.try_as<ICanvasResourceCreator>()}; 
+  Brushes::CanvasRadialGradientBrush brush{resourceCreator, m_stops};
+
+  SetPoints(brush, {0, 0, canvas.Size().Width, canvas.Size().Height});
+
+  if (m_transformSet) {               
+    brush.Transform(m_transform);           
+  }
+
+  m_brush = brush;                      
+}
+
+void RadialGradientView::UpdateBounds() {
+  if (m_gradientUnits == "objectBoundingBox") {
+    SetPoints(m_brush.as<Brushes::CanvasRadialGradientBrush>(), m_bounds);
+  }
+}
+
+void RadialGradientView::SetPoints(Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds) {
+  float rx{Utils::GetAbsoluteLength(m_rx, bounds.Width) + bounds.X};
+  float ry{Utils::GetAbsoluteLength(m_ry, bounds.Height) + bounds.Y};
+  //TODO: fx, fy, cx, cy
+
+  brush.RadiusX(rx);
+  brush.RadiusY(ry);
+}
+
 } // namespace winrt::RNSVG::implementation

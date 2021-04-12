@@ -22,6 +22,10 @@ struct RadialGradientView : RadialGradientViewT<RadialGradientView, RNSVG::imple
   std::string m_gradientUnits{"objectBoundingBox"};
   bool m_transformSet{false};
   Numerics::float3x2 m_transform{Numerics::make_float3x2_scale(1)};
+
+  void CreateBrush();
+  void UpdateBounds();
+  void SetPoints(Microsoft::Graphics::Canvas::Brushes::CanvasRadialGradientBrush brush, Windows::Foundation::Rect const &bounds);
 };
 } // namespace winrt::RNSVG::implementation
 
