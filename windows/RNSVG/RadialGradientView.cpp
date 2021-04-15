@@ -82,8 +82,9 @@ void RadialGradientView::SetPoints(Brushes::CanvasRadialGradientBrush brush, Win
 
   brush.RadiusX(rx);
   brush.RadiusY(ry);
-  brush.Center({cx, cy});
-  brush.OriginOffset({fx, fy});
+  brush.Center({fx, fy});
+  brush.OriginOffset({(cx - fx), (cy - fy)});
+  //not sure if it's in offset, but cx and cy need to be used somewhere somehow
 }
 
 } // namespace winrt::RNSVG::implementation
