@@ -3,7 +3,15 @@ import React from 'react';
 import {Example} from '../components/Example';
 import {Page} from '../components/Page';
 import {View} from 'react-native';
-import {Svg, Defs, Ellipse, LinearGradient, RadialGradient, Stop, Rect} from 'react-native-svg';
+import {
+  Svg,
+  Defs,
+  Ellipse,
+  LinearGradient,
+  RadialGradient,
+  Stop,
+  Rect,
+} from 'react-native-svg';
 
 export const GradientsPage: React.FunctionComponent<{}> = () => {
   return (
@@ -168,11 +176,12 @@ export const GradientsPage: React.FunctionComponent<{}> = () => {
           <Defs>
             <RadialGradient
               id="grad-6"
-              cx="20%"
-              cy="30%"
-              r="30%"
-              fx="50%"
-              fy="50%">
+              cx="60"
+              cy="45"
+              rx="90"
+              ry="45"
+              fx="75"
+              fy="150">
               <Stop offset="0%" stopColor="#fff" stopOpacity="0" />
               <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
             </RadialGradient>
