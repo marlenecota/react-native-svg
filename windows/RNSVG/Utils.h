@@ -2,11 +2,14 @@
 
 #include "pch.h"
 
+#include <winrt/Microsoft.ReactNative.Composition.h>
+#include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
 #include <winrt/Windows.Foundation.Numerics.h>
-#include <UI.Text.h>
+#include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
-#include "D2DHelpers.h"
 #include "D2DBrush.h"
+#include "D2DDeviceContext.h"
+#include "D2DHelpers.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -38,18 +41,18 @@ struct Utils {
     return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
   }
 
-  static float GetAbsoluteLength(SVGLength const& length, double relativeTo) {
+  static float GetAbsoluteLength(SVGLength const &length, double relativeTo) {
     return GetAbsoluteLength(length, static_cast<float>(relativeTo));
   }
 
   static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
-    auto value{length.Value()};
+    auto value{length.Value};
 
     // 1in = 2.54cm = 96px
     auto inch{96.0f};
     auto cm{inch / 2.54f};
 
-    switch (length.Unit()) {
+    switch (length.Unit) {
       case RNSVG::LengthType::Percentage:
         return value / 100.0f * relativeTo;
       case RNSVG::LengthType::Centimeter:
@@ -194,24 +197,23 @@ struct Utils {
     }
   }
 
-  static Windows::UI::Color JSValueAsColor(JSValue const &value, Windows::UI::Color const &defaultValue = Colors::Transparent()) {
+  static winrt::Windows::UI::Color JSValueAsColor(
+      JSValue const &value,
+      winrt::Windows::UI::Color const &defaultValue = winrt::Windows::UI::Color{0, 0, 0, 0}) {
     if (value.IsNull()) {
       return defaultValue;
-    } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
+    }
+
+    assert(false);
+    /*
+    else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
       if (auto const &scb{brush.try_as<xaml::Media::SolidColorBrush>()}) {
         return scb.Color();
       }
     }
+    */
 
     return defaultValue;
-  }
-
-  static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return RNSVG::implementation::SVGLength::From(value);
-    }
   }
 
   static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
@@ -230,7 +232,7 @@ struct Utils {
     }
   }
 
-  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F const defaultValue = {}) {
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const &value, D2D1::Matrix3x2F const defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -266,16 +268,18 @@ struct Utils {
 
   static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-      Windows::UI::Color const &color,
+      winrt::Microsoft::ReactNative::Color const &color,
       RNSVG::SvgView const &root,
-      com_ptr<ID2D1Geometry> const &geometry) {
+      com_ptr<ID2D1Geometry> const &geometry,
+      RNSVG::D2DDeviceContext const &context) {
     com_ptr<ID2D1Brush> brush;
-    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(root.DeviceContext())->Get()};
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(context)->Get()};
 
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
         com_ptr<ID2D1SolidColorBrush> scb;
-        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
+        deviceContext->CreateSolidColorBrush(
+            D2DHelpers::AsD2DColor(root.CurrentColor().AsWindowsColor(root.Theme())), scb.put());
         brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         brushView.CreateBrush();
@@ -292,7 +296,8 @@ struct Utils {
 
     if (!brush) {
       com_ptr<ID2D1SolidColorBrush> scb;
-      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color), scb.put());
+      assert(root != nullptr);
+      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color.AsWindowsColor(root.Theme())), scb.put());
       brush = scb.as<ID2D1Brush>();
     }
 

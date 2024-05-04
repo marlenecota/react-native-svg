@@ -6,7 +6,7 @@
 namespace winrt::RNSVG::implementation {
 struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
  public:
-  BrushView() = default;
+  BrushView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
   void SaveDefinition();
 

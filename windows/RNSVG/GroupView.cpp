@@ -14,97 +14,120 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
-  auto const &parent{SvgParent().try_as<RNSVG::GroupView>()};
-  auto fontProp{RNSVG::FontProp::Unknown};
+SvgGroupCommonProps::SvgGroupCommonProps(
+    const winrt::Microsoft::ReactNative::ViewProps &props)
+    : base_type(props) {}
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+void SvgGroupCommonProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
 
-    if (propertyName == "font") {
-      auto const &font{propertyValue.AsObject()};
+GroupView::GroupView(
+    const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
+    : base_type(args), m_reactContext(args.ReactContext()) {}
 
-      // When any of the font props update, you don't get individual updates.
-      // Instead, you get a new JSValueObject with all font props set on the element.
-      // If a prop was removed, you will not get a null type - it just won't
-      // be part of the new prop object, so we will reset all font values.
-      if (forceUpdate) {
-        m_fontPropMap[RNSVG::FontProp::FontSize] = false;
-        m_fontPropMap[RNSVG::FontProp::FontFamily] = false;
-        m_fontPropMap[RNSVG::FontProp::FontWeight] = false;
+void GroupView::MountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  RenderableView::MountChildComponentView(childComponentView, index);
+
+  if (auto const &childView{childComponentView.try_as<IRenderable>()}) {
+    childView.MergeProperties(*this);
+
+    if (childView.IsResponsible() && !IsResponsible()) {
+      IsResponsible(true);
+    }
+
+    if (auto const &root{SvgRoot()}) {
+      root.Invalidate();
+    }
+  }
+}
+
+void GroupView::UnmountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  RenderableView::UnmountChildComponentView(childComponentView, index);
+
+  if (auto child = childComponentView.as<IRenderable>()) {
+    if (!IsUnloaded()) {
+      child.Unload();
+    }
+
+    if (auto const &root{SvgRoot()}) {
+      root.Invalidate();
+    }
+  }
+}
+
+void GroupView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto renderableProps = props.as<SvgGroupCommonProps>();
+  auto oldRenderableProps =
+      oldProps ? oldProps.as<SvgGroupCommonProps>() : nullptr;
+
+  auto const &parent{Parent().try_as<RNSVG::GroupView>()};
+
+  if (!oldRenderableProps ||
+      renderableProps->font != oldRenderableProps->font) {
+    if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontSize]) {
+      if (renderableProps->font.fontSize) {
+        m_fontSize = renderableProps->font.fontSize
+            ? renderableProps->font.fontSize
+            : (parent ? parent.FontSize() : 12.0f);
       }
 
-      for (auto const &item : m_fontPropMap) {
-        if (!item.second) {
-          switch (item.first) {
-            case RNSVG::FontProp::FontSize:
-              m_fontSize = parent ? parent.FontSize() : 12.0f;
-              break;
-            case RNSVG::FontProp::FontFamily:
-              m_fontFamily = parent ? parent.FontFamily() : L"Segoe UI";
-              break;
-            case RNSVG::FontProp::FontWeight:
-              m_fontWeight = L"auto";
-              break;
-            default:
-              throw hresult_error();
-          }
-        }
+      m_fontPropMap[RNSVG::FontProp::FontSize] =
+          !!renderableProps->font.fontSize;
+    }
+
+    if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontFamily]) {
+      if (renderableProps->font.fontSize) {
+        m_fontFamily = !renderableProps->font.fontFamily.empty()
+            ? winrt::to_hstring(renderableProps->font.fontFamily)
+            : (parent ? parent.FontFamily() : L"Segoe UI");
       }
 
-      for (auto const &prop : font) {
-        auto const &key{prop.first};
-        auto const &value{prop.second};
+      m_fontPropMap[RNSVG::FontProp::FontFamily] =
+          !renderableProps->font.fontFamily.empty();
+    }
 
-        if (key == "fontSize") {
-          fontProp = RNSVG::FontProp::FontSize;
-          if (forceUpdate || !m_fontPropMap[fontProp]) {
-            m_fontSize = value.AsSingle();
-          }
-        } else if (key == "fontFamily") {
-          fontProp = RNSVG::FontProp::FontFamily;
-          if (forceUpdate || !m_fontPropMap[fontProp]) {
-            m_fontFamily = to_hstring(value.AsString());
-          }
-        } else if (key == "fontWeight") {
-          fontProp = RNSVG::FontProp::FontWeight;
-          auto fontWeight{to_hstring(value.AsString())};
-          if (forceUpdate) {
-            m_fontWeight = fontWeight;
-          } else if (!m_fontPropMap[fontProp]) {
-            m_fontWeight = L"auto";
-          }
-        }
-
-        // forceUpdate = true means the property is being set on an element
-        // instead of being inherited from the parent.
-        if (forceUpdate && (fontProp != RNSVG::FontProp::Unknown)) {
-          // If the propertyValue is null, that means we reset the property
-          m_fontPropMap[fontProp] = true;
-        }
+    if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontWeight]) {
+      if (!renderableProps->font.fontWeight.empty()) {
+        m_fontWeight = !renderableProps->font.fontWeight.empty()
+            ? winrt::to_hstring(renderableProps->font.fontWeight)
+            : (parent ? parent.FontWeight() : L"auto");
       }
+
+      m_fontPropMap[RNSVG::FontProp::FontWeight] =
+          !renderableProps->font.fontWeight.empty();
     }
   }
 
-  __super::UpdateProperties(reader, forceUpdate, false);
+  base_type::UpdateProperties(props, oldProps, forceUpdate, false);
 
   for (auto const &child : Children()) {
-    child.UpdateProperties(reader, false, false);
+    child.as<IRenderable>().UpdateProperties(props, oldProps, false, false);
   }
 
-  if (invalidate && SvgParent()) {
+  if (invalidate && Parent()) {
     SvgRoot().Invalidate();
   }
 }
 
-void GroupView::CreateGeometry() {
-  std::vector<ID2D1Geometry*> geometries;
-  for (auto const child : Children()) {
+void GroupView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
+  std::vector<ID2D1Geometry *> geometries;
+  for (auto const childComponent : Children()) {
+    auto const child = childComponent.as<IRenderable>();
     if (!child.Geometry()) {
-      child.CreateGeometry();
+      child.CreateGeometry(context);
     }
 
     if (child.Geometry()) {
@@ -117,7 +140,7 @@ void GroupView::CreateGeometry() {
   }
 
   if (!geometries.empty()) {
-    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(SvgRoot().DeviceContext())->Get()};
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
     com_ptr<ID2D1Factory> factory;
     deviceContext->GetFactory(factory.put());
@@ -134,7 +157,7 @@ void GroupView::SaveDefinition() {
   __super::SaveDefinition();
 
   for (auto const &child : Children()) {
-    child.SaveDefinition();
+    child.as<IRenderable>().SaveDefinition();
   }
 }
 
@@ -142,7 +165,7 @@ void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
   __super::MergeProperties(other);
 
   for (auto const &child : Children()) {
-    child.MergeProperties(*this);
+    child.as<IRenderable>().MergeProperties(*this);
   }
 }
 
@@ -157,8 +180,8 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
   com_ptr<ID2D1Geometry> clipPathGeometry;
 
-  if (ClipPathGeometry()) {
-    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  if (ClipPathGeometry(context)) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry(context))->Get();
   }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
@@ -176,24 +199,23 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
 void GroupView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &size) {
   for (auto const &child : Children()) {
-    child.Draw(context, size);
+    child.as<IRenderable>().Draw(context, size);
   }
 }
 
 void GroupView::CreateResources() {
   for (auto const &child : Children()) {
-    child.CreateResources();
+    child.as<IRenderable>().CreateResources();
   }
 }
 
 void GroupView::Unload() {
   for (auto const &child : Children()) {
-    child.Unload();
+    child.as<IRenderable>().Unload();
   }
 
   m_reactContext = nullptr;
   m_fontPropMap.clear();
-  m_children.Clear();
 
   __super::Unload();
 }
@@ -202,7 +224,7 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
   RNSVG::IRenderable renderable{nullptr};
   if (IsResponsible()) {
     for (auto const &child : Children()) {
-      if (auto const &hit{child.HitTest(point)}) {
+      if (auto const &hit{child.as<IRenderable>().HitTest(point)}) {
         renderable = hit;
       }
     }
@@ -210,7 +232,9 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
       return *this;
     } else if (!renderable) {
       if (!Geometry()) {
-        CreateGeometry();
+        assert(false); // Do we need a real context here... I think the geometry
+                       // should already be created by the time we get here?
+        CreateGeometry(nullptr);
       }
 
       if (Geometry()) {
@@ -218,7 +242,6 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
 
         D2D1_RECT_F bounds;
         check_hresult(geometry->GetBounds(nullptr, &bounds));
-
 
         if (xaml::RectHelper::Contains(D2DHelpers::FromD2DRect(bounds), point)) {
           return *this;
@@ -228,4 +251,19 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
   }
   return renderable;
 }
+
+void GroupView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGGroup",
+      [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::SvgGroupCommonProps>(props);
+        });
+        builder.SetCreateComponentView(
+        [](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+            return winrt::make<winrt::RNSVG::implementation::GroupView>(args);
+        });
+      });
+}
+
 } // namespace winrt::RNSVG::implementation

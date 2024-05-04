@@ -1,70 +1,98 @@
 import "Types.idl";
-#include <NamespaceRedirect.h>
 
 namespace RNSVG
 {
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass SvgNodeCommonProps : Microsoft.ReactNative.IComponentProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass SvgRenderableCommonProps : SvgNodeCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass SvgGroupCommonProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  runtimeclass SvgViewProps : Microsoft.ReactNative.IComponentProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass RectProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
   interface IRenderable
   {
-    XAML_NAMESPACE.FrameworkElement SvgParent;
     D2DGeometry Geometry;
     Boolean IsResponsible;
 
     void CreateResources();
     void Draw(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
-    void UpdateProperties(Microsoft.ReactNative.IJSValueReader reader, Boolean forceUpdate, Boolean invalidate);
+    void UpdateProperties(Microsoft.ReactNative.IComponentProps props, Microsoft.ReactNative.IComponentProps oldProps, Boolean forceUpdate, Boolean invalidate);
     void MergeProperties(RenderableView other);
     void SaveDefinition();
     void Unload();
-    void CreateGeometry();
+    void CreateGeometry(D2DDeviceContext deviceContext);
     IRenderable HitTest(Windows.Foundation.Point point);
   };
 
+  [experimental]
   [default_interface]
-  runtimeclass SvgView : XAML_NAMESPACE.Controls.Panel, IRenderable
+  runtimeclass SvgView : Microsoft.ReactNative.Composition.ViewComponentView, IRenderable
   {
-    SvgView(Microsoft.ReactNative.IReactContext context);
+    SvgView(Microsoft.ReactNative.Composition.CreateCompositionComponentViewArgs args);
+
+    Windows.Foundation.Size ActualSize { get; };
 
     GroupView Group;
-    Windows.UI.Color CurrentColor{ get; };
-    D2DDevice Device{ get; };
-    D2DDeviceContext DeviceContext{ get; };
+    Microsoft.ReactNative.Color CurrentColor{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
     void Invalidate();
   };
 
-  [default_interface]
-  unsealed runtimeclass RenderableView : XAML_NAMESPACE.FrameworkElement, IRenderable
-  {
-    RenderableView(Microsoft.ReactNative.IReactContext context);
-    SvgView SvgRoot{ get; };
-    Boolean IsUnloaded { get; };
+   [experimental]
+   [default_interface]
+   unsealed runtimeclass RenderableView : Microsoft.ReactNative.ComponentView, IRenderable
+   {
+     RenderableView(Microsoft.ReactNative.CreateComponentViewArgs args);
+     SvgView SvgRoot{ get; };
+     Boolean IsUnloaded { get; };
 
-    String Id{ get; };
-    Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
-    Windows.UI.Color Fill{ get; };
-    Single FillOpacity{ get; };
-    String FillBrushId{ get; };
-    Windows.UI.Color Stroke{ get; };
-    Single StrokeOpacity{ get; };
-    String StrokeBrushId{ get; };
-    SVGLength StrokeWidth{ get; };
-    Single StrokeMiterLimit{ get; };
-    Single StrokeDashOffset{ get; };
-    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-    LineCap StrokeLineCap{ get; };
-    LineJoin StrokeLineJoin{ get; };
-    FillRule FillRule{ get; };
-    D2DGeometry ClipPathGeometry{ get; };
-  };
+     String Id{ get; };
+     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+     Microsoft.ReactNative.Color Fill{ get; };
+     Single FillOpacity{ get; };
+     String FillBrushId{ get; };
+     Microsoft.ReactNative.Color Stroke{ get; };
+     Single StrokeOpacity{ get; };
+     String StrokeBrushId{ get; };
+     SVGLength StrokeWidth{ get; };
+     Single StrokeMiterLimit{ get; };
+     Single StrokeDashOffset{ get; };
+     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
+     LineCap StrokeLineCap{ get; };
+     LineJoin StrokeLineJoin{ get; };
+     FillRule FillRule{ get; };
+     D2DGeometry ClipPathGeometry(D2DDeviceContext deviceContext);
+   };
 
-  [default_interface]
-  runtimeclass RectView : RenderableView
-  {
-    RectView();
-  };
+   [experimental]
+   [default_interface]
+   runtimeclass RectView : RenderableView
+   {
+     RectView(Microsoft.ReactNative.CreateComponentViewArgs args);
+   };
 
+/*
   [default_interface]
   runtimeclass CircleView : RenderableView
   {
@@ -100,20 +128,20 @@ namespace RNSVG
   {
     ImageView();
   };
+*/
+   [experimental]
+   [default_interface]
+   unsealed runtimeclass GroupView : RenderableView
+   {
+     GroupView(Microsoft.ReactNative.CreateComponentViewArgs args);
 
-  [default_interface]
-  unsealed runtimeclass GroupView : RenderableView
-  {
-    GroupView(Microsoft.ReactNative.IReactContext context);
-    Windows.Foundation.Collections.IVector<IRenderable> Children { get; };
+     Single FontSize;
+     String FontFamily;
+     String FontWeight;
 
-    Single FontSize;
-    String FontFamily;
-    String FontWeight;
-
-    void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
-  };
-
+     void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
+   };
+/*
   [default_interface]
   unsealed runtimeclass TextView : GroupView
   {
@@ -161,17 +189,18 @@ namespace RNSVG
   {
     MarkerView();
   };
+*/
+   [experimental]
+   [default_interface]
+   unsealed runtimeclass BrushView : GroupView
+   {
+     BrushView(Microsoft.ReactNative.CreateComponentViewArgs args);
 
-  [default_interface]
-  unsealed runtimeclass BrushView : GroupView
-  {
-    BrushView();
-
-    D2DBrush Brush{ get; };
-    void CreateBrush();
-    void SetBounds(Windows.Foundation.Rect rect);
-  };
-
+     D2DBrush Brush{ get; };
+     void CreateBrush();
+     void SetBounds(Windows.Foundation.Rect rect);
+   };
+/*
   [default_interface]
   runtimeclass LinearGradientView : BrushView
   {
@@ -189,4 +218,5 @@ namespace RNSVG
   {
     PatternView();
   };
+  */
 }

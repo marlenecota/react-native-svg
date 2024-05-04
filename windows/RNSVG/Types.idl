@@ -88,14 +88,10 @@ namespace RNSVG {
     NonZero,
   };
 
-  [default_interface]
-  runtimeclass SVGLength {
-    SVGLength();
-    SVGLength(Single param);
-    SVGLength(Single param, LengthType type);
-
-    Single Value{ get; };
-    LengthType Unit{ get; };
+  struct SVGLength
+  {
+      Single Value;
+      LengthType Unit;
   };
 
   [default_interface]
@@ -118,3 +114,4 @@ namespace RNSVG {
     D2DBrush();
   };
  }
+ 

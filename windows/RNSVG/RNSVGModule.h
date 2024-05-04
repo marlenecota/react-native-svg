@@ -1,33 +1,25 @@
 #pragma once
 
+#include "pch.h"
+#include "resource.h"
+
 #include "JSValue.h"
 #include "NativeModules.h"
 
-using namespace winrt::Microsoft::ReactNative;
-
 namespace winrt::RNSVG
 {
+
   REACT_MODULE(RNSVGModule, L"RNSVG")
   struct RNSVGModule
   {
-    // See https://microsoft.github.io/react-native-windows/docs/native-modules for details on writing native modules
-
     REACT_INIT(Initialize)
-    void Initialize(ReactContext const &reactContext) noexcept
-    {
-      m_reactContext = reactContext;
-    }
+    void Initialize(React::ReactContext const &reactContext) noexcept;
 
-    REACT_METHOD(sampleMethod)
-    void
-    sampleMethod(std::string stringArgument, int numberArgument, std::function<void(std::string)> &&callback) noexcept
-    {
-      // TODO: Implement some actually useful functionality
-      callback("Received numberArgument: " + std::to_string(numberArgument) + " stringArgument: " + stringArgument);
-    }
+    REACT_SYNC_METHOD(multiply)
+    double multiply(double a, double b) noexcept;
 
-   private:
-    ReactContext m_reactContext{nullptr};
+  private:
+    React::ReactContext m_context;
   };
 
 } // namespace winrt::RNSVG
