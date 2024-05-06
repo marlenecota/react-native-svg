@@ -315,25 +315,15 @@ void SvgView::RegisterComponent(
         &builder) noexcept {
   builder.AddViewComponent(
       L"RNSVGSvgView",
-      [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const
-             &builder) noexcept {
-        builder.SetCreateProps(
-            [](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-              return winrt::make<winrt::RNSVG::implementation::SvgViewProps>(
-                  props);
-            });
-        auto compBuilder =
-            builder.as<winrt::Microsoft::ReactNative::Composition::
-                           IReactCompositionViewComponentBuilder>();
-        compBuilder.SetCreateViewComponentView(
-            [](const winrt::Microsoft::ReactNative::Composition::
-                   CreateCompositionComponentViewArgs &args) noexcept {
-              args.Features(
-                  args.Features() &
-                  ~winrt::Microsoft::ReactNative::Composition::
-                      ComponentViewFeatures::Background);
-              return winrt::make<winrt::RNSVG::implementation::SvgView>(args);
-            });
+      [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+            return winrt::make<winrt::RNSVG::implementation::SvgViewProps>(props);
+        });
+        auto compBuilder = builder.as<winrt::Microsoft::ReactNative::Composition:: IReactCompositionViewComponentBuilder>();
+        compBuilder.SetCreateViewComponentView([](const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args) noexcept {
+            args.Features(args.Features() & ~winrt::Microsoft::ReactNative::Composition::ComponentViewFeatures::Background);
+            return winrt::make<winrt::RNSVG::implementation::SvgView>(args);
+        });
       });
 }
 

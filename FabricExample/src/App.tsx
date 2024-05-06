@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Modal, Platform} from 'react-native';
-import {Svg, Circle, Line} from 'react-native-svg';
+import {Svg} from 'react-native-svg';
 
 import * as examples from './examples';
 
@@ -95,27 +95,27 @@ const styles = StyleSheet.create({
 });
 
 const names: (keyof typeof examples)[] = [
-  'Svg',
-  'Stroking',
-  'Path',
-  'Line',
-  'Rect',
-  'Polygon',
-  'Polyline',
-  'Circle',
-  'Ellipse',
-  'G',
-  'Text',
-  'Gradients',
-  'Clipping',
-  'Image',
-  'TouchEvents',
-  'PanResponder',
-  'Reusable',
-  'Reanimated',
-  'Transforms',
-  'Markers',
-  'Mask',
+  // 'Svg',
+  // 'Stroking',
+  // 'Path',
+  // 'Line',
+  // 'Rect',
+  // 'Polygon',
+  // 'Polyline',
+  // 'Circle',
+  // 'Ellipse',
+  // 'G',
+  // 'Text',
+  // 'Gradients',
+  // 'Clipping',
+  // 'Image',
+  // 'TouchEvents',
+  // 'PanResponder',
+  // 'Reusable',
+  // 'Reanimated',
+  // 'Transforms',
+  // 'Markers',
+  // 'Mask',
 ];
 
 const initialState = {
@@ -191,9 +191,7 @@ export default class SvgExample extends Component {
       <View style={styles.close}>
         <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
           <Svg height="20" width="20">
-            <Circle cx="10" cy="10" r="10" fill="red" />
-            <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
-            <Line x1="4" y1="16" x2="16" y2="4" stroke="#fff" strokeWidth="2" />
+
           </Svg>
         </TouchableOpacity>
       </View>
@@ -204,7 +202,9 @@ export default class SvgExample extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
-        <View style={styles.contentContainer}>{this.getExamples()}</View>
+        <Svg height="20" width="20"></Svg>
+        <Text style={styles.welcome}>Text</Text>
+        {/* <View style={styles.contentContainer}>{this.getExamples()}</View> */}
         {Platform.OS === 'windows' && this.state.modal ? (
           <View style={styles.scroll}>{this.modalContent()}</View>
         ) : (
