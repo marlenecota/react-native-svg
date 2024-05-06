@@ -99,7 +99,7 @@ const names: (keyof typeof examples)[] = [
   // 'Stroking',
   // 'Path',
   // 'Line',
-  // 'Rect',
+  'Rect',
   // 'Polygon',
   // 'Polyline',
   // 'Circle',
@@ -190,9 +190,6 @@ export default class SvgExample extends Component {
       </ScrollView>
       <View style={styles.close}>
         <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
-          <Svg height="20" width="20">
-
-          </Svg>
         </TouchableOpacity>
       </View>
     </>
@@ -202,9 +199,8 @@ export default class SvgExample extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
-        <Svg height="20" width="20"></Svg>
         <Text style={styles.welcome}>Text</Text>
-        {/* <View style={styles.contentContainer}>{this.getExamples()}</View> */}
+        <View style={styles.contentContainer}>{this.getExamples()}</View>
         {Platform.OS === 'windows' && this.state.modal ? (
           <View style={styles.scroll}>{this.modalContent()}</View>
         ) : (

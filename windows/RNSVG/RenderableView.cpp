@@ -358,8 +358,7 @@ void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size const &si
     }
 
     com_ptr<ID2D1StrokeStyle> strokeStyle;
-    check_hresult(
-        factory->CreateStrokeStyle(strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
+    check_hresult(factory->CreateStrokeStyle(strokeStyleProperties, dashArray, m_strokeDashArray.Size(), strokeStyle.put()));
 
     auto const stroke{Utils::GetCanvasBrush(StrokeBrushId(), Stroke(), SvgRoot(), geometry, context)};
     deviceContext->DrawGeometry(geometry.get(), stroke.get(), strokeWidth, strokeStyle.get());

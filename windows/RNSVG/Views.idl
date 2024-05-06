@@ -45,7 +45,7 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  runtimeclass SvgView : Microsoft.ReactNative.Composition.ViewComponentView, IRenderable
+  runtimeclass SvgView : Microsoft.ReactNative.Composition.ViewComponentView, Microsoft.ReactNative.Composition.Experimental.IInternalCreateVisual, IRenderable
   {
     SvgView(Microsoft.ReactNative.Composition.CreateCompositionComponentViewArgs args);
 

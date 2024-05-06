@@ -34,13 +34,17 @@ void SvgViewProps::SetProp(
   winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::
-                     CreateCompositionComponentViewArgs &args)
+SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args)
     : base_type(args),
       m_reactContext(args.ReactContext()) {
-    m_compContext =
-      winrt::Microsoft::ReactNative::Composition::Experimental::
-          MicrosoftCompositionContextHelper::CreateContext(args.Compositor());
+  m_compositor = args.Compositor();
+  m_compContext = winrt::Microsoft::ReactNative::Composition::Experimental::MicrosoftCompositionContextHelper::CreateContext(m_compositor);
+}
+
+winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::CreateInternalVisual() {
+  m_visual = m_compContext.CreateSpriteVisual();
+  m_visual.Comment(L"SVGRoot");
+  return m_visual;
 }
 
 winrt::Microsoft::ReactNative::Composition::Experimental::IVisual
@@ -279,13 +283,13 @@ void SvgView::Invalidate() {
     return;
   }
 
-  if (Theme().IsEmpty())
+  if (Theme().IsEmpty()) {
     return;
+  }
 
   auto drawingSurface = m_compContext.CreateDrawingSurfaceBrush(
       size,
-      winrt::Windows::Graphics::DirectX::DirectXPixelFormat::
-          B8G8R8A8UIntNormalized,
+      winrt::Windows::Graphics::DirectX::DirectXPixelFormat::B8G8R8A8UIntNormalized,
       winrt::Windows::Graphics::DirectX::DirectXAlphaMode::Premultiplied);
 
   POINT offset;
@@ -293,26 +297,21 @@ void SvgView::Invalidate() {
     ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(
         drawingSurface, m_layoutMetrics.PointScaleFactor, &offset);
     if (auto deviceContext = autoDraw.GetRenderTarget()) {
-      auto transform = Numerics::make_float3x2_translation(
-          {static_cast<float>(offset.x), static_cast<float>(offset.y)});
+      auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
       deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
 
       deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
 
       com_ptr<ID2D1DeviceContext> spDeviceContext;
       spDeviceContext.copy_from(deviceContext);
-      Draw(
-          winrt::make<RNSVG::implementation::D2DDeviceContext>(spDeviceContext),
-          size);
+      Draw(winrt::make<RNSVG::implementation::D2DDeviceContext>(spDeviceContext), size);
     }
   }
 
   m_visual.Brush(drawingSurface);
 }
 
-void SvgView::RegisterComponent(
-    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric
-        &builder) noexcept {
+void SvgView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
   builder.AddViewComponent(
       L"RNSVGSvgView",
       [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {

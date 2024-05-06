@@ -1,5 +1,5 @@
 // import * as Svg from './examples/Svg';
-// import * as Rect from './examples/Rect';
+import * as Rect from './examples/Rect';
 // import * as Circle from './examples/Circle';
 // import * as Ellipse from './examples/Ellipse';
 // import * as Line from './examples/Line';
@@ -22,7 +22,7 @@
 
 export {
   // Svg,
-  // Rect,
+  Rect,
   // Circle,
   // Ellipse,
   // Line,

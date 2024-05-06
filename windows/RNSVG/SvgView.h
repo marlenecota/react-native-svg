@@ -81,8 +81,10 @@ struct SvgView : SvgViewT<SvgView> {
   void CreateGeometry(RNSVG::D2DDeviceContext const &deviceContext);
   RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
 
+  // IInternalCreateVisual
+  winrt::Microsoft::ReactNative::Composition::Experimental::IVisual CreateInternalVisual();
+
   // Overrides
-  // winrt::Microsoft::UI::Composition::Visual CreateVisual() noexcept;
   winrt::Microsoft::ReactNative::Composition::Experimental::IVisual createVisual() noexcept;
 
   void UpdateProps(
@@ -126,6 +128,7 @@ struct SvgView : SvgViewT<SvgView> {
   winrt::Microsoft::ReactNative::Color m_currentColor{nullptr};
   winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
   winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
+  winrt::Microsoft::UI::Composition::Compositor m_compositor{nullptr};
 
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};
