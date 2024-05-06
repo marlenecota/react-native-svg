@@ -294,8 +294,7 @@ void SvgView::Invalidate() {
 
   POINT offset;
   {
-    ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(
-        drawingSurface, m_layoutMetrics.PointScaleFactor, &offset);
+    ::Microsoft::ReactNative::Composition::AutoDrawDrawingSurface autoDraw(drawingSurface, 1.0, &offset);
     if (auto deviceContext = autoDraw.GetRenderTarget()) {
       auto transform = Numerics::make_float3x2_translation({static_cast<float>(offset.x), static_cast<float>(offset.y)});
       deviceContext->SetTransform(D2DHelpers::AsD2DTransform(transform));
