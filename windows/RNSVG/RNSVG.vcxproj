@@ -114,6 +114,7 @@
     <ClInclude Include="D2DHelpers.h" />
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="GroupView.h" />
+    <ClInclude Include="LineView.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RenderableView.h" />
     <ClInclude Include="RNSVGModule.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="D2DGeometry.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
+    <ClCompile Include="LineView.cpp" />
     <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RenderableView.cpp" />
     <ClCompile Include="RNSVGModule.cpp" />

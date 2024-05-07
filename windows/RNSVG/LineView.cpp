@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "LineView.h"
+#if __has_include("LineView.g.cpp")
 #include "LineView.g.cpp"
+#endif
 
 #include "JSValueXaml.h"
 #include "Utils.h"
@@ -9,35 +11,39 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+LineProps::LineProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+void LineProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
 
-    if (propertyName == "x1") {
-      m_x1 = SVGLength::From(propertyValue);
-    } else if (propertyName == "y1") {
-      m_y1 = SVGLength::From(propertyValue);
-    } else if (propertyName == "x2") {
-      m_x2 = SVGLength::From(propertyValue);
-    } else if (propertyName == "y2") {
-      m_y2 = SVGLength::From(propertyValue);
-    }
+LineView::LineView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void LineView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto lineProps = props.try_as<LineProps>();
+  if (lineProps) {
+    m_props = lineProps;
   }
 
-  __super::UpdateProperties(reader, forceUpdate, invalidate);
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
-void LineView::CreateGeometry() {
+
+void LineView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
-  float x1{Utils::GetAbsoluteLength(m_x1, root.ActualWidth())};
-  float y1{Utils::GetAbsoluteLength(m_y1, root.ActualHeight())};
-  float x2{Utils::GetAbsoluteLength(m_x2, root.ActualWidth())};
-  float y2{Utils::GetAbsoluteLength(m_y2, root.ActualHeight())};
+  float x1{Utils::GetAbsoluteLength(m_props->x1, root.ActualSize().Width)};
+  float y1{Utils::GetAbsoluteLength(m_props->y1, root.ActualSize().Height)};
+  float x2{Utils::GetAbsoluteLength(m_props->x2, root.ActualSize().Width)};
+  float y2{Utils::GetAbsoluteLength(m_props->y2, root.ActualSize().Height)};
 
-  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
@@ -54,4 +60,17 @@ void LineView::CreateGeometry() {
 
   Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
+
+void LineView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGLine", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::LineProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::LineView>(args);
+        });
+      });
+}
+
 } // namespace winrt::RNSVG::implementation

@@ -38,6 +38,11 @@ namespace RNSVG
   };
 
   [experimental]
+  [default_interface]
+  unsealed runtimeclass LineProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
   interface IRenderable
   {
     D2DGeometry Geometry;
@@ -116,7 +121,6 @@ namespace RNSVG
     EllipseView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
-/*
   [experimental]
   [default_interface]
   runtimeclass LineView : RenderableView
@@ -124,6 +128,7 @@ namespace RNSVG
     LineView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+/*
   [experimental]
   [default_interface]
   runtimeclass PathView : RenderableView
