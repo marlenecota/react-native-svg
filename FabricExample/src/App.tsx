@@ -98,7 +98,7 @@ const names: (keyof typeof examples)[] = [
   // 'Svg',
   // 'Stroking',
   // 'Path',
-  // 'Line',
+  'Line',
   'Rect',
   // 'Polygon',
   // 'Polyline',
