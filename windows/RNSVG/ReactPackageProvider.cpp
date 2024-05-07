@@ -11,6 +11,7 @@
 #include "CircleView.h"
 #include "EllipseView.h"
 #include "LineView.h"
+#include "PathView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -26,6 +27,7 @@ namespace winrt::RNSVG::implementation
     CircleView::RegisterComponent(fabricPackageBuilder);
     EllipseView::RegisterComponent(fabricPackageBuilder);
     LineView::RegisterComponent(fabricPackageBuilder);
+    PathView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

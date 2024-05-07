@@ -14,39 +14,45 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+PathProps::PathProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-    if (propertyName == "d") {
-      m_commands.clear();
-      m_segmentData.clear();
-
-      if (propertyValue.IsNull()) {
-        m_d.clear();
-      } else {
-
-        m_d = propertyValue.AsString();
-        ParsePath();
-      }
-    } 
-  }
-
-  __super::UpdateProperties(reader, forceUpdate, invalidate);
+void PathProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-void PathView::CreateGeometry() {
+PathView::PathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void PathView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+
+    auto pathProps = props.try_as<PathProps>();
+    if (pathProps) {
+      m_props = pathProps;
+
+      m_commands.clear();
+      m_segmentData.clear();
+      ParsePath();
+    }
+
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
+}
+
+void PathView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
   com_ptr<ID2D1SvgDocument> doc;
-  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get().as<ID2D1DeviceContext5>()};
+  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(context)->Get().as<ID2D1DeviceContext5>()};
 
   check_hresult(deviceContext->CreateSvgDocument(
       nullptr,
-      D2D1::SizeF(static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())),
+      D2D1::SizeF(static_cast<float>(root.ActualSize().Width), static_cast<float>(root.ActualSize().Height)),
       doc.put()));
 
   m_segmentData.resize(m_segmentData.size());
@@ -66,11 +72,23 @@ void PathView::CreateGeometry() {
   Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
 
+void PathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGPath", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::PathProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::PathView>(args);
+        });
+      });
+}
+
 void PathView::ParsePath() {
   char prev_cmd = ' ';
 
   size_t i{0};
-  auto length{m_d.length()};
+  auto length{m_props->d.length()};
   while (i < length) {
     SkipSpaces(i);
 
@@ -79,7 +97,7 @@ void PathView::ParsePath() {
     }
 
     bool has_prev_cmd{prev_cmd != ' '};
-    char first_char = m_d.at(i);
+    char first_char = m_props->d.at(i);
 
     if (!has_prev_cmd && first_char != 'M' && first_char != 'm') {
       throw hresult_invalid_argument(L"First segment must be a MoveTo.");
@@ -181,19 +199,19 @@ void PathView::ParsePath() {
 }
 
 void PathView::SkipSpaces(size_t &index) {
-  while (index < m_d.length() && IsSpace(m_d.at(index))) {
+  while (index < m_props->d.length() && IsSpace(m_props->d.at(index))) {
     ++index;
   }
 }
 
 void PathView::SkipDigits(size_t& index) {
-  while (index < m_d.length() && IsDigit(m_d.at(index))) {
+  while (index < m_props->d.length() && IsDigit(m_props->d.at(index))) {
     ++index;
   }
 }
 
 void PathView::SkipListSeparator(size_t& index) {
-  if (index < m_d.length() && m_d.at(index) == ',') {
+  if (index < m_props->d.length() && m_props->d.at(index) == ',') {
     ++index;
   }
 }
@@ -219,7 +237,7 @@ bool PathView::IsSpace(char const& c) {
 }
 
 float PathView::ParseListNumber(size_t &index) {
-  if (index == m_d.length()) {
+  if (index == m_props->d.length()) {
     throw hresult_invalid_argument(L"Unexpected end.");
   }
 
@@ -233,24 +251,24 @@ float PathView::ParseListNumber(size_t &index) {
 float PathView::ParseNumber(size_t &index) {
   SkipSpaces(index);
 
-  if (index == m_d.length()) {
+  if (index == m_props->d.length()) {
     throw hresult_invalid_argument(L"Unexpected end.");
   }
 
   size_t start = index;
-  char c = m_d.at(start);
+  char c = m_props->d.at(start);
 
   // Consume sign.
   if (c == '-' || c == '+') {
     ++index;
-    c = m_d.at(index);
+    c = m_props->d.at(index);
   }
 
   // Consume integer.
   if (IsDigit(c)) {
     SkipDigits(index);
-    if (index < m_d.length()) {
-      c = m_d.at(index);
+    if (index < m_props->d.length()) {
+      c = m_props->d.at(index);
     }
   } else if (c != '.') {
     throw hresult_invalid_argument(L"Invalid number formating character.");
@@ -260,17 +278,17 @@ float PathView::ParseNumber(size_t &index) {
   if (c == '.') {
     ++index;
     SkipDigits(index);
-    if (index < m_d.length()) {
-      c = m_d.at(index);
+    if (index < m_props->d.length()) {
+      c = m_props->d.at(index);
     }
   }
 
-  if ((c == 'e' || c == 'E') && ((index + 1) < m_d.length())) {
-    char c2 = m_d.at(index + 1);
+  if ((c == 'e' || c == 'E') && ((index + 1) < m_props->d.length())) {
+    char c2 = m_props->d.at(index + 1);
     // Check for 'em'/'ex'
     if (c2 != 'm' && c2 != 'x') {
       ++index;
-      c = m_d.at(index);
+      c = m_props->d.at(index);
 
       if (c == '+' || c == '-') {
         ++index;
@@ -283,7 +301,7 @@ float PathView::ParseNumber(size_t &index) {
     }
   }
 
-  auto num{m_d.substr(start, index)};
+  auto num{m_props->d.substr(start, index)};
   auto result{std::stof(num, nullptr)};
 
   if (std::isinf(result) || std::isnan(result)) {
@@ -296,12 +314,12 @@ float PathView::ParseNumber(size_t &index) {
 float PathView::ParseFlag(size_t& index) {
   SkipSpaces(index);
 
-  char c = m_d.at(index);
+  char c = m_props->d.at(index);
   switch (c) {
     case '0':
     case '1': {
       ++index;
-      if (index < m_d.length() && m_d.at(index) == ',') {
+      if (index < m_props->d.length() && m_props->d.at(index) == ',') {
         ++index;
       }
       SkipSpaces(index);

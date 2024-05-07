@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Modal, Platform} from 'react-native';
-import {Svg} from 'react-native-svg';
+import {Svg, Circle, Line} from 'react-native-svg';
 
 import * as examples from './examples';
 
@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
 const names: (keyof typeof examples)[] = [
   // 'Svg',
   // 'Stroking',
-  // 'Path',
+  'Path',
   'Line',
   'Rect',
-  // 'Polygon',
-  // 'Polyline',
+  'Polygon',
+  'Polyline',
   'Circle',
   'Ellipse',
   // 'G',
@@ -190,6 +190,11 @@ export default class SvgExample extends Component {
       </ScrollView>
       <View style={styles.close}>
         <TouchableOpacity activeOpacity={0.7} onPress={this.hide}>
+          <Svg height="20" width="20">
+            <Circle cx="10" cy="10" r="10" fill="red" />
+            <Line x1="4" y1="4" x2="16" y2="16" stroke="#fff" strokeWidth="2" />
+            <Line x1="4" y1="16" x2="16" y2="4" stroke="#fff" strokeWidth="2" />
+          </Svg>
         </TouchableOpacity>
       </View>
     </>

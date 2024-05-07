@@ -1,18 +1,40 @@
 #pragma once
 
+#include "PathProps.g.h"
 #include "PathView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
+
+REACT_STRUCT(PathProps)
+struct PathProps : PathPropsT<PathProps, SvgRenderableCommonProps> {
+  PathProps(const winrt::Microsoft::ReactNative::ViewProps &props);
+
+  void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept
+      override;
+
+  REACT_SVG_NODE_COMMON_PROPS;
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
+
+  REACT_FIELD(d)
+  std::string d;
+};
+
 struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
  public:
-  PathView() = default;
+  PathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry();
+  void UpdateProperties(
+      const winrt::Microsoft::ReactNative::IComponentProps &props,
+      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+      bool forceUpdate = true,
+      bool invalidate = true) noexcept override;
+  void CreateGeometry(RNSVG::D2DDeviceContext const &context);
+
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 
  private:
-  std::string m_d;
+  com_ptr<PathProps> m_props;
   std::vector<float> m_segmentData;
   std::vector<D2D1_SVG_PATH_COMMAND> m_commands;
 
