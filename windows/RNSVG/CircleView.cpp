@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CircleView.h"
+#if __has_include("CircleView.g.cpp")
 #include "CircleView.g.cpp"
+#endif
 
 #include "JSValueXaml.h"
 #include "Utils.h"
@@ -9,33 +11,39 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+CircleProps::CircleProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-    if (propertyName == "r") {
-      m_r = SVGLength::From(propertyValue);
-    } else if (propertyName == "cx") {
-      m_cx = SVGLength::From(propertyValue);
-    } else if (propertyName == "cy") {
-      m_cy = SVGLength::From(propertyValue);
-    }
-  }
-
-  __super::UpdateProperties(reader, forceUpdate, invalidate);
+void CircleProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
 }
 
-void CircleView::CreateGeometry() {
+CircleView::CircleView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void CircleView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto circleProps = props.try_as<CircleProps>();
+  if (circleProps) {
+    m_props = circleProps;
+  }
+
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
+}
+
+void CircleView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const root{SvgRoot()};
   
-  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualWidth())};
-  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualHeight())};
-  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(root.ActualSize()))};
+  float cx{Utils::GetAbsoluteLength(m_props->cx, root.ActualSize().Width)};
+  float cy{Utils::GetAbsoluteLength(m_props->cy, root.ActualSize().Height)};
+  float r{Utils::GetAbsoluteLength(m_props->r, Utils::GetCanvasDiagonal(root.ActualSize()))};
 
-  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());
@@ -45,4 +53,17 @@ void CircleView::CreateGeometry() {
 
   Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
 }
+
+void CircleView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGCircle", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::CircleProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::CircleView>(args);
+        });
+      });
+}
+
 } // namespace winrt::RNSVG::implementation

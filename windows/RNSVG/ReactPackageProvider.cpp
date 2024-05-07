@@ -5,9 +5,10 @@
 #endif
 
 #include "RNSVGModule.h"
+#include "SvgView.h"
 #include "GroupView.h"
 #include "RectView.h"
-#include "SvgView.h"
+#include "CircleView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -20,6 +21,7 @@ namespace winrt::RNSVG::implementation
     SvgView::RegisterComponent(fabricPackageBuilder);
     GroupView::RegisterComponent(fabricPackageBuilder);
     RectView::RegisterComponent(fabricPackageBuilder);
+    CircleView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

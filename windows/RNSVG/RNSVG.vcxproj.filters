@@ -59,6 +59,9 @@
     <ClInclude Include="SVGLength.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="CircleView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -93,6 +96,9 @@
     </ClCompile>
     <ClCompile Include="SVGLength.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleView.cpp">
+      <Filter>Views</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

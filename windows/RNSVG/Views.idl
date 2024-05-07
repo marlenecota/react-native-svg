@@ -28,6 +28,11 @@ namespace RNSVG
   };
 
   [experimental]
+  [default_interface]
+  unsealed runtimeclass CircleProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
   interface IRenderable
   {
     D2DGeometry Geometry;
@@ -92,13 +97,14 @@ namespace RNSVG
      RectView(Microsoft.ReactNative.CreateComponentViewArgs args);
    };
 
-/*
+   [experimental]
   [default_interface]
   runtimeclass CircleView : RenderableView
   {
-    CircleView();
+     CircleView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+/*
   [default_interface]
   runtimeclass EllipseView : RenderableView
   {
