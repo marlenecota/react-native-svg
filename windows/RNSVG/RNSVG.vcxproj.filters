@@ -62,6 +62,9 @@
     <ClInclude Include="CircleView.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="EllipseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -98,6 +101,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="CircleView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
   </ItemGroup>

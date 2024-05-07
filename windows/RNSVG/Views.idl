@@ -33,6 +33,11 @@ namespace RNSVG
   };
 
   [experimental]
+  [default_interface]
+  unsealed runtimeclass EllipseProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
   interface IRenderable
   {
     D2DGeometry Geometry;
@@ -104,35 +109,40 @@ namespace RNSVG
      CircleView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
-/*
+  [experimental]
   [default_interface]
   runtimeclass EllipseView : RenderableView
   {
-    EllipseView();
+    EllipseView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+/*
+  [experimental]
   [default_interface]
   runtimeclass LineView : RenderableView
   {
-    LineView();
+    LineView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass PathView : RenderableView
   {
-    PathView();
+    PathView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass UseView : RenderableView
   {
-    UseView();
+    UseView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass ImageView : RenderableView
   {
-    ImageView();
+    ImageView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 */
    [experimental]
@@ -148,34 +158,38 @@ namespace RNSVG
      void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
    };
 /*
+  [experimental]
   [default_interface]
   unsealed runtimeclass TextView : GroupView
   {
-    TextView();
+    TextView(Microsoft.ReactNative.CreateComponentViewArgs args);
     Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
     Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
   };
 
+  [experimental]
   [default_interface]
   runtimeclass TSpanView : TextView
   {
-    TSpanView();
+    TSpanView(Microsoft.ReactNative.CreateComponentViewArgs args);
 
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
 
+  [experimental]
   [default_interface]
   runtimeclass DefsView : GroupView
   {
-    DefsView();
+    DefsView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass SymbolView : GroupView
   {
-    SymbolView();
+    SymbolView(Microsoft.ReactNative.CreateComponentViewArgs args);
     Single MinX{ get; };
     Single MinY{ get; };
     Single VbWidth{ get; };
@@ -184,16 +198,18 @@ namespace RNSVG
     MeetOrSlice MeetOrSlice{ get; };
   };
 
+  [experimental]
   [default_interface]
   runtimeclass ClipPathView : GroupView
   {
-    ClipPathView();
+    ClipPathView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass MarkerView : GroupView
   {
-    MarkerView();
+    MarkerView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 */
    [experimental]
@@ -207,22 +223,25 @@ namespace RNSVG
      void SetBounds(Windows.Foundation.Rect rect);
    };
 /*
+  [experimental]
   [default_interface]
   runtimeclass LinearGradientView : BrushView
   {
-    LinearGradientView();
+    LinearGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass RadialGradientView : BrushView
   {
-    RadialGradientView();
+    RadialGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
+  [experimental]
   [default_interface]
   runtimeclass PatternView : BrushView
   {
-    PatternView();
+    PatternView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
   */
 }

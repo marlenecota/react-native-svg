@@ -103,7 +103,7 @@ const names: (keyof typeof examples)[] = [
   // 'Polygon',
   // 'Polyline',
   'Circle',
-  // 'Ellipse',
+  'Ellipse',
   // 'G',
   // 'Text',
   // 'Gradients',
