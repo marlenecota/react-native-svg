@@ -71,12 +71,11 @@ namespace RNSVG
   [default_interface]
   unsealed runtimeclass RadialGradientProps : SvgRenderableCommonProps {
   };
-/*
+
   [experimental]
   [default_interface]
   unsealed runtimeclass PatternProps : SvgRenderableCommonProps {
   };
-*/
 
   [experimental]
   interface IRenderable
@@ -278,12 +277,11 @@ namespace RNSVG
   {
     RadialGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-/*
+
   [experimental]
   [default_interface]
   runtimeclass PatternView : BrushView
   {
     PatternView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-*/
 }

@@ -19,7 +19,7 @@
 #include "MarkerView.h"
 #include "LinearGradientView.h"
 #include "RadialGradientView.h"
-//#include "PatternView.h"
+#include "PatternView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -43,7 +43,7 @@ namespace winrt::RNSVG::implementation
     MarkerView::RegisterComponent(fabricPackageBuilder);
     LinearGradientView::RegisterComponent(fabricPackageBuilder);
     RadialGradientView::RegisterComponent(fabricPackageBuilder);
-    //PatternView::RegisterComponent(fabricPackageBuilder);
+    PatternView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

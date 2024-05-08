@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PatternView.h"
+#if __has_include("PatternView.g.cpp")
 #include "PatternView.g.cpp"
+#endif
 
 #include "Utils.h"
 #include "D2DDevice.h"
@@ -9,47 +11,34 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+PatternProps::PatternProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+void PatternProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
 
-    if (propertyName == "x") {
-      m_x = SVGLength::From(propertyValue);
-    } else if (propertyName == "y") {
-      m_y = SVGLength::From(propertyValue);
-    } else if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
-    } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
-    } else if (propertyName == "patternUnits") {
-      m_patternUnits = Utils::JSValueAsBrushUnits(propertyValue);
-    } else if (propertyName == "patternContentUnits") {
-      m_patternContentUnits = Utils::JSValueAsBrushUnits(propertyValue, "userSpaceOnUse");
-    } else if (propertyName == "patternTransform") {
-      m_transform = Utils::JSValueAsD2DTransform(propertyValue);
+PatternView::PatternView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
+    : base_type(args) {}
 
-      if (propertyValue.IsNull()) {
-        m_transform = D2D1::Matrix3x2F::Identity();
-      }
-    } else if (propertyName == "vbWidth") {
-      m_vbWidth = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "vbHeight") {
-      m_vbHeight = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "minX") {
-      m_minX = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "minY") {
-      m_minY = Utils::JSValueAsFloat(propertyValue);
-    } else if (propertyName == "align") {
-      m_align = Utils::JSValueAsString(propertyValue);
-    } else if (propertyName == "meetOrSlice") {
-      m_meetOrSlice = Utils::GetMeetOrSlice(propertyValue);
-    }
+void PatternView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto patternProps = props.try_as<PatternProps>();
+  if (patternProps) {
+    m_props = patternProps;
+
+    m_patternUnits = Utils::JSValueAsBrushUnits(m_props->patternUnits);
+    m_patternContentUnits = Utils::JSValueAsBrushUnits(m_props->patternContentUnits, "userSpaceOnUse");
+
+    m_transform = Utils::JSValueAsD2DTransform(m_props->patternTransform);
   }
 
-  __super::UpdateProperties(reader, forceUpdate, invalidate);
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 
   SaveDefinition();
 
@@ -70,7 +59,7 @@ void PatternView::UpdateBounds() {
 void PatternView::CreateBrush() {
   auto const root{SvgRoot()};
 
-  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())})};
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, root.ActualSize().Width, root.ActualSize().Height})};
   CreateBrush(elRect);
 }
 
@@ -100,10 +89,10 @@ D2D1_RECT_F PatternView::GetAdjustedRect(D2D1_RECT_F bounds) {
   float width{D2DHelpers::WidthFromD2DRect(bounds)};
   float height{D2DHelpers::HeightFromD2DRect(bounds)};
 
-  float x{Utils::GetAbsoluteLength(m_x, width) + bounds.left};
-  float y{Utils::GetAbsoluteLength(m_y, height) + bounds.top};
-  float adjWidth{Utils::GetAbsoluteLength(m_width, width)};
-  float adjHeight{Utils::GetAbsoluteLength(m_height, height)};
+  float x{Utils::GetAbsoluteLength(m_props->x, width) + bounds.left};
+  float y{Utils::GetAbsoluteLength(m_props->y, height) + bounds.top};
+  float adjWidth{Utils::GetAbsoluteLength(m_props->width, width)};
+  float adjHeight{Utils::GetAbsoluteLength(m_props->height, height)};
 
   return {x, y, adjWidth + x, adjHeight + y};
 }
@@ -122,18 +111,18 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
   auto transform{D2D1::Matrix3x2F::Identity()};
 
-  if (m_align != "") {
+  if (m_props->align != "") {
     Rect vbRect{
-        m_minX,
-        m_minY,
-        (m_vbWidth + m_minX),
-        (m_vbHeight + m_minY)};
+        m_props->minX,
+        m_props->minY,
+        (m_props->vbWidth + m_props->minX),
+        (m_props->vbHeight + m_props->minY)};
 
     auto viewboxTransform{Utils::GetViewBoxTransform(
         vbRect,
         D2DHelpers::FromD2DRect(rect),
-        m_align,
-        m_meetOrSlice)};
+        m_props->align,
+        Utils::GetMeetOrSlice(m_props->meetOrSlice))};
 
     transform = D2DHelpers::AsD2DTransform(viewboxTransform) * transform;
   }
@@ -142,7 +131,7 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
   auto context = make<D2DDeviceContext>(deviceContext);
   for (auto const &child : Children()) {
-    child.Draw(context, D2DHelpers::SizeFromD2DRect(rect));
+    child.as<IRenderable>().Draw(context, D2DHelpers::SizeFromD2DRect(rect));
   }
 
   cmdList->Close();
@@ -152,6 +141,17 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
   return cmdList;
 }
 
-
+void PatternView::RegisterComponent(
+    const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGPattern", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::PatternProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::PatternView>(args);
+        });
+      });
+}
 
 } // namespace winrt::RNSVG::implementation
