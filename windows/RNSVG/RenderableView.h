@@ -45,7 +45,8 @@ struct ColorStruct {
   REACT_FIELD(clipPath)             \
   REACT_FIELD(clipRule)             \
   REACT_FIELD(responsible)          \
-  REACT_FIELD(display)
+  REACT_FIELD(display)              \
+  REACT_FIELD(pointerEvents)
 
 REACT_STRUCT(SvgNodeCommonProps)
 struct SvgNodeCommonProps : SvgNodeCommonPropsT<SvgNodeCommonProps> {
@@ -69,7 +70,7 @@ struct SvgNodeCommonProps : SvgNodeCommonPropsT<SvgNodeCommonProps> {
   int32_t clipRule;
   bool responsible;
   std::string display;
-  // pointerEvents ? : string;
+  std::string pointerEvents;
 
  private:
   winrt::Microsoft::ReactNative::ViewProps m_props{nullptr};

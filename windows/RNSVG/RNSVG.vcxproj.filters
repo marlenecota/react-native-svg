@@ -71,6 +71,9 @@
     <ClInclude Include="PathView.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="UseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -116,6 +119,9 @@
       <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="PathView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="UseView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
   </ItemGroup>
