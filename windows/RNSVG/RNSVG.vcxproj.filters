@@ -83,6 +83,9 @@
     <ClInclude Include="DefsView.h">
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
+    <ClInclude Include="ClipPathView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -137,6 +140,9 @@
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
     <ClCompile Include="DefsView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipPathView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
   </ItemGroup>

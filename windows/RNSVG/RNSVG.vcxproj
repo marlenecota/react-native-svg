@@ -107,6 +107,7 @@
   <ItemGroup>
     <ClInclude Include="BrushView.h" />
     <ClInclude Include="CircleView.h" />
+    <ClInclude Include="ClipPathView.h" />
     <ClInclude Include="D2DBrush.h" />
     <ClInclude Include="D2DDevice.h" />
     <ClInclude Include="D2DDeviceContext.h" />
@@ -135,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="BrushView.cpp" />
     <ClCompile Include="CircleView.cpp" />
+    <ClCompile Include="ClipPathView.cpp" />
     <ClCompile Include="D2DBrush.cpp" />
     <ClCompile Include="D2DDevice.cpp" />
     <ClCompile Include="D2DDeviceContext.cpp" />

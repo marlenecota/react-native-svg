@@ -5,10 +5,12 @@
 namespace winrt::RNSVG::implementation {
 struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupView> {
  public:
-  ClipPathView() = default;
+  ClipPathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
   // RenderableView
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
+
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
 };
 } // namespace winrt::RNSVG::implementation
 
