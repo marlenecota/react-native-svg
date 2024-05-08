@@ -72,8 +72,6 @@ void TextView::UpdateProperties(
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-
-  SaveDefinition();
 }
 
 void TextView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &size) {

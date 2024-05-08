@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, Circle, G, Text, Line, Rect, Use} from 'react-native-svg';
+import {Svg, Circle, G, /*Text,*/ Line, Rect, Use} from 'react-native-svg';
 
 class GExample extends Component {
   static title = 'G children props inherit';
@@ -57,7 +57,7 @@ class GTransform extends Component {
             strokeWidth="1"
             fill="#060"
           />
-          <Text
+          {/* <Text
             x="100"
             y="75"
             stroke="#600"
@@ -65,7 +65,7 @@ class GTransform extends Component {
             fill="#600"
             textAnchor="middle">
             Text grouped with shapes
-          </Text>
+          </Text> */}
         </G>
         <Use
           href="#group"

@@ -4,7 +4,7 @@ import {
   Circle,
   Ellipse,
   G,
-  Text,
+  // Text,
   Path,
   Polygon,
   Rect,
@@ -36,7 +36,7 @@ class ClipPathElement extends Component {
             <Ellipse cx="60" cy="70" rx="20" ry="10" />
             <Rect x="65" y="15" width="30" height="30" />
             <Polygon points="20,60 20,80 50,70" />
-            <Text
+            {/* <Text
               x="50"
               y="30"
               fontSize="32"
@@ -44,7 +44,7 @@ class ClipPathElement extends Component {
               textAnchor="middle"
               scale="1.2">
               Q
-            </Text>
+            </Text> */}
           </ClipPath>
         </Defs>
         <Rect
@@ -101,7 +101,7 @@ class TextClipping extends Component {
             <Circle cx="180" cy="35" r="10" />
           </ClipPath>
         </Defs>
-        <Text
+        {/* <Text
           x="100"
           y="40"
           fill="red"
@@ -112,7 +112,7 @@ class TextClipping extends Component {
           textAnchor="middle"
           clipPath="url(#text-clipping-clip)">
           NOT THE FACE
-        </Text>
+        </Text> */}
       </Svg>
     );
   }

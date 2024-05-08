@@ -3,7 +3,7 @@ import {
   Svg,
   Circle,
   G,
-  Text,
+  // Text,
   Path,
   Polyline,
   Rect,
@@ -76,7 +76,7 @@ class StrokeDashoffset extends Component {
           strokeDasharray="100"
           strokeDashoffset="100"
         />
-        <Text
+        {/* <Text
           stroke="blue"
           strokeWidth="1"
           fill="none"
@@ -88,7 +88,7 @@ class StrokeDashoffset extends Component {
           strokeDasharray="100"
           strokeDashoffset="60">
           STROKE
-        </Text>
+        </Text> */}
       </Svg>
     );
   }
