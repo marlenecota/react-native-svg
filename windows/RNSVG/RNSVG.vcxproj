@@ -117,6 +117,7 @@
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="LineView.h" />
+    <ClInclude Include="MarkerView.h" />
     <ClInclude Include="PathView.h" />
     <ClInclude Include="RectView.h" />
     <ClInclude Include="RenderableView.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="LineView.cpp" />
+    <ClCompile Include="MarkerView.cpp" />
     <ClCompile Include="PathView.cpp" />
     <ClCompile Include="RectView.cpp" />
     <ClCompile Include="RenderableView.cpp" />

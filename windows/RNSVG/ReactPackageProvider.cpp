@@ -16,6 +16,7 @@
 #include "SymbolView.h"
 #include "DefsView.h"
 #include "ClipPathView.h"
+#include "MarkerView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -36,6 +37,7 @@ namespace winrt::RNSVG::implementation
     SymbolView::RegisterComponent(fabricPackageBuilder);
     DefsView::RegisterComponent(fabricPackageBuilder);
     ClipPathView::RegisterComponent(fabricPackageBuilder);
+    MarkerView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

@@ -7,7 +7,6 @@
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
 SymbolProps::SymbolProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}

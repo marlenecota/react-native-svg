@@ -58,6 +58,11 @@ namespace RNSVG
   };
 
   [experimental]
+  [default_interface]
+  unsealed runtimeclass MarkerProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
   interface IRenderable
   {
     D2DGeometry Geometry;
@@ -223,14 +228,14 @@ namespace RNSVG
   {
     ClipPathView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-/*
+
   [experimental]
   [default_interface]
   runtimeclass MarkerView : GroupView
   {
     MarkerView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-*/
+
    [experimental]
    [default_interface]
    unsealed runtimeclass BrushView : GroupView
