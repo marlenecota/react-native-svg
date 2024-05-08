@@ -29,9 +29,6 @@
     <ClInclude Include="SvgView.h">
       <Filter>Views</Filter>
     </ClInclude>
-    <ClInclude Include="BrushView.h">
-      <Filter>Views</Filter>
-    </ClInclude>
     <ClInclude Include="RectView.h">
       <Filter>Views</Filter>
     </ClInclude>
@@ -89,15 +86,15 @@
     <ClInclude Include="MarkerView.h">
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
+    <ClInclude Include="BrushView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="RNSVGModule.cpp" />
     <ClCompile Include="SvgView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="BrushView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="RectView.cpp">
@@ -149,6 +146,9 @@
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
     <ClCompile Include="MarkerView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushView.cpp">
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
   </ItemGroup>
