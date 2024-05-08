@@ -20,6 +20,8 @@
 #include "LinearGradientView.h"
 #include "RadialGradientView.h"
 #include "PatternView.h"
+#include "TextView.h"
+#include "TSpanView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -44,6 +46,8 @@ namespace winrt::RNSVG::implementation
     LinearGradientView::RegisterComponent(fabricPackageBuilder);
     RadialGradientView::RegisterComponent(fabricPackageBuilder);
     PatternView::RegisterComponent(fabricPackageBuilder);
+    TextView::RegisterComponent(fabricPackageBuilder);
+    TSpanView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

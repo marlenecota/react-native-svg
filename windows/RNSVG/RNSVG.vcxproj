@@ -134,6 +134,8 @@
     <ClInclude Include="SvgView.h" />
     <ClInclude Include="SymbolView.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextView.h" />
+    <ClInclude Include="TSpanView.h" />
     <ClInclude Include="UseView.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
@@ -167,6 +169,8 @@
     <ClCompile Include="SVGLength.cpp" />
     <ClCompile Include="SvgView.cpp" />
     <ClCompile Include="SymbolView.cpp" />
+    <ClCompile Include="TextView.cpp" />
+    <ClCompile Include="TSpanView.cpp" />
     <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup>

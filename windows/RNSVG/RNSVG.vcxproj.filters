@@ -17,11 +17,14 @@
     <Filter Include="D2DWrappers">
       <UniqueIdentifier>{72678be0-05b4-475c-b4df-f39a139362de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Views\GroupViews">
+    <Filter Include="Views\Group">
       <UniqueIdentifier>{af8fa78f-4084-46df-9ed0-43bd92731938}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Views\GroupViews\BrushViews">
+    <Filter Include="Views\Group\Brush">
       <UniqueIdentifier>{28cacd6c-0c11-4747-83b5-8020cd1ebe6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Group\Text">
+      <UniqueIdentifier>{e6183a93-8cfe-4ae5-a008-a244bf877fdd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,31 +78,37 @@
       <Filter>Views</Filter>
     </ClInclude>
     <ClInclude Include="GroupView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClInclude>
     <ClInclude Include="SymbolView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClInclude>
     <ClInclude Include="DefsView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClInclude>
     <ClInclude Include="ClipPathView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClInclude>
     <ClInclude Include="MarkerView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClInclude>
     <ClInclude Include="BrushView.h">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClInclude>
     <ClInclude Include="LinearGradientView.h">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClInclude>
     <ClInclude Include="RadialGradientView.h">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClInclude>
     <ClInclude Include="PatternView.h">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="TextView.h">
+      <Filter>Views\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanView.h">
+      <Filter>Views\Group\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,31 +155,37 @@
       <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="GroupView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClCompile>
     <ClCompile Include="SymbolView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClCompile>
     <ClCompile Include="DefsView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClCompile>
     <ClCompile Include="ClipPathView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClCompile>
     <ClCompile Include="MarkerView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\Group</Filter>
     </ClCompile>
     <ClCompile Include="BrushView.cpp">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClCompile>
     <ClCompile Include="LinearGradientView.cpp">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClCompile>
     <ClCompile Include="RadialGradientView.cpp">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
     </ClCompile>
     <ClCompile Include="PatternView.cpp">
-      <Filter>Views\GroupViews\BrushViews</Filter>
+      <Filter>Views\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="TextView.cpp">
+      <Filter>Views\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanView.cpp">
+      <Filter>Views\Group\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

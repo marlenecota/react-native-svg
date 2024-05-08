@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TSpanView.h"
+#if __has_include("TSpanView.g.cpp")
 #include "TSpanView.g.cpp"
+#endif
 
 #include <codecvt>
 
@@ -10,19 +12,28 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
-  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+TSpanProps::TSpanProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
-  for (auto const &pair : propertyMap) {
-    auto const &propertyName{pair.first};
-    auto const &propertyValue{pair.second};
+void TSpanProps::SetProp(
+    uint32_t hash,
+    winrt::hstring propName,
+    winrt::Microsoft::ReactNative::IJSValueReader value) noexcept {
+  winrt::Microsoft::ReactNative::ReadProp(hash, propName, value, *this);
+}
 
-    if (propertyName == "content") {
-      m_content = propertyValue.AsString();
-    }
+TSpanView::TSpanView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void TSpanView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  auto tspanProps = props.try_as<TSpanProps>();
+  if (tspanProps) {
+    m_props = tspanProps;
   }
 
-  __super::UpdateProperties(reader, forceUpdate, invalidate);
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
 
 void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
@@ -33,8 +44,8 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
 
   if (translateXY) {
-    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
-    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+    float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x, y}) * transform);
   }
 
@@ -51,18 +62,18 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   check_hresult(dwriteFactory->CreateTextFormat(
       FontFamily().c_str(),
       nullptr, // Font collection (nullptr sets it to use the system font collection).
-      D2DHelpers::FontWeightFrom(FontWeight(), SvgParent()),
+      D2DHelpers::FontWeightFrom(FontWeight(), Parent()),
       DWRITE_FONT_STYLE_NORMAL,
       DWRITE_FONT_STRETCH_NORMAL,
       FontSize(),
       L"",
       textFormat.put()));
 
-  auto const fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), nullptr)};
+  auto const fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), nullptr, context)};
 
   deviceContext->DrawText(
-      to_hstring(m_content).c_str(),
-      static_cast<uint32_t>(m_content.size()),
+      to_hstring(m_props->content).c_str(),
+      static_cast<uint32_t>(m_props->content.size()),
       textFormat.get(),
       D2D1::RectF(0, 0, size.Width, size.Height),
       fill.get());
@@ -70,5 +81,17 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (translateXY) {
     deviceContext->SetTransform(transform);
   }
+}
+
+void TSpanView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGTSpan", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::TSpanProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::TSpanView>(args);
+        });
+      });
 }
 } // namespace winrt::RNSVG::implementation

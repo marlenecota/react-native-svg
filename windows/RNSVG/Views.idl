@@ -59,32 +59,42 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass DefsProps : SvgRenderableCommonProps {
+  unsealed runtimeclass DefsProps : SvgGroupCommonProps {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass ClipPathProps : SvgRenderableCommonProps {
+  unsealed runtimeclass ClipPathProps : SvgGroupCommonProps {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass MarkerProps : SvgRenderableCommonProps {
+  unsealed runtimeclass MarkerProps : SvgGroupCommonProps {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass LinearGradientProps : SvgRenderableCommonProps {
+  unsealed runtimeclass LinearGradientProps : SvgGroupCommonProps {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass RadialGradientProps : SvgRenderableCommonProps {
+  unsealed runtimeclass RadialGradientProps : SvgGroupCommonProps {
   };
 
   [experimental]
   [default_interface]
-  unsealed runtimeclass PatternProps : SvgRenderableCommonProps {
+  unsealed runtimeclass PatternProps : SvgGroupCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass SvgTextCommonProps : SvgGroupCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass TSpanProps : SvgTextCommonProps {
   };
 
   [experimental]
@@ -208,7 +218,7 @@ namespace RNSVG
 
      void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
    };
-/*
+
   [experimental]
   [default_interface]
   unsealed runtimeclass TextView : GroupView
@@ -228,7 +238,7 @@ namespace RNSVG
 
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
-*/
+
   [experimental]
   [default_interface]
   runtimeclass DefsView : GroupView
