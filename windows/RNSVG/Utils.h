@@ -151,12 +151,8 @@ struct Utils {
     return D2DHelpers::AsD2DTransform(GetViewBoxTransform(vbRect, elRect, align, meetOrSlice));
   }
 
-  static RNSVG::MeetOrSlice GetMeetOrSlice(JSValue const &value) {
-    if (value.IsNull()) {
-      return RNSVG::MeetOrSlice::Meet;
-    }
-
-    switch (value.AsInt8()) {
+  static RNSVG::MeetOrSlice GetMeetOrSlice(uint32_t value) {
+    switch (value) {
       case 2:
         return RNSVG::MeetOrSlice::None;
       case 1:

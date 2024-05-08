@@ -134,7 +134,7 @@ else if (propertyName == "height")
     m_align = svgProps->align;
   }
   if (!oldSvgProps || svgProps->meetOrSlice != oldSvgProps->meetOrSlice) {
-    m_meetOrSlice = svgProps->meetOrSlice;
+    m_meetOrSlice = Utils::GetMeetOrSlice(svgProps->meetOrSlice);
   }
   if (!oldSvgProps || svgProps->color != oldSvgProps->color) {
     m_currentColor = svgProps->color;

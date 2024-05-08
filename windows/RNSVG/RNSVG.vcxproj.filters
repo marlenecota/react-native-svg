@@ -17,6 +17,9 @@
     <Filter Include="D2DWrappers">
       <UniqueIdentifier>{72678be0-05b4-475c-b4df-f39a139362de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Views\GroupViews">
+      <UniqueIdentifier>{af8fa78f-4084-46df-9ed0-43bd92731938}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -27,9 +30,6 @@
       <Filter>Views</Filter>
     </ClInclude>
     <ClInclude Include="BrushView.h">
-      <Filter>Views</Filter>
-    </ClInclude>
-    <ClInclude Include="GroupView.h">
       <Filter>Views</Filter>
     </ClInclude>
     <ClInclude Include="RectView.h">
@@ -74,6 +74,12 @@
     <ClInclude Include="UseView.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="GroupView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolView.h">
+      <Filter>Views\GroupViews</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -83,9 +89,6 @@
       <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="BrushView.cpp">
-      <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="GroupView.cpp">
       <Filter>Views</Filter>
     </ClCompile>
     <ClCompile Include="RectView.cpp">
@@ -123,6 +126,12 @@
     </ClCompile>
     <ClCompile Include="UseView.cpp">
       <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupView.cpp">
+      <Filter>Views\GroupViews</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolView.cpp">
+      <Filter>Views\GroupViews</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -52,6 +52,10 @@ namespace RNSVG
   unsealed runtimeclass UseProps : SvgRenderableCommonProps {
   };
 
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass SymbolProps : SvgRenderableCommonProps {
+  };
 
   [experimental]
   interface IRenderable
@@ -199,7 +203,7 @@ namespace RNSVG
   {
     DefsView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-
+*/
   [experimental]
   [default_interface]
   runtimeclass SymbolView : GroupView
@@ -212,7 +216,7 @@ namespace RNSVG
     String Align{ get; };
     MeetOrSlice MeetOrSlice{ get; };
   };
-
+/*
   [experimental]
   [default_interface]
   runtimeclass ClipPathView : GroupView

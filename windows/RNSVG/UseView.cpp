@@ -52,22 +52,22 @@ void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     }
 
     // Figure out any necessary transforms
-    //if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-    //  if (symbol.Align() != L"") {
-    //    Rect vbRect{
-    //        symbol.MinX(),
-    //        symbol.MinY(),
-    //        (symbol.MinX() + symbol.VbWidth()),
-    //        (symbol.MinY() + symbol.VbHeight())};
+    if (auto const &symbol{viewTemplate.try_as<RNSVG::SymbolView>()}) {
+      if (symbol.Align() != L"") {
+        Rect vbRect{
+            symbol.MinX(),
+            symbol.MinY(),
+            (symbol.MinX() + symbol.VbWidth()),
+            (symbol.MinY() + symbol.VbHeight())};
 
-    //    float elWidth{Utils::GetAbsoluteLength(m_props->width, size.Width)};
-    //    float elHeight{Utils::GetAbsoluteLength(m_props->height, size.Height)};
-    //    Rect elRect{0.0f, 0.0f, elWidth, elHeight};
+        float elWidth{Utils::GetAbsoluteLength(m_props->width, size.Width)};
+        float elHeight{Utils::GetAbsoluteLength(m_props->height, size.Height)};
+        Rect elRect{0.0f, 0.0f, elWidth, elHeight};
 
-    //    auto vbTransform{Utils::GetViewBoxTransformD2D(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice())};
-    //    transform = vbTransform * transform;
-    //  }
-    //}
+        auto vbTransform{Utils::GetViewBoxTransformD2D(vbRect, elRect, to_string(symbol.Align()), symbol.MeetOrSlice())};
+        transform = vbTransform * transform;
+      }
+    }
 
     deviceContext->SetTransform(transform);
 
@@ -76,11 +76,11 @@ void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
     // Set opacity and render
     D2DHelpers::PushOpacityLayer(deviceContext.get(), nullptr, m_opacity);
-    //if (auto const &symbol{view.try_as<RNSVG::SymbolView>()}) {
-    //  symbol.DrawGroup(context, size);
-    //} else {
-    //  view.Draw(context, size);
-    //}
+    if (auto const &symbol{viewTemplate.try_as<RNSVG::SymbolView>()}) {
+      symbol.DrawGroup(context, size);
+    } else {
+      viewTemplate.Draw(context, size);
+    }
 
     deviceContext->PopLayer();
 

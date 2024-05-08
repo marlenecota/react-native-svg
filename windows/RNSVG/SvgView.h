@@ -33,7 +33,7 @@ struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
   REACT_FIELD(align)
   std::string align;
   REACT_FIELD(meetOrSlice)
-  winrt::RNSVG::MeetOrSlice meetOrSlice;
+  uint32_t meetOrSlice;
   REACT_FIELD(tintColor)
   winrt::Microsoft::ReactNative::Color tintColor{nullptr};
   REACT_FIELD(color)

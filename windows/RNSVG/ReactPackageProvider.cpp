@@ -13,6 +13,7 @@
 #include "LineView.h"
 #include "PathView.h"
 #include "UseView.h"
+#include "SymbolView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -30,6 +31,7 @@ namespace winrt::RNSVG::implementation
     LineView::RegisterComponent(fabricPackageBuilder);
     PathView::RegisterComponent(fabricPackageBuilder);
     UseView::RegisterComponent(fabricPackageBuilder);
+    SymbolView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

@@ -126,6 +126,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SVGLength.h" />
     <ClInclude Include="SvgView.h" />
+    <ClInclude Include="SymbolView.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UseView.h" />
     <ClInclude Include="Utils.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="SVGLength.cpp" />
     <ClCompile Include="SvgView.cpp" />
+    <ClCompile Include="SymbolView.cpp" />
     <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup>
