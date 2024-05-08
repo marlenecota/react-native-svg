@@ -6,7 +6,7 @@
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(PatternProps)
-struct PatternProps : PatternPropsT<PatternProps, SvgRenderableCommonProps> {
+struct PatternProps : PatternPropsT<PatternProps, SvgGroupCommonProps> {
   PatternProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept

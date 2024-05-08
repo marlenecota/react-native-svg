@@ -192,23 +192,15 @@ struct Utils {
     }
   }
 
-  static winrt::Windows::UI::Color JSValueAsColor(
-      JSValue const &value,
-      winrt::Windows::UI::Color const &defaultValue = winrt::Windows::UI::Color{0, 0, 0, 0}) {
-    if (value.IsNull()) {
-      return defaultValue;
-    }
+  static winrt::Windows::UI::Color JSValueAsD2DColor(float value) {
+    auto color = static_cast<int32_t>(value);
 
-    assert(false);
-    /*
-    else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
-      if (auto const &scb{brush.try_as<xaml::Media::SolidColorBrush>()}) {
-        return scb.Color();
-      }
-    }
-    */
+    auto alpha = color >> 24;
+    auto red = (color >> 16) & 0xff;
+    auto green = (color >> 8) & 0xff;
+    auto blue = color & 0xff;
 
-    return defaultValue;
+    return winrt::Windows::UI::ColorHelper::FromArgb(alpha, red, green, blue);
   }
 
   static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
@@ -228,8 +220,8 @@ struct Utils {
   }
 
   static D2D1::Matrix3x2F JSValueAsD2DTransform(std::optional<std::vector<float>> const &value) {
-    auto matrix{value.value()};
-    if (value.has_value() && matrix.size() == 6) {
+    if (value.has_value()) {
+      auto matrix{value.value()};
       return D2D1::Matrix3x2F(
           matrix.at(0),
           matrix.at(1),
@@ -250,7 +242,7 @@ struct Utils {
       for (size_t i = 0; i < gradient.size(); ++i) {
         D2D1_GRADIENT_STOP stop{};
         stop.position = Utils::JSValueAsFloat(gradient.at(i));
-        stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(gradient.at(++i)));
+        stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsD2DColor(gradient.at(++i)));
         gradientStops.emplace_back(stop);
       }
 

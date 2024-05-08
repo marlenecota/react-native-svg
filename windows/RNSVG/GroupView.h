@@ -53,6 +53,11 @@ struct FontObject {
   }
 };
 
+#define REACT_SVG_GROUP_COMMON_PROPS  \
+  REACT_FIELD(fontSize)               \
+  REACT_FIELD(fontWeight)             \
+  REACT_FIELD(font)
+
 REACT_STRUCT(SvgGroupCommonProps)
 struct SvgGroupCommonProps
     : SvgGroupCommonPropsT<SvgGroupCommonProps, SvgRenderableCommonProps> {
@@ -63,11 +68,12 @@ struct SvgGroupCommonProps
       winrt::hstring propName,
       winrt::Microsoft::ReactNative::IJSValueReader value) noexcept;
 
-  REACT_FIELD(fontSize)
+  REACT_SVG_NODE_COMMON_PROPS;
+  REACT_SVG_RENDERABLE_COMMON_PROPS;
+  REACT_SVG_GROUP_COMMON_PROPS;
+
   std::string fontSize;
-  REACT_FIELD(fontWeight)
   std::string fontWeight;
-  REACT_FIELD(font)
   FontObject font;
 };
 

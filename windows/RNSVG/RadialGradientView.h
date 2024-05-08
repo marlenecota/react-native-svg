@@ -6,7 +6,7 @@
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(RadialGradientProps)
-struct RadialGradientProps : RadialGradientPropsT<RadialGradientProps, SvgRenderableCommonProps> {
+struct RadialGradientProps : RadialGradientPropsT<RadialGradientProps, SvgGroupCommonProps> {
   RadialGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept

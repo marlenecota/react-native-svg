@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
 });
 
 const names: (keyof typeof examples)[] = [
-  // 'Svg',
-  // 'Stroking',
+  'Svg',
+  'Stroking',
   'Path',
   'Line',
   'Rect',
@@ -104,17 +104,17 @@ const names: (keyof typeof examples)[] = [
   'Polyline',
   'Circle',
   'Ellipse',
-  // 'G',
+  'G',
   // 'Text',
-  // 'Gradients',
-  // 'Clipping',
+  'Gradients',
+  'Clipping',
   // 'Image',
   // 'TouchEvents',
   // 'PanResponder',
-  // 'Reusable',
+  'Reusable',
   // 'Reanimated',
-  // 'Transforms',
-  // 'Markers',
+  'Transforms',
+  'Markers',
   // 'Mask',
 ];
 
@@ -204,7 +204,6 @@ export default class SvgExample extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>SVG library for React Apps</Text>
-        <Text style={styles.welcome}>Text</Text>
         <View style={styles.contentContainer}>{this.getExamples()}</View>
         {Platform.OS === 'windows' && this.state.modal ? (
           <View style={styles.scroll}>{this.modalContent()}</View>

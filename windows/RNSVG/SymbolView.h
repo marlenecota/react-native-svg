@@ -7,7 +7,7 @@
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(SymbolProps)
-struct SymbolProps : SymbolPropsT<SymbolProps, SvgRenderableCommonProps> {
+struct SymbolProps : SymbolPropsT<SymbolProps, SvgGroupCommonProps> {
   SymbolProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept

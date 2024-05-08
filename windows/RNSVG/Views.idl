@@ -59,6 +59,16 @@ namespace RNSVG
 
   [experimental]
   [default_interface]
+  unsealed runtimeclass DefsProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass ClipPathProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
   unsealed runtimeclass MarkerProps : SvgRenderableCommonProps {
   };
 

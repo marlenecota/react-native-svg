@@ -7,7 +7,7 @@
 namespace winrt::RNSVG::implementation {
 
 REACT_STRUCT(MarkerProps)
-struct MarkerProps : MarkerPropsT<MarkerProps, SvgRenderableCommonProps> {
+struct MarkerProps : MarkerPropsT<MarkerProps, SvgGroupCommonProps> {
   MarkerProps(const winrt::Microsoft::ReactNative::ViewProps &props);
 
   void SetProp(uint32_t hash, winrt::hstring propName, winrt::Microsoft::ReactNative::IJSValueReader value) noexcept
