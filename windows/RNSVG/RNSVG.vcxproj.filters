@@ -95,6 +95,9 @@
     <ClInclude Include="LinearGradientView.h">
       <Filter>Views\GroupViews\BrushViews</Filter>
     </ClInclude>
+    <ClInclude Include="RadialGradientView.h">
+      <Filter>Views\GroupViews\BrushViews</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -158,6 +161,9 @@
       <Filter>Views\GroupViews\BrushViews</Filter>
     </ClCompile>
     <ClCompile Include="LinearGradientView.cpp">
+      <Filter>Views\GroupViews\BrushViews</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientView.cpp">
       <Filter>Views\GroupViews\BrushViews</Filter>
     </ClCompile>
   </ItemGroup>

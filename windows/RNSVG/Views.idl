@@ -66,12 +66,12 @@ namespace RNSVG
   [default_interface]
   unsealed runtimeclass LinearGradientProps : SvgRenderableCommonProps {
   };
-/*
+
   [experimental]
   [default_interface]
   unsealed runtimeclass RadialGradientProps : SvgRenderableCommonProps {
   };
-
+/*
   [experimental]
   [default_interface]
   unsealed runtimeclass PatternProps : SvgRenderableCommonProps {
@@ -271,14 +271,14 @@ namespace RNSVG
   {
     LinearGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-/*
+
   [experimental]
   [default_interface]
   runtimeclass RadialGradientView : BrushView
   {
     RadialGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-
+/*
   [experimental]
   [default_interface]
   runtimeclass PatternView : BrushView

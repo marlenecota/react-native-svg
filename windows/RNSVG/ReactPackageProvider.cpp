@@ -18,7 +18,7 @@
 #include "ClipPathView.h"
 #include "MarkerView.h"
 #include "LinearGradientView.h"
-//#include "RadialGradientView.h"
+#include "RadialGradientView.h"
 //#include "PatternView.h"
 
 using namespace winrt::Microsoft::ReactNative;
@@ -42,7 +42,7 @@ namespace winrt::RNSVG::implementation
     ClipPathView::RegisterComponent(fabricPackageBuilder);
     MarkerView::RegisterComponent(fabricPackageBuilder);
     LinearGradientView::RegisterComponent(fabricPackageBuilder);
-    //RadialGradientView::RegisterComponent(fabricPackageBuilder);
+    RadialGradientView::RegisterComponent(fabricPackageBuilder);
     //PatternView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
