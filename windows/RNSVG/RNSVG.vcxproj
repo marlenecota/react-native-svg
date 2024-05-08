@@ -116,6 +116,7 @@
     <ClInclude Include="DefsView.h" />
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="GroupView.h" />
+    <ClInclude Include="LinearGradientView.h" />
     <ClInclude Include="LineView.h" />
     <ClInclude Include="MarkerView.h" />
     <ClInclude Include="PathView.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="DefsView.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
+    <ClCompile Include="LinearGradientView.cpp" />
     <ClCompile Include="LineView.cpp" />
     <ClCompile Include="MarkerView.cpp" />
     <ClCompile Include="PathView.cpp" />

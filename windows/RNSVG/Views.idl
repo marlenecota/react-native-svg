@@ -63,6 +63,22 @@ namespace RNSVG
   };
 
   [experimental]
+  [default_interface]
+  unsealed runtimeclass LinearGradientProps : SvgRenderableCommonProps {
+  };
+/*
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass RadialGradientProps : SvgRenderableCommonProps {
+  };
+
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass PatternProps : SvgRenderableCommonProps {
+  };
+*/
+
+  [experimental]
   interface IRenderable
   {
     D2DGeometry Geometry;
@@ -88,6 +104,8 @@ namespace RNSVG
 
     GroupView Group;
     Microsoft.ReactNative.Color CurrentColor{ get; };
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
     Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
     Windows.Foundation.Collections.IMap<String, BrushView> Brushes{ get; };
 
@@ -246,14 +264,14 @@ namespace RNSVG
      void CreateBrush();
      void SetBounds(Windows.Foundation.Rect rect);
    };
-/*
+
   [experimental]
   [default_interface]
   runtimeclass LinearGradientView : BrushView
   {
     LinearGradientView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-
+/*
   [experimental]
   [default_interface]
   runtimeclass RadialGradientView : BrushView
@@ -267,5 +285,5 @@ namespace RNSVG
   {
     PatternView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-  */
+*/
 }

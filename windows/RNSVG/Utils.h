@@ -163,11 +163,9 @@ struct Utils {
     }
   }
 
-  static std::string JSValueAsBrushUnits(JSValue const &value, std::string defaultValue = "objectBoundingBox") {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      switch (value.AsInt32()) {
+  static std::string JSValueAsBrushUnits(std::optional<int32_t> const &value) {
+    if (value.has_value()) {
+      switch (value.value()) {
         case 1:
           return "userSpaceOnUse";
         case 0:
@@ -175,6 +173,7 @@ struct Utils {
           return "objectBoundingBox";
       }
     }
+    return "objectBoundingBox";
   }
 
   static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
@@ -228,38 +227,37 @@ struct Utils {
     }
   }
 
-  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const &value, D2D1::Matrix3x2F const defaultValue = {}) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      auto const &matrix{value.AsArray()};
-
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(std::optional<std::vector<float>> const &value) {
+    auto matrix{value.value()};
+    if (value.has_value() && matrix.size() == 6) {
       return D2D1::Matrix3x2F(
-          matrix.at(0).AsSingle(),
-          matrix.at(1).AsSingle(),
-          matrix.at(2).AsSingle(),
-          matrix.at(3).AsSingle(),
-          matrix.at(4).AsSingle(),
-          matrix.at(5).AsSingle());
+          matrix.at(0),
+          matrix.at(1),
+          matrix.at(2),
+          matrix.at(3),
+          matrix.at(4),
+          matrix.at(5));
     }
+
+    return D2D1::Matrix3x2F::Identity();
   }
 
-  static std::vector<D2D1_GRADIENT_STOP> JSValueAsStops(JSValue const &value) {
-    if (value.IsNull()) {
-      return {};
+  static std::vector<D2D1_GRADIENT_STOP> JSValueAsGradientStops(std::optional<std::vector<float>> const &value) {
+    if (value.has_value()) {
+      auto gradient = value.value();
+      std::vector<D2D1_GRADIENT_STOP> gradientStops;
+
+      for (size_t i = 0; i < gradient.size(); ++i) {
+        D2D1_GRADIENT_STOP stop{};
+        stop.position = Utils::JSValueAsFloat(gradient.at(i));
+        stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(gradient.at(++i)));
+        gradientStops.emplace_back(stop);
+      }
+
+      return gradientStops;
     }
 
-    auto const &stops{value.AsArray()};
-    std::vector<D2D1_GRADIENT_STOP> gradientStops;
-
-    for (size_t i = 0; i < stops.size(); ++i) {
-      D2D1_GRADIENT_STOP stop{};
-      stop.position = Utils::JSValueAsFloat(stops.at(i));
-      stop.color = D2DHelpers::AsD2DColor(Utils::JSValueAsColor(stops.at(++i)));
-      gradientStops.emplace_back(stop);
-    }
-
-    return gradientStops;
+    return {};
   }
 
   static com_ptr<ID2D1Brush> GetCanvasBrush(

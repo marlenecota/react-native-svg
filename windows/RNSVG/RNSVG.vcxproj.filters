@@ -20,6 +20,9 @@
     <Filter Include="Views\GroupViews">
       <UniqueIdentifier>{af8fa78f-4084-46df-9ed0-43bd92731938}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Views\GroupViews\BrushViews">
+      <UniqueIdentifier>{28cacd6c-0c11-4747-83b5-8020cd1ebe6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -87,7 +90,10 @@
       <Filter>Views\GroupViews</Filter>
     </ClInclude>
     <ClInclude Include="BrushView.h">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\GroupViews\BrushViews</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientView.h">
+      <Filter>Views\GroupViews\BrushViews</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +155,10 @@
       <Filter>Views\GroupViews</Filter>
     </ClCompile>
     <ClCompile Include="BrushView.cpp">
-      <Filter>Views\GroupViews</Filter>
+      <Filter>Views\GroupViews\BrushViews</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientView.cpp">
+      <Filter>Views\GroupViews\BrushViews</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

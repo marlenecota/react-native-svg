@@ -303,7 +303,15 @@ void SvgView::Invalidate() {
 
       com_ptr<ID2D1DeviceContext> spDeviceContext;
       spDeviceContext.copy_from(deviceContext);
-      Draw(winrt::make<RNSVG::implementation::D2DDeviceContext>(spDeviceContext), size);
+
+      m_deviceContext = winrt::make<RNSVG::implementation::D2DDeviceContext>(spDeviceContext);
+
+      com_ptr<ID2D1Device> spDevice;
+      spDeviceContext->GetDevice(spDevice.put());
+
+      m_device = winrt::make<RNSVG::implementation::D2DDevice>(spDevice);
+
+      Draw(m_deviceContext, size);
     }
   }
 
