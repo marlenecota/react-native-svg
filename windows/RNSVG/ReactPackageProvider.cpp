@@ -14,6 +14,7 @@
 #include "PathView.h"
 #include "UseView.h"
 #include "SymbolView.h"
+#include "DefsView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -32,6 +33,7 @@ namespace winrt::RNSVG::implementation
     PathView::RegisterComponent(fabricPackageBuilder);
     UseView::RegisterComponent(fabricPackageBuilder);
     SymbolView::RegisterComponent(fabricPackageBuilder);
+    DefsView::RegisterComponent(fabricPackageBuilder);
 
     AddAttributedModules(packageBuilder);
   }

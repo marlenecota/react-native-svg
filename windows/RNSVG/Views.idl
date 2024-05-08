@@ -196,14 +196,14 @@ namespace RNSVG
 
     Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
   };
-
+*/
   [experimental]
   [default_interface]
   runtimeclass DefsView : GroupView
   {
     DefsView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
-*/
+
   [experimental]
   [default_interface]
   runtimeclass SymbolView : GroupView

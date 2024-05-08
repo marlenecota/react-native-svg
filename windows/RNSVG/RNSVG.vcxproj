@@ -112,6 +112,7 @@
     <ClInclude Include="D2DDeviceContext.h" />
     <ClInclude Include="D2DGeometry.h" />
     <ClInclude Include="D2DHelpers.h" />
+    <ClInclude Include="DefsView.h" />
     <ClInclude Include="EllipseView.h" />
     <ClInclude Include="GroupView.h" />
     <ClInclude Include="LineView.h" />
@@ -138,6 +139,7 @@
     <ClCompile Include="D2DDevice.cpp" />
     <ClCompile Include="D2DDeviceContext.cpp" />
     <ClCompile Include="D2DGeometry.cpp" />
+    <ClCompile Include="DefsView.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="LineView.cpp" />
