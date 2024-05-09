@@ -14,6 +14,7 @@
 #include "PathView.h"
 #include "UseView.h"
 #include "SymbolView.h"
+#include "ImageView.h"
 #include "DefsView.h"
 #include "ClipPathView.h"
 #include "MarkerView.h"
@@ -32,7 +33,6 @@ namespace winrt::RNSVG::implementation
     auto fabricPackageBuilder = packageBuilder.as<winrt::Microsoft::ReactNative::IReactPackageBuilderFabric>();
 
     SvgView::RegisterComponent(fabricPackageBuilder);
-    GroupView::RegisterComponent(fabricPackageBuilder);
     RectView::RegisterComponent(fabricPackageBuilder);
     CircleView::RegisterComponent(fabricPackageBuilder);
     EllipseView::RegisterComponent(fabricPackageBuilder);
@@ -40,6 +40,8 @@ namespace winrt::RNSVG::implementation
     PathView::RegisterComponent(fabricPackageBuilder);
     UseView::RegisterComponent(fabricPackageBuilder);
     SymbolView::RegisterComponent(fabricPackageBuilder);
+    ImageView::RegisterComponent(fabricPackageBuilder);
+    GroupView::RegisterComponent(fabricPackageBuilder);
     DefsView::RegisterComponent(fabricPackageBuilder);
     ClipPathView::RegisterComponent(fabricPackageBuilder);
     MarkerView::RegisterComponent(fabricPackageBuilder);

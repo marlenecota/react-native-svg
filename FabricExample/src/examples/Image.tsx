@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Alert, Platform} from 'react-native';
-import {Svg, Circle, Text, Rect, Defs, ClipPath, Image} from 'react-native-svg';
+import {Svg, Circle, /*Text,*/ Rect, Defs, ClipPath, Image} from 'react-native-svg';
 
 class ImageExample extends Component {
   static title = 'Draw Image with preserveAspectRatio prop';
@@ -24,7 +24,7 @@ class ImageExample extends Component {
           href={require('../assets/image.jpg')}
           clipPath="url(#image-clip)"
         />
-        <Text
+        {/* <Text
           x="50"
           y="50"
           textAnchor="middle"
@@ -32,7 +32,7 @@ class ImageExample extends Component {
           fontSize="16"
           fill="blue">
           HOGWARTS
-        </Text>
+        </Text> */}
       </Svg>
     );
   }
@@ -58,7 +58,7 @@ class ClipImage extends Component {
           opacity="0.6"
           clipPath="url(#clip-image)"
         />
-        <Text
+        {/* <Text
           x="50"
           y="50"
           textAnchor="middle"
@@ -66,7 +66,7 @@ class ClipImage extends Component {
           fontSize="16"
           fill="red">
           HOGWARTS
-        </Text>
+        </Text> */}
       </Svg>
     );
   }

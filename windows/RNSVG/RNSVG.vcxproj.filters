@@ -110,6 +110,9 @@
     <ClInclude Include="TSpanView.h">
       <Filter>Views\Group\Text</Filter>
     </ClInclude>
+    <ClInclude Include="ImageView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -186,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="TSpanView.cpp">
       <Filter>Views\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Views</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
