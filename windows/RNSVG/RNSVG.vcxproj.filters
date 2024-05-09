@@ -207,5 +207,8 @@
     <Midl Include="Views.idl">
       <Filter>IDLs</Filter>
     </Midl>
+    <Midl Include="ViewProps.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
   </ItemGroup>
 </Project>

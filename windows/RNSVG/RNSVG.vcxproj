@@ -178,6 +178,7 @@
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
     <Midl Include="Types.idl" />
+    <Midl Include="ViewProps.idl" />
     <Midl Include="Views.idl" />
   </ItemGroup>
   <ItemGroup>
