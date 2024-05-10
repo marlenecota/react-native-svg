@@ -152,6 +152,13 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RNSVG::FillRule FillRule() { return m_fillRule; }
   RNSVG::D2DGeometry ClipPathGeometry(RNSVG::D2DDeviceContext const &context);
 
+  void MountChildComponentView(
+      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+      uint32_t index) noexcept;
+  void UnmountChildComponentView(
+      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+      uint32_t index) noexcept;
+
   virtual void UpdateProps(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;

@@ -29,40 +29,6 @@ void SvgGroupCommonProps::SetProp(
 GroupView::GroupView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
     : base_type(args), m_reactContext(args.ReactContext()) {}
 
-void GroupView::MountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
-  RenderableView::MountChildComponentView(childComponentView, index);
-
-  if (auto const &childView{childComponentView.try_as<IRenderable>()}) {
-    childView.MergeProperties(*this);
-
-    if (childView.IsResponsible() && !IsResponsible()) {
-      IsResponsible(true);
-    }
-
-    if (auto const &root{SvgRoot()}) {
-      root.Invalidate();
-    }
-  }
-}
-
-void GroupView::UnmountChildComponentView(
-    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-    uint32_t index) noexcept {
-  RenderableView::UnmountChildComponentView(childComponentView, index);
-
-  if (auto child = childComponentView.as<IRenderable>()) {
-    if (!IsUnloaded()) {
-      child.Unload();
-    }
-
-    if (auto const &root{SvgRoot()}) {
-      root.Invalidate();
-    }
-  }
-}
-
 void GroupView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps,

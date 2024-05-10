@@ -47,13 +47,6 @@ winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::Creat
   return m_visual;
 }
 
-winrt::Microsoft::ReactNative::Composition::Experimental::IVisual
-SvgView::createVisual() noexcept {
-  m_visual = m_compContext.CreateSpriteVisual();
-  m_visual.Comment(L"SVGRoot");
-  return m_visual;
-}
-
 void SvgView::MountChildComponentView(
     const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
     uint32_t index) noexcept {
@@ -95,8 +88,14 @@ void SvgView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
     bool forceUpdate,
     bool invalidate) {
-  auto svgProps = props.as<SvgViewProps>();
-  auto oldSvgProps = oldProps ? oldProps.as<SvgViewProps>() : nullptr;
+  auto svgProps = props.try_as<SvgViewProps>();
+  auto oldSvgProps = oldProps ? oldProps.try_as<SvgViewProps>() : nullptr;
+
+  if (!svgProps && m_group) {
+    m_group.UpdateProperties(props, oldProps, forceUpdate, invalidate);
+    return;
+  }
+
   /*
 else if (propertyName == "width")
 {

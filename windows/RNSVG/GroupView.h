@@ -97,13 +97,6 @@ struct GroupView
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
 
-  virtual void MountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
-  virtual void UnmountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
-
   virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context);
 
   virtual void SaveDefinition();

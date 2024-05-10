@@ -39,6 +39,47 @@ RenderableView::RenderableView(
     const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
     : base_type(args), m_reactContext(args.ReactContext()) {}
 
+void RenderableView::MountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  const RNSVG::RenderableView &view{*this};
+  const auto &group{view.try_as<RNSVG::GroupView>()};
+  const auto &child{childComponentView.try_as<IRenderable>()};
+
+  if (group && child) {
+    base_type::MountChildComponentView(childComponentView, index);
+    child.MergeProperties(*this);
+
+    if (child.IsResponsible() && !IsResponsible()) {
+      IsResponsible(true);
+    }
+
+    if (auto const &root{SvgRoot()}) {
+      root.Invalidate();
+    }
+  }
+}
+
+void RenderableView::UnmountChildComponentView(
+    const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+    uint32_t index) noexcept {
+  const RNSVG::RenderableView &view{*this};
+  const auto &group{view.try_as<RNSVG::GroupView>()};
+  const auto &child{childComponentView.try_as<IRenderable>()};
+
+  if (group && child) {
+    if (!IsUnloaded()) {
+      child.Unload();
+    }
+
+    base_type::UnmountChildComponentView(childComponentView, index);
+
+    if (auto const &root{SvgRoot()}) {
+      root.Invalidate();
+    }
+  }
+}
+
 void RenderableView::UpdateProps(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {

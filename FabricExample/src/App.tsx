@@ -105,17 +105,17 @@ const names: (keyof typeof examples)[] = [
   'Circle',
   'Ellipse',
   'G',
-  // 'Text',
+  'Text',
   'Gradients',
   'Clipping',
   'Image',
-  // 'TouchEvents',
-  // 'PanResponder',
+  'TouchEvents',
+  'PanResponder',
   'Reusable',
-  // 'Reanimated',
+  'Reanimated',
   'Transforms',
   'Markers',
-  // 'Mask',
+  'Mask',
 ];
 
 const initialState = {

@@ -84,21 +84,18 @@ struct SvgView : SvgViewT<SvgView> {
   void CreateResources();
   void CreateGeometry(RNSVG::D2DDeviceContext const &deviceContext);
   RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
-
+  
+  // Overrides
   // IInternalCreateVisual
   winrt::Microsoft::ReactNative::Composition::Experimental::IVisual CreateInternalVisual();
 
-  // Overrides
-  winrt::Microsoft::ReactNative::Composition::Experimental::IVisual createVisual() noexcept;
-
+  // ComponentView
   void UpdateProps(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
   void UpdateLayoutMetrics(
       const winrt::Microsoft::ReactNative::LayoutMetrics &metrics,
       const winrt::Microsoft::ReactNative::LayoutMetrics &oldMetrics);
-  // Windows::Foundation::Size MeasureOverride(Windows::Foundation::Size const &availableSize);
-  // Windows::Foundation::Size ArrangeOverride(Windows::Foundation::Size const &finalSize);
   void MountChildComponentView(
       const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
       uint32_t index) noexcept;
