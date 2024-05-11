@@ -88,6 +88,14 @@ namespace RNSVG {
     NonZero,
   };
 
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L18-L25
+  //enum VectorEffect {
+  //  None,
+  //  NonScalingStroke,
+  //  Inherit,
+  //  Uri,
+  //};
+
   struct SVGLength
   {
       Single Value;

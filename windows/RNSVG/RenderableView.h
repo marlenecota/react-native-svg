@@ -59,18 +59,18 @@ struct SvgNodeCommonProps : SvgNodeCommonPropsT<SvgNodeCommonProps> {
 
   REACT_SVG_NODE_COMMON_PROPS;
 
-  std::string name;
-  std::optional<float> opacity;
+  std::optional<std::string> name;
+  std::optional<float> opacity;               // 1.0f
   std::optional<std::vector<float>> matrix;
-  std::string mask;
-  std::string markerStart;
-  std::string markerMid;
-  std::string markerEnd;
-  std::string clipPath;
-  int32_t clipRule;
-  bool responsible;
-  std::string display;
-  std::string pointerEvents;
+  std::optional<std::string> mask;
+  std::optional<std::string> markerStart;
+  std::optional<std::string> markerMid;
+  std::optional<std::string> markerEnd;
+  std::optional<std::string> clipPath;
+  std::optional<RNSVG::FillRule> clipRule;    // RNSVG::FillRule::EvenOdd
+  std::optional<bool> responsible;
+  std::optional<std::string> display;
+  std::optional<std::string> pointerEvents;
 
  private:
   winrt::Microsoft::ReactNative::ViewProps m_props{nullptr};
@@ -106,17 +106,17 @@ struct SvgRenderableCommonProps
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 
   std::optional<ColorStruct> fill;
-  std::optional<float> fillOpacity; // default 1.0f
-  std::optional<FillRule> fillRule;
+  std::optional<float> fillOpacity;         // 1.0f
+  std::optional<FillRule> fillRule;         // RNSVG::FillRule::NonZero
   std::optional<ColorStruct> stroke;
-  std::optional<float> strokeOpacity;
+  std::optional<float> strokeOpacity;       // 1.0f
   std::optional<RNSVG::SVGLength> strokeWidth;
-  std::optional<LineCap> strokeLinecap;
-  std::optional<LineJoin> strokeLinejoin;
+  std::optional<LineCap> strokeLinecap;     // RNSVG::LineCap::Butt
+  std::optional<LineJoin> strokeLinejoin;   // RNSVG::LineJoin::Miter
   std::optional<std::vector<RNSVG::SVGLength>> strokeDasharray;
   std::optional<float> strokeDashoffset;
   std::optional<float> strokeMiterlimit;
-  int32_t vectorEffect;
+  std::optional<int32_t> vectorEffect;      // 0
   std::optional<std::vector<std::string>> propList;
 };
 

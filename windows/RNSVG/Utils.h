@@ -176,20 +176,12 @@ struct Utils {
     return defaultValue;
   }
 
-  static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return value.AsSingle();
-    }
+  static float JSValueAsFloat(std::optional<float> const &value, float defaultValue = 0.0f) {
+    return value.has_value() ? *value : defaultValue;
   }
 
-  static std::string JSValueAsString(JSValue const &value, std::string defaultValue = "") {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return value.AsString();
-    }
+  static std::string JSValueAsString(std::optional<std::string> const &value, std::string defaultValue = "") {
+    return value.has_value() ? *value : defaultValue;
   }
 
   static winrt::Windows::UI::Color JSValueAsD2DColor(float value) {
@@ -201,22 +193,6 @@ struct Utils {
     auto blue = color & 0xff;
 
     return winrt::Windows::UI::ColorHelper::FromArgb(alpha, red, green, blue);
-  }
-
-  static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      auto const &matrix{value.AsArray()};
-
-      return Numerics::float3x2(
-          matrix.at(0).AsSingle(),
-          matrix.at(1).AsSingle(),
-          matrix.at(2).AsSingle(),
-          matrix.at(3).AsSingle(),
-          matrix.at(4).AsSingle(),
-          matrix.at(5).AsSingle());
-    }
   }
 
   static D2D1::Matrix3x2F JSValueAsD2DTransform(std::optional<std::vector<float>> const &value) {
