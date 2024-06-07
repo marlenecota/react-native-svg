@@ -61,7 +61,7 @@
         "dependencies": {
           "Common": "[1.0.0, )",
           "Folly": "[1.0.0, )",
-          "Microsoft.JavaScript.Hermes": "[0.1.18, )",
+          "Microsoft.JavaScript.Hermes": "[0.1.21, )",
           "Microsoft.WindowsAppSDK": "[1.5.240227000, )",
           "ReactCommon": "[1.0.0, )",
           "boost": "[1.76.0, )"
