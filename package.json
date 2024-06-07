@@ -1,5 +1,5 @@
 {
-  "version": "15.2.0",
+  "version": "15.3.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -116,7 +116,7 @@
     "type": "all",
     "jsSrcsDir": "./src/fabric",
     "android": {
-      "javaPackageName": "com.horcrux.rnsvg"
+      "javaPackageName": "com.horcrux.svg"
     }
   }
 }
