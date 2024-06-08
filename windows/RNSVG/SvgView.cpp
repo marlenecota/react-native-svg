@@ -36,10 +36,11 @@ void SvgViewProps::SetProp(
 
 SvgView::SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args)
     : base_type(args),
-      m_reactContext(args.ReactContext()) {
-  m_compositor = args.Compositor();
-  m_compContext = winrt::Microsoft::ReactNative::Composition::Experimental::MicrosoftCompositionContextHelper::CreateContext(m_compositor);
-}
+      m_reactContext(args.ReactContext()),
+      m_compositor(args.Compositor()),
+      m_compContext(
+            args.as<winrt::Microsoft::ReactNative::Composition::Experimental::IInternalCreateComponentViewArgs>()
+                .CompositionContext()) {}
 
 winrt::Microsoft::ReactNative::Composition::Experimental::IVisual SvgView::CreateInternalVisual() {
   m_visual = m_compContext.CreateSpriteVisual();
