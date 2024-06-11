@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Svg, Circle, G, /*Text,*/ Path} from 'react-native-svg';
+import {Svg, Circle, G, Text, Path} from 'react-native-svg';
 
 class PathExample extends Component {
   static title = 'Path';
@@ -73,7 +73,7 @@ class BezierCurve extends Component {
             <Circle cx="400" cy="350" r="3" />
           </G>
           <G fontSize="30" fill="black" stroke="none" textAnchor="middle">
-            {/* <Text x="100" y="350" dx="-30">
+            <Text x="100" y="350" dx="-30">
               A
             </Text>
             <Text x="250" y="50" dy="-50">
@@ -81,7 +81,7 @@ class BezierCurve extends Component {
             </Text>
             <Text x="400" y="350" dx="10">
               C
-            </Text> */}
+            </Text>
           </G>
         </G>
       </Svg>

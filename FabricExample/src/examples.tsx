@@ -29,7 +29,7 @@ export {
   Polygon,
   Polyline,
   Path,
-  // Text,
+  Text,
   Stroking,
   G,
   Gradients,

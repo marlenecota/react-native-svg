@@ -4,7 +4,7 @@ import {
   Svg,
   Circle,
   Ellipse,
-  // Text,
+  Text,
   Rect,
   Defs,
   LinearGradient,
@@ -145,12 +145,12 @@ class LinearGradientPercent extends Component {
             <Stop offset="100%" stopColor="red" stopOpacity="1" />
           </LinearGradient>
         </Defs>
-        {/* <Text x="25" y="70" fill="#333">
+        <Text x="25" y="70" fill="#333">
           x1=0%
         </Text>
         <Text x="235" y="70" fill="#333">
           x2=100%
-        </Text> */}
+        </Text>
         <Ellipse cx="150" cy="75" rx="85" ry="55" fill="url(#grad-3)" />
       </Svg>
     );
