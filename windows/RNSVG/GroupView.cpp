@@ -42,8 +42,8 @@ void GroupView::UpdateProperties(
   if (!oldRenderableProps || renderableProps->font != oldRenderableProps->font) {
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontSize]) {
       if (renderableProps->font.fontSize) {
-        m_fontSize = renderableProps->font.fontSize
-            ? renderableProps->font.fontSize
+        m_fontSize = renderableProps->font.fontSize != std::nullopt
+            ? *renderableProps->font.fontSize
             : (parent ? parent.FontSize() : 12.0f);
       }
 
@@ -51,23 +51,23 @@ void GroupView::UpdateProperties(
     }
 
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontFamily]) {
-      if (renderableProps->font.fontSize) {
-        m_fontFamily = !renderableProps->font.fontFamily.empty()
-            ? winrt::to_hstring(renderableProps->font.fontFamily)
+      if (renderableProps->font.fontFamily) {
+        m_fontFamily = !(*renderableProps->font.fontFamily).empty()
+            ? winrt::to_hstring(*renderableProps->font.fontFamily)
             : (parent ? parent.FontFamily() : L"Segoe UI");
-      }
 
-      m_fontPropMap[RNSVG::FontProp::FontFamily] = !renderableProps->font.fontFamily.empty();
+        m_fontPropMap[RNSVG::FontProp::FontFamily] = !(*renderableProps->font.fontFamily).empty();
+      }
     }
 
     if (forceUpdate || !m_fontPropMap[RNSVG::FontProp::FontWeight]) {
-      if (!renderableProps->font.fontWeight.empty()) {
-        m_fontWeight = !renderableProps->font.fontWeight.empty()
-            ? winrt::to_hstring(renderableProps->font.fontWeight)
+      if (renderableProps->font.fontWeight) {
+        m_fontWeight = !(*renderableProps->font.fontWeight).empty()
+            ? winrt::to_hstring(*renderableProps->font.fontWeight)
             : (parent ? parent.FontWeight() : L"auto");
-      }
 
-      m_fontPropMap[RNSVG::FontProp::FontWeight] = !renderableProps->font.fontWeight.empty();
+        m_fontPropMap[RNSVG::FontProp::FontWeight] = !(*renderableProps->font.fontWeight).empty();
+      }
     }
   }
 

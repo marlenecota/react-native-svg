@@ -8,33 +8,33 @@ namespace winrt::RNSVG::implementation {
 REACT_STRUCT(FontObject)
 struct FontObject {
   REACT_FIELD(fontStyle)
-  std::string fontStyle;
+  std::optional<std::string> fontStyle; // 'normal' | 'italic' | 'oblique'
   REACT_FIELD(fontVariant)
-  std::string fontVariant;
+  std::optional<std::string> fontVariant; // 'normal' | 'small-caps'
   REACT_FIELD(fontWeight)
-  std::string fontWeight;
+  std::optional<std::string> fontWeight;
   REACT_FIELD(fontStretch)
-  std::string fontStretch;
+  std::optional<std::string> fontStretch;
   REACT_FIELD(fontSize)
-  float fontSize;
+  std::optional<float> fontSize;
   REACT_FIELD(fontFamily)
-  std::string fontFamily;
+  std::optional<std::string> fontFamily;
   REACT_FIELD(textAnchor)
-  std::string textAnchor;
+  std::optional<std::string> textAnchor; // TODO: type->TextAnchor
   REACT_FIELD(textDecoration)
-  std::string textDecoration;
+  std::optional<std::string> textDecoration; // TODO: type-> TextDecoration
   REACT_FIELD(letterSpacing)
-  std::string letterSpacing;
+  std::optional<float> letterSpacing;
   REACT_FIELD(wordSpacing)
-  std::string wordSpacing;
+  std::optional<float> wordSpacing;
   REACT_FIELD(kerning)
-  std::string kerning;
+  std::optional<float> kerning;
   REACT_FIELD(fontFeatureSettings)
-  std::string fontFeatureSettings;
+  std::optional<std::string> fontFeatureSettings;
   REACT_FIELD(fontVariantLigatures)
-  std::string fontVariantLigatures;
+  std::optional<std::string> fontVariantLigatures; // TODO: Type -> FontVariantLigatures
   REACT_FIELD(fontVariationSettings)
-  std::string fontVariationSettings;
+  std::optional<std::string> fontVariationSettings;
 
   bool operator==(const FontObject &rhs) const {
     return fontStyle == rhs.fontStyle && fontVariant == rhs.fontVariant &&
