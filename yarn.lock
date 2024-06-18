@@ -8718,10 +8718,10 @@ react-native-codegen@*:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-react-native-windows@^0.74.0:
-  version "0.74.7"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.74.7.tgz#fff2d6346112d89adaaf02cf471ed6ff362b5e79"
-  integrity sha512-ujRB86iBxK0MdGGzKbwUgSjA0xtC+oISs1+xTuuBYVq+tfrN5QFTpPvFx60lnNgtioIIV6/jvqFmarkGaYXAWA==
+react-native-windows@0.74.9:
+  version "0.74.9"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.74.9.tgz#2abcc8eb99a4ce0ce80dfe2dea8ce249b8e21469"
+  integrity sha512-0WEwKhfi+WyjVswT6pRewfw2V694KYfTMIDSITDEu3Y3A9m1o0YyisnURxc4KRndRc0FQuw1iUf49uVK7BnXAw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^29.6.3"
@@ -8765,7 +8765,7 @@ react-native-windows@^0.74.0:
     ws "^6.2.2"
     yargs "^17.6.2"
 
-react-native@^0.74.0:
+react-native@0.74.2:
   version "0.74.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.74.2.tgz#172e64e4e79861e2b3da99b86999e4a4c55b8321"
   integrity sha512-EBMBjPPL4/GjHMP4NqsZabT3gI5WU9cSmduABGAGrd8uIcmTZ5F2Ng9k6gFmRm7n8e8CULxDNu98ZpQfBjl7Bw==
