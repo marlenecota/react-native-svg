@@ -47,18 +47,6 @@
     <ClInclude Include="Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="D2DBrush.h">
-      <Filter>D2DWrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="D2DDevice.h">
-      <Filter>D2DWrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="D2DDeviceContext.h">
-      <Filter>D2DWrappers</Filter>
-    </ClInclude>
-    <ClInclude Include="D2DGeometry.h">
-      <Filter>D2DWrappers</Filter>
-    </ClInclude>
     <ClInclude Include="SVGLength.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -113,6 +101,18 @@
     <ClInclude Include="ImageView.h">
       <Filter>Views</Filter>
     </ClInclude>
+    <ClInclude Include="D2DWrappers\D2DBrush.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DWrappers\D2DDevice.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DWrappers\D2DDeviceContext.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DWrappers\D2DGeometry.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -126,18 +126,6 @@
     </ClCompile>
     <ClCompile Include="RenderableView.cpp">
       <Filter>Views</Filter>
-    </ClCompile>
-    <ClCompile Include="D2DBrush.cpp">
-      <Filter>D2DWrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="D2DDevice.cpp">
-      <Filter>D2DWrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="D2DDeviceContext.cpp">
-      <Filter>D2DWrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="D2DGeometry.cpp">
-      <Filter>D2DWrappers</Filter>
     </ClCompile>
     <ClCompile Include="SVGLength.cpp">
       <Filter>Utils</Filter>
@@ -192,6 +180,18 @@
     </ClCompile>
     <ClCompile Include="ImageView.cpp">
       <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DWrappers\D2DBrush.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DWrappers\D2DDevice.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DWrappers\D2DDeviceContext.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DWrappers\D2DGeometry.cpp">
+      <Filter>D2DWrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

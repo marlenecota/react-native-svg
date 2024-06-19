@@ -7,8 +7,8 @@
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
-#include "D2DBrush.h"
-#include "D2DDeviceContext.h"
+#include "D2DWrappers/D2DBrush.h"
+#include "D2DWrappers/D2DDeviceContext.h"
 #include "D2DHelpers.h"
 
 #define _USE_MATH_DEFINES

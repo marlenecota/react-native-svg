@@ -9,8 +9,8 @@
 #include <winrt/Windows.Graphics.Display.h>
 #include <winrt/Windows.UI.Xaml.Media.Imaging.h>
 
-#include "D2DDevice.h"
-#include "D2DDeviceContext.h"
+#include "D2DWrappers/D2DDevice.h"
+#include "D2DWrappers/D2DDeviceContext.h"
 #include "GroupView.h"
 
 #include <AutoDraw.h>

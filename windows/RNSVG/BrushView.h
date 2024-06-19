@@ -1,7 +1,7 @@
 #pragma once
 #include "BrushView.g.h"
 #include "GroupView.h"
-#include "D2DBrush.h"
+#include "D2DWrappers/D2DBrush.h"
 
 namespace winrt::RNSVG::implementation {
 struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {

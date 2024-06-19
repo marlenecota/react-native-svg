@@ -2,8 +2,8 @@
 
 #include "RenderableView.g.h"
 #include "SVGLength.h"
-#include "D2DDeviceContext.h"
-#include "D2DGeometry.h"
+#include "D2DWrappers/D2DDeviceContext.h"
+#include "D2DWrappers/D2DGeometry.h"
 
 #include "SvgNodeCommonProps.g.h"
 #include "SvgRenderableCommonProps.g.h"

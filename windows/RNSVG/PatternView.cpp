@@ -5,7 +5,7 @@
 #endif
 
 #include "Utils.h"
-#include "D2DDevice.h"
+#include "D2DWrappers/D2DDevice.h"
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
