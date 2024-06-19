@@ -36,40 +36,40 @@ namespace RNSVG
     void Invalidate();
   };
 
-   [experimental]
-   [default_interface]
-   unsealed runtimeclass RenderableView : Microsoft.ReactNative.ComponentView, IRenderable
-   {
-     RenderableView(Microsoft.ReactNative.CreateComponentViewArgs args);
-     SvgView SvgRoot{ get; };
-     Boolean IsUnloaded { get; };
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass RenderableView : Microsoft.ReactNative.ComponentView, IRenderable
+  {
+    RenderableView(Microsoft.ReactNative.CreateComponentViewArgs args);
+    SvgView SvgRoot{ get; };
+    Boolean IsUnloaded { get; };
 
-     String Id{ get; };
-     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
-     Microsoft.ReactNative.Color Fill{ get; };
-     Single FillOpacity{ get; };
-     String FillBrushId{ get; };
-     Microsoft.ReactNative.Color Stroke{ get; };
-     Single StrokeOpacity{ get; };
-     String StrokeBrushId{ get; };
-     SVGLength StrokeWidth{ get; };
-     Single StrokeMiterLimit{ get; };
-     Single StrokeDashOffset{ get; };
-     Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
-     LineCap StrokeLineCap{ get; };
-     LineJoin StrokeLineJoin{ get; };
-     FillRule FillRule{ get; };
-     D2DGeometry ClipPathGeometry(D2DDeviceContext deviceContext);
-   };
+    String Id{ get; };
+    Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+    Microsoft.ReactNative.Color Fill{ get; };
+    Single FillOpacity{ get; };
+    String FillBrushId{ get; };
+    Microsoft.ReactNative.Color Stroke{ get; };
+    Single StrokeOpacity{ get; };
+    String StrokeBrushId{ get; };
+    SVGLength StrokeWidth{ get; };
+    Single StrokeMiterLimit{ get; };
+    Single StrokeDashOffset{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
+    LineCap StrokeLineCap{ get; };
+    LineJoin StrokeLineJoin{ get; };
+    FillRule FillRule{ get; };
+    D2DGeometry ClipPathGeometry(D2DDeviceContext deviceContext);
+  };
 
-   [experimental]
-   [default_interface]
-   runtimeclass RectView : RenderableView
-   {
-     RectView(Microsoft.ReactNative.CreateComponentViewArgs args);
-   };
+  [experimental]
+  [default_interface]
+  runtimeclass RectView : RenderableView
+  {
+    RectView(Microsoft.ReactNative.CreateComponentViewArgs args);
+  };
 
-   [experimental]
+  [experimental]
   [default_interface]
   runtimeclass CircleView : RenderableView
   {
@@ -111,18 +111,18 @@ namespace RNSVG
     ImageView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
-   [experimental]
-   [default_interface]
-   unsealed runtimeclass GroupView : RenderableView
-   {
-     GroupView(Microsoft.ReactNative.CreateComponentViewArgs args);
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass GroupView : RenderableView
+  {
+    GroupView(Microsoft.ReactNative.CreateComponentViewArgs args);
 
-     Single FontSize;
-     String FontFamily;
-     String FontWeight;
+    Single FontSize;
+    String FontFamily;
+    String FontWeight;
 
-     void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
-   };
+    void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
+  };
 
   [experimental]
   [default_interface]
@@ -178,16 +178,16 @@ namespace RNSVG
     MarkerView(Microsoft.ReactNative.CreateComponentViewArgs args);
   };
 
-   [experimental]
-   [default_interface]
-   unsealed runtimeclass BrushView : GroupView
-   {
-     BrushView(Microsoft.ReactNative.CreateComponentViewArgs args);
+  [experimental]
+  [default_interface]
+  unsealed runtimeclass BrushView : GroupView
+  {
+    BrushView(Microsoft.ReactNative.CreateComponentViewArgs args);
 
-     D2DBrush Brush{ get; };
-     void CreateBrush();
-     void SetBounds(Windows.Foundation.Rect rect);
-   };
+    D2DBrush Brush{ get; };
+    void CreateBrush();
+    void SetBounds(Windows.Foundation.Rect rect);
+  };
 
   [experimental]
   [default_interface]

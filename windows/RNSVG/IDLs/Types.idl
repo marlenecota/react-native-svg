@@ -98,8 +98,8 @@ namespace RNSVG {
 
   struct SVGLength
   {
-      Single Value;
-      LengthType Unit;
+    Single Value;
+    LengthType Unit;
   };
 
   [default_interface]
