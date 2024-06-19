@@ -201,13 +201,13 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="Types.idl">
+    <Midl Include="IDLs\Types.idl">
       <Filter>IDLs</Filter>
     </Midl>
-    <Midl Include="Views.idl">
+    <Midl Include="IDLs\ViewProps.idl">
       <Filter>IDLs</Filter>
     </Midl>
-    <Midl Include="ViewProps.idl">
+    <Midl Include="IDLs\Views.idl">
       <Filter>IDLs</Filter>
     </Midl>
   </ItemGroup>

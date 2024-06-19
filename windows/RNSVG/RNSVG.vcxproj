@@ -179,10 +179,10 @@
     <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="IDLs\Types.idl" />
+    <Midl Include="IDLs\ViewProps.idl" />
+    <Midl Include="IDLs\Views.idl" />
     <Midl Include="ReactPackageProvider.idl" />
-    <Midl Include="Types.idl" />
-    <Midl Include="ViewProps.idl" />
-    <Midl Include="Views.idl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RNSVG.rc" />
