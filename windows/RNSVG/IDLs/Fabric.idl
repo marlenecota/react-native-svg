@@ -27,6 +27,8 @@ namespace RNSVG
   {
     RenderableView(Microsoft.ReactNative.CreateComponentViewArgs args);
     SvgView SvgRoot{ get; };
+    Microsoft.ReactNative.Color Fill{ get; };
+    Microsoft.ReactNative.Color Stroke{ get; };
   };
 
   [experimental]

@@ -35,10 +35,8 @@ namespace RNSVG
 
     String Id{ get; };
     Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
-    Microsoft.ReactNative.Color Fill{ get; };
     Single FillOpacity{ get; };
     String FillBrushId{ get; };
-    Microsoft.ReactNative.Color Stroke{ get; };
     Single StrokeOpacity{ get; };
     String StrokeBrushId{ get; };
     SVGLength StrokeWidth{ get; };
