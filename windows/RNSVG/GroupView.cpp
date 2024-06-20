@@ -74,7 +74,11 @@ void GroupView::UpdateProperties(
   base_type::UpdateProperties(props, oldProps, forceUpdate, false);
 
   for (auto const &child : Children()) {
-    child.as<IRenderable>().UpdateProperties(props, oldProps, false, false);
+#ifdef USE_FABRIC
+    child.as<IRenderableFabric>().UpdateProperties(props, oldProps, false, false);
+#else
+    child.as<IRenderablePaper>().UpdateProperties(props, oldProps, false, false);
+#endif
   }
 
   if (invalidate && Parent()) {

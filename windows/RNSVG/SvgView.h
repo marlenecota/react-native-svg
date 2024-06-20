@@ -67,7 +67,7 @@ struct SvgView : SvgViewT<SvgView> {
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
     return m_templates;
   }
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> Brushes() {
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IBrushView> Brushes() {
     return m_brushes;
   }
 
@@ -77,7 +77,7 @@ struct SvgView : SvgViewT<SvgView> {
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true);
-  void MergeProperties(RNSVG::RenderableView const &other);
+  void MergeProperties(RNSVG::IRenderable const &other);
   void SaveDefinition();
   void Unload();
   void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
@@ -134,8 +134,8 @@ struct SvgView : SvgViewT<SvgView> {
 
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::BrushView> m_brushes{
-      winrt::single_threaded_map<hstring, RNSVG::BrushView>()};
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IBrushView> m_brushes{
+      winrt::single_threaded_map<hstring, RNSVG::IBrushView>()};
 };
 } // namespace winrt::RNSVG::implementation
 

@@ -169,7 +169,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
       bool forceUpdate = true,
       bool invalidate = true) noexcept;
   virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context) {}
-  virtual void MergeProperties(RNSVG::RenderableView const &other);
+  virtual void MergeProperties(RNSVG::IRenderable const &other);
   virtual void SaveDefinition();
   virtual void Unload();
   virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);

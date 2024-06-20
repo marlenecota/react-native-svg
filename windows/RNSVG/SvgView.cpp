@@ -156,7 +156,7 @@ void SvgView::SaveDefinition() {
   }
 }
 
-void SvgView::MergeProperties(RNSVG::RenderableView const &other) {
+void SvgView::MergeProperties(RNSVG::IRenderable const &other) {
   if (m_group) {
     m_group.MergeProperties(other);
   }

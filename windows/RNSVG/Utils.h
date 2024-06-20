@@ -237,11 +237,17 @@ struct Utils {
     com_ptr<ID2D1Brush> brush;
     com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(context)->Get()};
 
+    auto winColor{Windows::UI::Colors::Transparent()};
+
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
         com_ptr<ID2D1SolidColorBrush> scb;
-        deviceContext->CreateSolidColorBrush(
-            D2DHelpers::AsD2DColor(root.CurrentColor().AsWindowsColor(root.Theme())), scb.put());
+#ifdef USE_FABRIC
+        winColor = root.CurrentColor().AsWindowsColor(root.Theme());
+#else
+        winColor = Windows::UI::Colors::Black();
+#endif
+        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
         brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         brushView.CreateBrush();
@@ -259,7 +265,12 @@ struct Utils {
     if (!brush) {
       com_ptr<ID2D1SolidColorBrush> scb;
       assert(root != nullptr);
-      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color.AsWindowsColor(root.Theme())), scb.put());
+#ifdef USE_FABRIC
+      winColor = color.AsWindowsColor(root.Theme());
+#else
+      winColor = Windows::UI::Colors::Black();
+#endif
+      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
       brush = scb.as<ID2D1Brush>();
     }
 

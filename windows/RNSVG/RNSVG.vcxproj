@@ -179,6 +179,8 @@
     <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Condition="'$(UseFabric)' == 'true'" Include="IDLs\Fabric.idl" />
+    <Midl Condition="'$(UseFabric)' != 'true'" Include="IDLs\Paper.idl" />
     <Midl Include="IDLs\Types.idl" />
     <Midl Include="IDLs\ViewProps.idl" />
     <Midl Include="IDLs\Views.idl" />

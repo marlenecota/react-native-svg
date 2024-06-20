@@ -210,5 +210,11 @@
     <Midl Include="IDLs\Views.idl">
       <Filter>IDLs</Filter>
     </Midl>
+    <Midl Include="IDLs\Fabric.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="IDLs\Paper.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
   </ItemGroup>
 </Project>

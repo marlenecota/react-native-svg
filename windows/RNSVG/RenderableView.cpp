@@ -488,44 +488,46 @@ void RenderableView::Draw(RNSVG::D2DDeviceContext const &context, Size const &si
   deviceContext->SetTransform(transform);
 }
 
-void RenderableView::MergeProperties(RNSVG::RenderableView const &other) {
+void RenderableView::MergeProperties(RNSVG::IRenderable const &other) {
+  auto view{other.try_as<RNSVG::RenderableView>()};
+
   for (auto const &prop : m_propSetMap) {
-    if (!prop.second) {
+    if (!prop.second && view) {
       switch (prop.first) {
         case RNSVG::BaseProp::Fill:
-          m_fill = other.Fill();
-          m_fillBrushId = other.FillBrushId();
+          m_fill = view.Fill();
+          m_fillBrushId = view.FillBrushId();
           break;
         case RNSVG::BaseProp::FillOpacity:
-          m_fillOpacity = other.FillOpacity();
+          m_fillOpacity = view.FillOpacity();
           break;
         case RNSVG::BaseProp::FillRule:
-          m_fillRule = other.FillRule();
+          m_fillRule = view.FillRule();
           break;
         case RNSVG::BaseProp::Stroke:
-          m_stroke = other.Stroke();
-          m_strokeBrushId = other.StrokeBrushId();
+          m_stroke = view.Stroke();
+          m_strokeBrushId = view.StrokeBrushId();
           break;
         case RNSVG::BaseProp::StrokeOpacity:
-          m_strokeOpacity = other.StrokeOpacity();
+          m_strokeOpacity = view.StrokeOpacity();
           break;
         case RNSVG::BaseProp::StrokeWidth:
-          m_strokeWidth = other.StrokeWidth();
+          m_strokeWidth = view.StrokeWidth();
           break;
         case RNSVG::BaseProp::StrokeMiterLimit:
-          m_strokeMiterLimit = other.StrokeMiterLimit();
+          m_strokeMiterLimit = view.StrokeMiterLimit();
           break;
         case RNSVG::BaseProp::StrokeDashOffset:
-          m_strokeDashOffset = other.StrokeDashOffset();
+          m_strokeDashOffset = view.StrokeDashOffset();
           break;
         case RNSVG::BaseProp::StrokeDashArray:
-          m_strokeDashArray = other.StrokeDashArray();
+          m_strokeDashArray = view.StrokeDashArray();
           break;
         case RNSVG::BaseProp::StrokeLineCap:
-          m_strokeLineCap = other.StrokeLineCap();
+          m_strokeLineCap = view.StrokeLineCap();
           break;
         case RNSVG::BaseProp::StrokeLineJoin:
-          m_strokeLineJoin = other.StrokeLineJoin();
+          m_strokeLineJoin = view.StrokeLineJoin();
           break;
         case RNSVG::BaseProp::Unknown:
         default:
