@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "SymbolViewManager.h"
 #if __has_include("SymbolViewManager.g.cpp")
 #include "SymbolViewManager.g.cpp"

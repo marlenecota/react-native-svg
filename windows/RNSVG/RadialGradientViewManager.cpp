@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "RadialGradientViewManager.h"
 #if __has_include("RadialGradientViewManager.g.cpp")
 #include "RadialGradientViewManager.g.cpp"

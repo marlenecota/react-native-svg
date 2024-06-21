@@ -1,30 +1,25 @@
-#include "../pch.h"
-#include "PathViewManager.h"
-#if __has_include("PathViewManager.g.cpp")
-#include "PathViewManager.g.cpp"
+#include "pch.h"
+#include "ClipPathViewManager.h"
+#if __has_include("ClipPathViewManager.g.cpp")
+#include "ClipPathViewManager.g.cpp"
 #endif
-
-#include "PathViewManager.h"
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-PathViewManager::PathViewManager() {
-  m_class = RNSVG::SVGClass::RNSVGPath;
-  m_name = L"RNSVGPath";
+ClipPathViewManager::ClipPathViewManager() {
+  m_class = RNSVG::SVGClass::RNSVGClipPath;
+  m_name = L"RNSVGClipPath";
 }
 
-// IViewManagerWithNativeProperties
-IMapView<hstring, ViewManagerPropertyType> PathViewManager::NativeProps() {
+IMapView<hstring, ViewManagerPropertyType> ClipPathViewManager::NativeProps() {
   auto const &parentProps{__super::NativeProps()};
   auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 
   for (auto const &prop : parentProps) {
     nativeProps.Insert(prop.Key(), prop.Value());
   }
-
-  nativeProps.Insert(L"d", ViewManagerPropertyType::String);
 
   return nativeProps.GetView();
 }

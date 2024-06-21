@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "LinearGradientViewManager.h"
 #if __has_include("LinearGradientViewManager.g.cpp")
 #include "LinearGradientViewManager.g.cpp"

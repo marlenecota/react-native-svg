@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "SvgViewManager.h"
 #if __has_include("SvgViewManager.g.cpp")
 #include "SvgViewManager.g.cpp"

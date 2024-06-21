@@ -144,25 +144,25 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)' != 'true'">
-    <ClInclude Include="ViewManagers\CircleViewManager.h" />
-    <ClInclude Include="ViewManagers\ClipPathViewManager.h" />
-    <ClInclude Include="ViewManagers\DefsViewManager.h" />
-    <ClInclude Include="ViewManagers\EllipseViewManager.h" />
-    <ClInclude Include="ViewManagers\GroupViewManager.h" />
-    <ClInclude Include="ViewManagers\ImageViewManager.h" />
-    <ClInclude Include="ViewManagers\LinearGradientViewManager.h" />
-    <ClInclude Include="ViewManagers\LineViewManager.h" />
-    <ClInclude Include="ViewManagers\MarkerViewManager.h" />
-    <ClInclude Include="ViewManagers\PathViewManager.h" />
-    <ClInclude Include="ViewManagers\PatternViewManager.h" />
-    <ClInclude Include="ViewManagers\RadialGradientViewManager.h" />
-    <ClInclude Include="ViewManagers\RectViewManager.h" />
-    <ClInclude Include="ViewManagers\RenderableViewManager.h" />
-    <ClInclude Include="ViewManagers\SvgViewManager.h" />
-    <ClInclude Include="ViewManagers\SymbolViewManager.h" />
-    <ClInclude Include="ViewManagers\TextViewManager.h" />
-    <ClInclude Include="ViewManagers\TSpanViewManager.h" />
-    <ClInclude Include="ViewManagers\UseViewManager.h" />
+    <ClInclude Include="CircleViewManager.h" />
+    <ClInclude Include="ClipPathViewManager.h" />
+    <ClInclude Include="DefsViewManager.h" />
+    <ClInclude Include="EllipseViewManager.h" />
+    <ClInclude Include="GroupViewManager.h" />
+    <ClInclude Include="ImageViewManager.h" />
+    <ClInclude Include="LinearGradientViewManager.h" />
+    <ClInclude Include="LineViewManager.h" />
+    <ClInclude Include="MarkerViewManager.h" />
+    <ClInclude Include="PathViewManager.h" />
+    <ClInclude Include="PatternViewManager.h" />
+    <ClInclude Include="RadialGradientViewManager.h" />
+    <ClInclude Include="RectViewManager.h" />
+    <ClInclude Include="RenderableViewManager.h" />
+    <ClInclude Include="SvgViewManager.h" />
+    <ClInclude Include="SymbolViewManager.h" />
+    <ClInclude Include="TextViewManager.h" />
+    <ClInclude Include="TSpanViewManager.h" />
+    <ClInclude Include="UseViewManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BrushView.cpp" />
@@ -200,25 +200,25 @@
     <ClCompile Include="UseView.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseFabric)' != 'true'">
-    <ClCompile Include="ViewManagers\CircleViewManager.cpp" />
-    <ClCompile Include="ViewManagers\ClipPathViewManager.cpp" />
-    <ClCompile Include="ViewManagers\DefsViewManager.cpp" />
-    <ClCompile Include="ViewManagers\EllipseViewManager.cpp" />
-    <ClCompile Include="ViewManagers\GroupViewManager.cpp" />
-    <ClCompile Include="ViewManagers\ImageViewManager.cpp" />
-    <ClCompile Include="ViewManagers\LinearGradientViewManager.cpp" />
-    <ClCompile Include="ViewManagers\LineViewManager.cpp" />
-    <ClCompile Include="ViewManagers\MarkerViewManager.cpp" />
-    <ClCompile Include="ViewManagers\PathViewManager.cpp" />
-    <ClCompile Include="ViewManagers\PatternViewManager.cpp" />
-    <ClCompile Include="ViewManagers\RadialGradientViewManager.cpp" />
-    <ClCompile Include="ViewManagers\RectViewManager.cpp" />
-    <ClCompile Include="ViewManagers\RenderableViewManager.cpp" />
-    <ClCompile Include="ViewManagers\SvgViewManager.cpp" />
-    <ClCompile Include="ViewManagers\SymbolViewManager.cpp" />
-    <ClCompile Include="ViewManagers\TextViewManager.cpp" />
-    <ClCompile Include="ViewManagers\TSpanViewManager.cpp" />
-    <ClCompile Include="ViewManagers\UseViewManager.cpp" />
+    <ClCompile Include="CircleViewManager.cpp" />
+    <ClCompile Include="ClipPathViewManager.cpp" />
+    <ClCompile Include="DefsViewManager.cpp" />
+    <ClCompile Include="EllipseViewManager.cpp" />
+    <ClCompile Include="GroupViewManager.cpp" />
+    <ClCompile Include="ImageViewManager.cpp" />
+    <ClCompile Include="LinearGradientViewManager.cpp" />
+    <ClCompile Include="LineViewManager.cpp" />
+    <ClCompile Include="MarkerViewManager.cpp" />
+    <ClCompile Include="PathViewManager.cpp" />
+    <ClCompile Include="PatternViewManager.cpp" />
+    <ClCompile Include="RadialGradientViewManager.cpp" />
+    <ClCompile Include="RectViewManager.cpp" />
+    <ClCompile Include="RenderableViewManager.cpp" />
+    <ClCompile Include="SvgViewManager.cpp" />
+    <ClCompile Include="SymbolViewManager.cpp" />
+    <ClCompile Include="TextViewManager.cpp" />
+    <ClCompile Include="TSpanViewManager.cpp" />
+    <ClCompile Include="UseViewManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Midl Condition="'$(UseFabric)' == 'true'" Include="IDLs\Fabric.idl" />

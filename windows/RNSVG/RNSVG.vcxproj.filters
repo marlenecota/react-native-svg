@@ -125,61 +125,61 @@
     <ClInclude Include="D2DWrappers\D2DGeometry.h">
       <Filter>D2DWrappers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\CircleViewManager.h">
+    <ClInclude Include="CircleViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\EllipseViewManager.h">
+    <ClInclude Include="EllipseViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\ImageViewManager.h">
+    <ClInclude Include="ImageViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\LineViewManager.h">
+    <ClInclude Include="LineViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\PathViewManager.h">
+    <ClInclude Include="PathViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\RectViewManager.h">
+    <ClInclude Include="RectViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\RenderableViewManager.h">
+    <ClInclude Include="RenderableViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\SvgViewManager.h">
+    <ClInclude Include="SvgViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\DefsViewManager.h">
+    <ClInclude Include="DefsViewManager.h">
       <Filter>ViewManagers\Group</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\GroupViewManager.h">
+    <ClInclude Include="GroupViewManager.h">
       <Filter>ViewManagers\Group</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\SymbolViewManager.h">
+    <ClInclude Include="SymbolViewManager.h">
       <Filter>ViewManagers\Group</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\TSpanViewManager.h">
+    <ClInclude Include="TSpanViewManager.h">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\TextViewManager.h">
+    <ClInclude Include="TextViewManager.h">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\LinearGradientViewManager.h">
+    <ClInclude Include="LinearGradientViewManager.h">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\PatternViewManager.h">
+    <ClInclude Include="PatternViewManager.h">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\RadialGradientViewManager.h">
+    <ClInclude Include="RadialGradientViewManager.h">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\MarkerViewManager.h">
+    <ClInclude Include="MarkerViewManager.h">
       <Filter>ViewManagers\Group</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\ClipPathViewManager.h">
+    <ClInclude Include="ClipPathViewManager.h">
       <Filter>ViewManagers\Group</Filter>
     </ClInclude>
-    <ClInclude Include="ViewManagers\UseViewManager.h">
+    <ClInclude Include="UseViewManager.h">
       <Filter>ViewManagers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -262,61 +262,61 @@
     <ClCompile Include="D2DWrappers\D2DGeometry.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\CircleViewManager.cpp">
+    <ClCompile Include="CircleViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\EllipseViewManager.cpp">
+    <ClCompile Include="EllipseViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\ImageViewManager.cpp">
+    <ClCompile Include="ImageViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\LineViewManager.cpp">
+    <ClCompile Include="LineViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\PathViewManager.cpp">
+    <ClCompile Include="PathViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\RectViewManager.cpp">
+    <ClCompile Include="RectViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\RenderableViewManager.cpp">
+    <ClCompile Include="RenderableViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\SvgViewManager.cpp">
+    <ClCompile Include="SvgViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\DefsViewManager.cpp">
+    <ClCompile Include="DefsViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\GroupViewManager.cpp">
+    <ClCompile Include="GroupViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\SymbolViewManager.cpp">
+    <ClCompile Include="SymbolViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\TextViewManager.cpp">
+    <ClCompile Include="TextViewManager.cpp">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\TSpanViewManager.cpp">
+    <ClCompile Include="TSpanViewManager.cpp">
       <Filter>ViewManagers\Group\Text</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\LinearGradientViewManager.cpp">
+    <ClCompile Include="LinearGradientViewManager.cpp">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\PatternViewManager.cpp">
+    <ClCompile Include="PatternViewManager.cpp">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\RadialGradientViewManager.cpp">
+    <ClCompile Include="RadialGradientViewManager.cpp">
       <Filter>ViewManagers\Group\Brush</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\MarkerViewManager.cpp">
+    <ClCompile Include="MarkerViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\ClipPathViewManager.cpp">
+    <ClCompile Include="ClipPathViewManager.cpp">
       <Filter>ViewManagers\Group</Filter>
     </ClCompile>
-    <ClCompile Include="ViewManagers\UseViewManager.cpp">
+    <ClCompile Include="UseViewManager.cpp">
       <Filter>ViewManagers</Filter>
     </ClCompile>
   </ItemGroup>

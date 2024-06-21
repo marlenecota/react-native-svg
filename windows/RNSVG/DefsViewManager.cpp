@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "DefsViewManager.h"
 #if __has_include("DefsViewManager.g.cpp")
 #include "DefsViewManager.g.cpp"

@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "CircleViewManager.h"
 #if __has_include("CircleViewManager.g.cpp")
 #include "CircleViewManager.g.cpp"

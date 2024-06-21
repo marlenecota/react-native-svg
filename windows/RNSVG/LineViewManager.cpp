@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "LineViewManager.h"
 #if __has_include("LineViewManager.g.cpp")
 #include "LineViewManager.g.cpp"

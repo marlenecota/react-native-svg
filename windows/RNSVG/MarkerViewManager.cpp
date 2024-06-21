@@ -1,19 +1,19 @@
-#include "../pch.h"
-#include "ClipPathViewManager.h"
-#if __has_include("ClipPathViewManager.g.cpp")
-#include "ClipPathViewManager.g.cpp"
+#include "pch.h"
+#include "MarkerViewManager.h"
+#if __has_include("MarkerViewManager.g.cpp")
+#include "MarkerViewManager.g.cpp"
 #endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-ClipPathViewManager::ClipPathViewManager() {
-  m_class = RNSVG::SVGClass::RNSVGClipPath;
-  m_name = L"RNSVGClipPath";
+MarkerViewManager::MarkerViewManager() {
+  m_class = RNSVG::SVGClass::RNSVGMarker;
+  m_name = L"RNSVGMarker";
 }
 
-IMapView<hstring, ViewManagerPropertyType> ClipPathViewManager::NativeProps() {
+IMapView<hstring, ViewManagerPropertyType> MarkerViewManager::NativeProps() {
   auto const &parentProps{__super::NativeProps()};
   auto const &nativeProps{winrt::single_threaded_map<hstring, ViewManagerPropertyType>()};
 

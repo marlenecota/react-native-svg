@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "EllipseViewManager.h"
 #if __has_include("EllipseViewManager.g.cpp")
 #include "EllipseViewManager.g.cpp"

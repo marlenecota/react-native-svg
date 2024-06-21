@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "PatternViewManager.h"
 #if __has_include("PatternViewManager.g.cpp")
 #include "PatternViewManager.g.cpp"
