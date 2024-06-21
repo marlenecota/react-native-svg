@@ -4,7 +4,7 @@
 #include "PathViewManager.g.cpp"
 #endif
 
-//#include "PathViewManager.h"
+#include "PathViewManager.h"
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;
