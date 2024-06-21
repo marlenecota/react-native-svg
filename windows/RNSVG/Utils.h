@@ -2,8 +2,11 @@
 
 #include "pch.h"
 
+#ifdef USE_FABRIC
 #include <winrt/Microsoft.ReactNative.Composition.h>
 #include <winrt/Microsoft.ReactNative.Composition.Experimental.h>
+#endif
+
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Text.h>
 #include "JSValueReader.h"
