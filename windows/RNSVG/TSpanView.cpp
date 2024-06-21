@@ -75,8 +75,14 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
 
   if (translateXY) {
+#ifdef USE_FABRIC
     float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
+#else
+    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+#endif
+
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x, y}) * transform);
   }
 
@@ -93,7 +99,7 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   check_hresult(dwriteFactory->CreateTextFormat(
       FontFamily().c_str(),
       nullptr, // Font collection (nullptr sets it to use the system font collection).
-      D2DHelpers::FontWeightFrom(FontWeight(), Parent()),
+      D2DHelpers::FontWeightFrom(SvgParent(), FontWeight()),
       DWRITE_FONT_STYLE_NORMAL,
       DWRITE_FONT_STRETCH_NORMAL,
       FontSize(),
@@ -103,8 +109,8 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   auto const fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), nullptr, context)};
 
   deviceContext->DrawText(
-      to_hstring(m_props->content).c_str(),
-      static_cast<uint32_t>(m_props->content.size()),
+      to_hstring(m_content).c_str(),
+      static_cast<uint32_t>(m_content.size()),
       textFormat.get(),
       D2D1::RectF(0, 0, size.Width, size.Height),
       fill.get());

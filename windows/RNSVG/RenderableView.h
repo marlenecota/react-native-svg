@@ -10,8 +10,9 @@
 #include "SvgRenderableCommonProps.g.h"
 
 #include <JSValueComposition.h>
-#include <NativeModules.h>
 #endif
+
+#include <NativeModules.h>
 
 namespace winrt::RNSVG::implementation {
 #ifdef USE_FABRIC
@@ -202,6 +203,10 @@ struct RenderableView : RenderableViewT<RenderableView> {
   virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
 
  protected:
+#ifndef USE_FABRIC
+  std::vector<std::string> m_propList{};
+#endif
+
   float m_opacity{1.0f};
   std::map<RNSVG::BaseProp, bool> m_propSetMap{
       {RNSVG::BaseProp::Matrix, false},

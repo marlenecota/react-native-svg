@@ -136,7 +136,10 @@ void PatternView::UpdateBounds() {
 void PatternView::CreateBrush() {
   auto const root{SvgRoot()};
 
-  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, root.ActualSize().Width, root.ActualSize().Height})};
+  float width{root.CanvasSize().Width};
+  float height{root.CanvasSize().Height};
+
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, width, height})};
   CreateBrush(elRect);
 }
 

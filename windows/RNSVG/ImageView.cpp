@@ -304,8 +304,8 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
 
 #ifndef USE_FABRIC
     if (!source.headers.empty()) {
-      for (auto const &pair : source.headers) {
-        if (_stricmp(header.first.c_str(), "authorization") == 0) {
+      for (auto const &header : source.headers) {
+        if (_stricmp(to_string(header.first).c_str(), "authorization") == 0) {
           request.Headers().TryAppendWithoutValidation(header.first, header.second);
         } else {
           request.Headers().Append(header.first, header.second);

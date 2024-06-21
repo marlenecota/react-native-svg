@@ -751,6 +751,10 @@ void RenderableView::Unload() {
   m_propSetMap.clear();
   m_strokeDashArray.Clear();
   m_isUnloaded = true;
+
+#ifndef USE_FABRIC
+  m_propList.clear();
+#endif
 }
 
 RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
@@ -761,7 +765,7 @@ RNSVG::IRenderable RenderableView::HitTest(Point const &point) {
     com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(m_geometry)->Get()};
 
     if (auto const &svgRoot{SvgRoot()}) {
-      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.ActualSize())};
+      float canvasDiagonal{Utils::GetCanvasDiagonal(svgRoot.CanvasSize())};
       float strokeWidth{Utils::GetAbsoluteLength(StrokeWidth(), canvasDiagonal)};
 
       check_hresult(geometry->StrokeContainsPoint(pointD2D, strokeWidth, nullptr, nullptr, &strokeContainsPoint));

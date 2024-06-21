@@ -118,11 +118,7 @@ void RadialGradientView::CreateBrush() {
   winrt::com_ptr<ID2D1RadialGradientBrush> radialBrush;
   winrt::check_hresult(deviceContext->CreateRadialGradientBrush(brushProperties, stopCollection.get(), radialBrush.put()));
 
-#ifdef USE_FABRIC
-  SetPoints(radialBrush.get(), {0, 0, root.ActualSize().Width, root.ActualSize().Height});
-#else
-  SetPoints(radialBrush.get(), {0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())});
-#endif
+  SetPoints(radialBrush.get(), {0, 0, root.CanvasSize().Width, root.CanvasSize().Height});
 
   if (!m_transform.IsIdentity()) {
     radialBrush->SetTransform(m_transform);

@@ -127,8 +127,12 @@ struct D2DHelpers {
   }
 
   static DWRITE_FONT_WEIGHT FontWeightFrom(
-      hstring const &weight,
-      winrt::Microsoft::ReactNative::ComponentView const &parent) {
+#ifdef USE_FABRIC
+      winrt::Microsoft::ReactNative::ComponentView const &parent,
+#else
+      xaml::FrameworkElement const &parent,
+#endif
+      hstring const &weight) {
     if (weight == L"normal") {
       return DWRITE_FONT_WEIGHT_NORMAL;
     } else if (weight == L"bold") {
@@ -137,7 +141,8 @@ struct D2DHelpers {
 
     auto const &groupView{parent.try_as<RNSVG::GroupView>()};
     DWRITE_FONT_WEIGHT parentWeight{
-        groupView ? D2DHelpers::FontWeightFrom(groupView.FontWeight(), groupView.Parent()) : DWRITE_FONT_WEIGHT_NORMAL};
+        groupView ? D2DHelpers::FontWeightFrom(groupView.SvgParent(), groupView.FontWeight())
+                  : DWRITE_FONT_WEIGHT_NORMAL};
 
     if (weight == L"bolder") {
       return D2DHelpers::Bolder(parentWeight);

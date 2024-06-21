@@ -85,15 +85,24 @@ void RectView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 void RectView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
-  float x{Utils::GetAbsoluteLength(m_x, root.ActualSize().Width)};
-  float y{Utils::GetAbsoluteLength(m_y, root.ActualSize().Height)};
-  float width{Utils::GetAbsoluteLength(m_width, root.ActualSize().Width)};
-  float height{Utils::GetAbsoluteLength(m_height, root.ActualSize().Height)};
+  float canvasWidth{root.CanvasSize().Width};
+  float canvasHeight{root.CanvasSize().Height};
 
+  float x{Utils::GetAbsoluteLength(m_x, canvasWidth)};
+  float y{Utils::GetAbsoluteLength(m_y, canvasHeight)};
+  float width{Utils::GetAbsoluteLength(m_width, canvasWidth)};
+  float height{Utils::GetAbsoluteLength(m_height, canvasHeight)};
+
+#ifdef USE_FABRIC
   auto const rxLength{m_rx.Unit == RNSVG::LengthType::Unknown ? m_ry : m_rx};
   auto const ryLength{m_ry.Unit == RNSVG::LengthType::Unknown ? m_rx : m_ry};
-  float rx{Utils::GetAbsoluteLength(rxLength, root.ActualSize().Width)};
-  float ry{Utils::GetAbsoluteLength(ryLength, root.ActualSize().Height)};
+#else
+  auto const rxLength{m_rx.Unit() == RNSVG::LengthType::Unknown ? m_ry : m_rx};
+  auto const ryLength{m_ry.Unit() == RNSVG::LengthType::Unknown ? m_rx : m_ry};
+#endif
+
+  float rx{Utils::GetAbsoluteLength(rxLength, canvasWidth)};
+  float ry{Utils::GetAbsoluteLength(ryLength, canvasHeight)};
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 

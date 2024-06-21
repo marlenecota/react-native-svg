@@ -79,10 +79,13 @@ void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
 void LineView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
-  float x1{Utils::GetAbsoluteLength(m_props->x1, root.ActualSize().Width)};
-  float y1{Utils::GetAbsoluteLength(m_props->y1, root.ActualSize().Height)};
-  float x2{Utils::GetAbsoluteLength(m_props->x2, root.ActualSize().Width)};
-  float y2{Utils::GetAbsoluteLength(m_props->y2, root.ActualSize().Height)};
+  float width{root.CanvasSize().Width};
+  float height{root.CanvasSize().Height};
+
+  float x1{Utils::GetAbsoluteLength(m_x1, width)};
+  float y1{Utils::GetAbsoluteLength(m_y1, height)};
+  float x2{Utils::GetAbsoluteLength(m_x2, width)};
+  float y2{Utils::GetAbsoluteLength(m_y2, height)};
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 

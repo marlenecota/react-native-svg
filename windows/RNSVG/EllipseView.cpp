@@ -78,10 +78,13 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
 void EllipseView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const root{SvgRoot()};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualSize().Width)};
-  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualSize().Height)};
-  float rx{Utils::GetAbsoluteLength(m_rx, root.ActualSize().Width)};
-  float ry{Utils::GetAbsoluteLength(m_ry, root.ActualSize().Height)};
+  float width{root.CanvasSize().Width};
+  float height{root.CanvasSize().Height};
+
+  float cx{Utils::GetAbsoluteLength(m_cx, width)};
+  float cy{Utils::GetAbsoluteLength(m_cy, height)};
+  float rx{Utils::GetAbsoluteLength(m_rx, width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, height)};
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 

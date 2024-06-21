@@ -106,11 +106,7 @@ void LinearGradientView::CreateBrush() {
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
-#ifdef USE_FABRIC
-  Size size{root.ActualSize()};
-#else
-  Size size{static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
-#endif
+  Size size{root.CanvasSize()};
 
   D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
   brushProperties.startPoint = {0, 0};

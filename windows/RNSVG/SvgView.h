@@ -2,9 +2,9 @@
 
 #include "SvgView.g.h"
 
+#ifdef USE_FABRIC
 #include "SvgViewProps.g.h"
 
-#ifdef USE_FABRIC
 #include <JSValueComposition.h>
 #include "NativeModules.h"
 #endif
@@ -56,8 +56,6 @@ struct SvgView : SvgViewT<SvgView> {
 #ifdef USE_FABRIC
   SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args);
 
-  winrt::Windows::Foundation::Size ActualSize() noexcept;
-
   winrt::Microsoft::ReactNative::ComponentView SvgParent() { return Parent(); }
   winrt::Microsoft::ReactNative::Color CurrentColor() { return m_currentColor; }
 
@@ -106,6 +104,8 @@ struct SvgView : SvgViewT<SvgView> {
   void Panel_Loaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
   void Panel_Unloaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
 #endif
+
+  winrt::Windows::Foundation::Size CanvasSize() noexcept;
 
   RNSVG::GroupView Group() { return m_group; }
   void Group(RNSVG::GroupView const &value) { m_group = value; }

@@ -179,11 +179,6 @@ void SvgView::UpdateLayoutMetrics(
     Invalidate();
   }
 }
-
-winrt::Windows::Foundation::Size SvgView::ActualSize() noexcept {
-  return winrt::Windows::Foundation::Size{
-      m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
-}
 #else
 SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
   uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -260,10 +255,18 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
         m_height = SVGLength::From(propertyValue);
       } else if (propertyName == "bbWidth") {
         m_bbWidth = SVGLength::From(propertyValue);
+#ifdef USE_FABRIC
+        Width(m_bbWidth.Value);
+#else
         Width(m_bbWidth.Value());
+#endif
       } else if (propertyName == "bbHeight") {
         m_bbHeight = SVGLength::From(propertyValue);
+#ifdef USE_FABRIC
+        Height(m_bbHeight.Value);
+#else
         Height(m_bbHeight.Value());
+#endif
       } else if (propertyName == "vbWidth") {
         m_vbWidth = Utils::JSValueAsFloat(propertyValue);
       } else if (propertyName == "vbHeight") {
@@ -315,6 +318,14 @@ void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs c
   }
 }
 #endif
+
+winrt::Windows::Foundation::Size SvgView::CanvasSize() noexcept {
+#ifdef USE_FABRIC
+  return winrt::Windows::Foundation::Size{m_layoutMetrics.Frame.Width, m_layoutMetrics.Frame.Height};
+#else
+  return ActualSize();
+#endif
+}
 
 void SvgView::SaveDefinition() {
   if (m_id != L"" && m_group) {
@@ -402,7 +413,7 @@ void SvgView::Invalidate() {
   m_templates.Clear();
 
 #ifdef USE_FABRIC
-  Size size = ActualSize();
+  Size size = CanvasSize();
 
   if (size.Height == 0 || size.Width == 0) {
     return;

@@ -4,6 +4,7 @@
 #include "TextView.g.cpp"
 #endif
 
+//#include "Utils.h"
 #include "D2DHelpers.h"
 
 using namespace winrt;
@@ -134,8 +135,14 @@ void TextView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &siz
 
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
   if (translateXY) {
+#ifdef USE_FABRIC
     float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
     float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
+#else
+    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+#endif
+
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x,y}) * transform);
   }
   __super::DrawGroup(context, size);

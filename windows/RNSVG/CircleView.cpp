@@ -76,9 +76,12 @@ void CircleView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate
 void CircleView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const root{SvgRoot()};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualSize().Width)};
-  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualSize().Height)};
-  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(root.ActualSize()))};
+  float width{root.CanvasSize().Width};
+  float height{root.CanvasSize().Height};
+
+  float cx{Utils::GetAbsoluteLength(m_cx, width)};
+  float cy{Utils::GetAbsoluteLength(m_cy, height)};
+  float r{Utils::GetAbsoluteLength(m_r, Utils::GetCanvasDiagonal(root.CanvasSize()))};
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
