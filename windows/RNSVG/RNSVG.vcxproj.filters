@@ -26,6 +26,18 @@
     <Filter Include="Views\Group\Text">
       <UniqueIdentifier>{e6183a93-8cfe-4ae5-a008-a244bf877fdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ViewManagers">
+      <UniqueIdentifier>{903caadb-cce7-4047-85a4-02cb1081259d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group">
+      <UniqueIdentifier>{0a73fdc8-1bc0-472c-9e0e-b74523f527a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group\Brush">
+      <UniqueIdentifier>{057e5232-638c-4f2d-a509-195b3e5544f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group\Text">
+      <UniqueIdentifier>{06b62b39-66a3-4a36-a349-cac0f3a3f196}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -113,6 +125,63 @@
     <ClInclude Include="D2DWrappers\D2DGeometry.h">
       <Filter>D2DWrappers</Filter>
     </ClInclude>
+    <ClInclude Include="ViewManagers\CircleViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\EllipseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\ImageViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\LineViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\PathViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\RectViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\RenderableViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\SvgViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\DefsViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\GroupViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\SymbolViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\TSpanViewManager.h">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\TextViewManager.h">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\LinearGradientViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\PatternViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\RadialGradientViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\MarkerViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\ClipPathViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewManagers\UseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
@@ -193,6 +262,63 @@
     <ClCompile Include="D2DWrappers\D2DGeometry.cpp">
       <Filter>D2DWrappers</Filter>
     </ClCompile>
+    <ClCompile Include="ViewManagers\CircleViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\EllipseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\ImageViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\LineViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\PathViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\RectViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\RenderableViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\SvgViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\DefsViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\GroupViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\SymbolViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\TextViewManager.cpp">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\TSpanViewManager.cpp">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\LinearGradientViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\PatternViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\RadialGradientViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\MarkerViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\ClipPathViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewManagers\UseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RNSVG.rc">
@@ -201,19 +327,22 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="IDLs\Fabric.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="IDLs\Paper.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
     <Midl Include="IDLs\Types.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="IDLs\ViewManagers.idl">
       <Filter>IDLs</Filter>
     </Midl>
     <Midl Include="IDLs\ViewProps.idl">
       <Filter>IDLs</Filter>
     </Midl>
     <Midl Include="IDLs\Views.idl">
-      <Filter>IDLs</Filter>
-    </Midl>
-    <Midl Include="IDLs\Fabric.idl">
-      <Filter>IDLs</Filter>
-    </Midl>
-    <Midl Include="IDLs\Paper.idl">
       <Filter>IDLs</Filter>
     </Midl>
   </ItemGroup>

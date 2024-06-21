@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "../pch.h"
 #include "PathViewManager.h"
 #if __has_include("PathViewManager.g.cpp")
 #include "PathViewManager.g.cpp"

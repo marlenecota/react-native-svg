@@ -5,6 +5,8 @@
 #endif
 
 #include "RNSVGModule.h"
+
+#ifdef USE_FABRIC
 #include "SvgView.h"
 #include "GroupView.h"
 #include "RectView.h"
@@ -23,6 +25,26 @@
 #include "PatternView.h"
 #include "TextView.h"
 #include "TSpanView.h"
+#else
+#include "ViewManagers/SvgViewManager.h"
+#include "ViewManagers/GroupViewManager.h"
+#include "ViewManagers/PathViewManager.h"
+#include "ViewManagers/RectViewManager.h"
+#include "ViewManagers/CircleViewManager.h"
+#include "ViewManagers/EllipseViewManager.h"
+#include "ViewManagers/LineViewManager.h"
+#include "ViewManagers/UseViewManager.h"
+#include "ViewManagers/ImageViewManager.h"
+#include "ViewManagers/TextViewManager.h"
+#include "ViewManagers/TSpanViewManager.h"
+#include "ViewManagers/SymbolViewManager.h"
+#include "ViewManagers/DefsViewManager.h"
+#include "ViewManagers/LinearGradientViewManager.h"
+#include "ViewManagers/RadialGradientViewManager.h"
+#include "ViewManagers/PatternViewManager.h"
+#include "ViewManagers/ClipPathViewManager.h"
+#include "ViewManagers/MarkerViewManager.h"
+#endif
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -30,6 +52,9 @@ namespace winrt::RNSVG::implementation
 {
   void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
   {
+    AddAttributedModules(packageBuilder);
+
+#ifdef USE_FABRIC
     auto fabricPackageBuilder = packageBuilder.as<winrt::Microsoft::ReactNative::IReactPackageBuilderFabric>();
 
     SvgView::RegisterComponent(fabricPackageBuilder);
@@ -50,8 +75,27 @@ namespace winrt::RNSVG::implementation
     PatternView::RegisterComponent(fabricPackageBuilder);
     TextView::RegisterComponent(fabricPackageBuilder);
     TSpanView::RegisterComponent(fabricPackageBuilder);
+#else
+    packageBuilder.AddViewManager(L"SvgViewManager", []() { return winrt::make<SvgViewManager>(); });
+    packageBuilder.AddViewManager(L"GroupViewManager", []() { return winrt::make<GroupViewManager>(); });
+    packageBuilder.AddViewManager(L"PathViewManager", []() { return winrt::make<PathViewManager>(); });
+    packageBuilder.AddViewManager(L"RectViewManager", []() { return winrt::make<RectViewManager>(); });
+    packageBuilder.AddViewManager(L"CircleViewManager", []() { return winrt::make<CircleViewManager>(); });
+    packageBuilder.AddViewManager(L"EllipseViewManager", []() { return winrt::make<EllipseViewManager>(); });
+    packageBuilder.AddViewManager(L"LineViewManager", []() { return winrt::make<LineViewManager>(); });
+    packageBuilder.AddViewManager(L"UseViewManager", []() { return winrt::make<UseViewManager>(); });
+    packageBuilder.AddViewManager(L"ImageViewManager", []() { return winrt::make<ImageViewManager>(); });
+    packageBuilder.AddViewManager(L"TextViewManager", []() { return winrt::make<TextViewManager>(); });
+    packageBuilder.AddViewManager(L"TSpanViewManager", []() { return winrt::make<TSpanViewManager>(); });
+    packageBuilder.AddViewManager(L"SymbolViewManager", []() { return winrt::make<SymbolViewManager>(); });
+    packageBuilder.AddViewManager(L"DefsViewManager", []() { return winrt::make<DefsViewManager>(); });
+    packageBuilder.AddViewManager(L"LinearGradientViewManager", []() { return winrt::make<LinearGradientViewManager>(); });
+    packageBuilder.AddViewManager(L"RadialGradientViewManager", []() { return winrt::make<RadialGradientViewManager>(); });
+    packageBuilder.AddViewManager(L"PatternViewManager", []() { return winrt::make<PatternViewManager>(); });
+    packageBuilder.AddViewManager(L"ClipPathViewManager", []() { return winrt::make<ClipPathViewManager>(); });
+    packageBuilder.AddViewManager(L"MarkerViewManager", []() { return winrt::make<MarkerViewManager>(); });
+#endif
 
-    AddAttributedModules(packageBuilder);
   }
 
 } // namespace winrt::RNSVG::implementation
