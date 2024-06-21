@@ -5,14 +5,16 @@
 #include "D2DWrappers/D2DDeviceContext.h"
 #include "D2DWrappers/D2DGeometry.h"
 
+#ifdef USE_FABRIC
 #include "SvgNodeCommonProps.g.h"
 #include "SvgRenderableCommonProps.g.h"
 
 #include <JSValueComposition.h>
 #include <NativeModules.h>
+#endif
 
 namespace winrt::RNSVG::implementation {
-
+#ifdef USE_FABRIC
 REACT_STRUCT(ColorStruct)
 struct ColorStruct {
   REACT_FIELD(type)
@@ -119,10 +121,50 @@ struct SvgRenderableCommonProps
   std::optional<int32_t> vectorEffect;      // 0
   std::optional<std::vector<std::string>> propList;
 };
+#endif
 
 struct RenderableView : RenderableViewT<RenderableView> {
  public:
+  RenderableView() = default;
+
+#ifdef USE_FABRIC
   RenderableView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
+
+  // IRenderableFabric
+  winrt::Microsoft::ReactNative::ComponentView SvgParent() { return Parent(); }
+  winrt::Microsoft::ReactNative::Color Fill() { return m_fill; }
+  winrt::Microsoft::ReactNative::Color Stroke() { return m_stroke; }
+
+  // ComponentView
+  void MountChildComponentView(
+      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+      uint32_t index) noexcept;
+  void UnmountChildComponentView(
+      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
+      uint32_t index) noexcept;
+
+  virtual void UpdateProps(
+      const winrt::Microsoft::ReactNative::IComponentProps &props,
+      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
+
+  // IRenderableFabric
+  virtual void UpdateProperties(
+      const winrt::Microsoft::ReactNative::IComponentProps &props,
+      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+      bool forceUpdate = true,
+      bool invalidate = true) noexcept;
+#else
+  RenderableView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
+
+  // IRenderablePaper
+  xaml::FrameworkElement SvgParent() { return m_parent; }
+  void SvgParent(xaml::FrameworkElement const &value) { m_parent = value; }
+
+  Windows::UI::Color Fill() { return m_fill; }
+  Windows::UI::Color Stroke() { return m_stroke; }
+
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
+#endif
 
   RNSVG::SvgView SvgRoot();
 
@@ -138,10 +180,8 @@ struct RenderableView : RenderableViewT<RenderableView> {
   bool IsUnloaded() { return m_isUnloaded; }
 
   hstring FillBrushId() { return m_fillBrushId; }
-  winrt::Microsoft::ReactNative::Color Fill() { return m_fill; }
   float FillOpacity() { return m_fillOpacity; }
   hstring StrokeBrushId() { return m_strokeBrushId; }
-  winrt::Microsoft::ReactNative::Color Stroke() { return m_stroke; }
   float StrokeOpacity() { return m_strokeOpacity; }
   float StrokeMiterLimit() { return m_strokeMiterLimit; }
   float StrokeDashOffset() { return m_strokeDashOffset; }
@@ -152,22 +192,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RNSVG::FillRule FillRule() { return m_fillRule; }
   RNSVG::D2DGeometry ClipPathGeometry(RNSVG::D2DDeviceContext const &context);
 
-  void MountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
-  void UnmountChildComponentView(
-      const winrt::Microsoft::ReactNative::ComponentView &childComponentView,
-      uint32_t index) noexcept;
-
-  virtual void UpdateProps(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
-
-  virtual void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true) noexcept;
+  // IRenderable
   virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context) {}
   virtual void MergeProperties(RNSVG::IRenderable const &other);
   virtual void SaveDefinition();
@@ -194,8 +219,24 @@ struct RenderableView : RenderableViewT<RenderableView> {
   };
 
  private:
-  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+#ifdef USE_FABRIC
   winrt::Microsoft::ReactNative::ComponentView m_parent{nullptr};
+  winrt::Microsoft::ReactNative::Color m_fill{winrt::Microsoft::ReactNative::Color::Black()};
+  winrt::Microsoft::ReactNative::Color m_stroke{winrt::Microsoft::ReactNative::Color::Transparent()};
+
+  void SetColor(
+    std::optional<ColorStruct> &propValue,
+    winrt::Microsoft::ReactNative::Color const &fallbackColor,
+    std::string propName);
+#else
+  xaml::FrameworkElement m_parent{nullptr};
+  Windows::UI::Color m_fill{Colors::Black()};
+  Windows::UI::Color m_stroke{Colors::Transparent()};
+
+  void SetColor(const Microsoft::ReactNative::JSValueObject &propValue, Windows::UI::Color const &fallbackColor, std::string propName);
+#endif
+ 
+  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   RNSVG::D2DGeometry m_geometry{nullptr};
   bool m_recreateResources{true};
   bool m_isResponsible{false};
@@ -203,9 +244,7 @@ struct RenderableView : RenderableViewT<RenderableView> {
 
   hstring m_id{L""};
   hstring m_clipPathId{L""};
-  Numerics::float3x2 m_transformMatrix{Numerics::make_float3x2_rotation(0)};
-  winrt::Microsoft::ReactNative::Color m_fill{winrt::Microsoft::ReactNative::Color::Black()};
-  winrt::Microsoft::ReactNative::Color m_stroke{winrt::Microsoft::ReactNative::Color::Transparent()};
+  Numerics::float3x2 m_transformMatrix{Numerics::float3x2::identity()};
   hstring m_fillBrushId{L""};
   hstring m_strokeBrushId{L""};
   float m_fillOpacity{1.0f};
@@ -219,11 +258,6 @@ struct RenderableView : RenderableViewT<RenderableView> {
   RNSVG::LineCap m_strokeLineCap{RNSVG::LineCap::Butt};
   RNSVG::LineJoin m_strokeLineJoin{RNSVG::LineJoin::Miter};
   RNSVG::FillRule m_fillRule{RNSVG::FillRule::NonZero};
-
-  void SetColor(
-      std::optional<ColorStruct> &propValue,
-      winrt::Microsoft::ReactNative::Color const &fallbackColor,
-      std::string propName);
 };
 } // namespace winrt::RNSVG::implementation
 

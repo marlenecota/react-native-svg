@@ -1,9 +1,14 @@
 #pragma once
+
+#ifdef USE_FABRIC
 #include "ClipPathProps.g.h"
+#endif
+
 #include "ClipPathView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
+#ifdef USE_FABRIC
 REACT_STRUCT(ClipPathProps)
 struct ClipPathProps : ClipPathPropsT<ClipPathProps, SvgGroupCommonProps> {
   ClipPathProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -15,20 +20,26 @@ struct ClipPathProps : ClipPathPropsT<ClipPathProps, SvgGroupCommonProps> {
   REACT_SVG_RENDERABLE_COMMON_PROPS;
   REACT_SVG_GROUP_COMMON_PROPS;
 };
-
+#endif
 struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupView> {
  public:
+  ClipPathView() = default;
+
+#ifdef USE_FABRIC
   ClipPathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
-  // RenderableView
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+  
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
-  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
+#endif
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+  // IRenderable
+  void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 };
 } // namespace winrt::RNSVG::implementation
 

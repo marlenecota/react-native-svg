@@ -10,6 +10,8 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 SvgTextCommonProps::SvgTextCommonProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
 void SvgTextCommonProps::SetProp(
@@ -20,6 +22,18 @@ void SvgTextCommonProps::SetProp(
 }
 
 TextView::TextView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void TextView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGText", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::SvgTextCommonProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::TextView>(args);
+        });
+      });
+}
 
 void TextView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
@@ -73,6 +87,45 @@ void TextView::UpdateProperties(
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
+#else
+void TextView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+
+  for (auto const &pair : propertyMap) {
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
+
+    if (propertyName == "x") {
+      m_x.Clear();
+      for (auto const &item : propertyValue.AsArray()) {
+        m_x.Append(SVGLength::From(item));
+      }
+    } else if (propertyName == "y") {
+      m_y.Clear();
+      for (auto const &item : propertyValue.AsArray()) {
+        m_y.Append(SVGLength::From(item));
+      }
+    } else if (propertyName == "dx") {
+      m_dx.Clear();
+      for (auto const &item : propertyValue.AsArray()) {
+        m_dx.Append(SVGLength::From(item));
+      }
+    } else if (propertyName == "dy") {
+      m_dy.Clear();
+      for (auto const &item : propertyValue.AsArray()) {
+        m_dy.Append(SVGLength::From(item));
+      }
+    } else if (propertyName == "rotate") {
+      m_rotate.Clear();
+      for (auto const &item : propertyValue.AsArray()) {
+        m_rotate.Append(SVGLength::From(item));
+      }
+    }
+  }
+
+  __super::UpdateProperties(reader, forceUpdate, invalidate);
+}
+#endif
 
 void TextView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
@@ -89,17 +142,5 @@ void TextView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &siz
   if (translateXY) {
     deviceContext->SetTransform(transform);
   }
-}
-
-void TextView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGText", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::SvgTextCommonProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TextView>(args);
-        });
-      });
 }
 } // namespace winrt::RNSVG::implementation

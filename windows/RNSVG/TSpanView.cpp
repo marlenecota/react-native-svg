@@ -12,6 +12,8 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 TSpanProps::TSpanProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
 void TSpanProps::SetProp(
@@ -23,6 +25,18 @@ void TSpanProps::SetProp(
 
 TSpanView::TSpanView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
 
+void TSpanView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGTSpan", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::TSpanProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::TSpanView>(args);
+        });
+      });
+}
+
 void TSpanView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
@@ -31,10 +45,27 @@ void TSpanView::UpdateProperties(
   auto tspanProps = props.try_as<TSpanProps>();
   if (tspanProps) {
     m_props = tspanProps;
+    m_content = m_props->content;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
+#else
+void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+
+  for (auto const &pair : propertyMap) {
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
+
+    if (propertyName == "content") {
+      m_content = propertyValue.AsString();
+    }
+  }
+
+  __super::UpdateProperties(reader, forceUpdate, invalidate);
+}
+#endif
 
 void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
@@ -81,17 +112,5 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   if (translateXY) {
     deviceContext->SetTransform(transform);
   }
-}
-
-void TSpanView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGTSpan", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TSpanProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::TSpanView>(args);
-        });
-      });
 }
 } // namespace winrt::RNSVG::implementation

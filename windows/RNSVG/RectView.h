@@ -1,11 +1,15 @@
 #pragma once
 
+#ifdef USE_FABRIC
 #include "RectProps.g.h"
+#endif
+
 #include "RectView.g.h"
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
 
+#ifdef USE_FABRIC
 REACT_STRUCT(RectProps)
 struct RectProps : RectPropsT<RectProps, SvgRenderableCommonProps> {
   RectProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -29,22 +33,42 @@ struct RectProps : RectPropsT<RectProps, SvgRenderableCommonProps> {
   REACT_FIELD(ry)
   RNSVG::SVGLength ry{0, winrt::RNSVG::LengthType::Unknown};
 };
+#endif
 
 struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
  public:
+  RectView() = default;
+
+#ifdef USE_FABRIC
   RectView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
+#else
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
+
+  // IRenderable
   void CreateGeometry(RNSVG::D2DDeviceContext const &context);
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
+  RNSVG::SVGLength m_width{};
+  RNSVG::SVGLength m_height{};
+  RNSVG::SVGLength m_x{};
+  RNSVG::SVGLength m_y{};
+  RNSVG::SVGLength m_rx{};
+  RNSVG::SVGLength m_ry{};
+
+#ifdef USE_FABRIC
   com_ptr<RectProps> m_props;
+#endif
 };
 } // namespace winrt::RNSVG::implementation
 

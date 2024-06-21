@@ -4,11 +4,11 @@
 #include "MarkerView.g.cpp"
 #endif
 
-#include "Utils.h"
-
 using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 MarkerProps::MarkerProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
 void MarkerProps::SetProp(
@@ -19,6 +19,18 @@ void MarkerProps::SetProp(
 }
 
 MarkerView::MarkerView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
+
+void MarkerView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGMarker", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::MarkerProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::MarkerView>(args);
+        });
+      });
+}
 
 void MarkerView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
@@ -32,16 +44,7 @@ void MarkerView::UpdateProperties(
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
+#else
+#endif
 
-void MarkerView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGMarker", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MarkerProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::MarkerView>(args);
-        });
-      });
-}
 } // namespace winrt::RNSVG::implementation

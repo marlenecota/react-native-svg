@@ -1,9 +1,15 @@
 #pragma once
+
+#ifdef USE_FABRIC
 #include "SvgTextCommonProps.g.h"
+#endif
+
 #include "TextView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 #define REACT_SVG_TEXT_COMMON_PROPS \
   REACT_FIELD(dx)                   \
   REACT_FIELD(dy)                   \
@@ -40,10 +46,27 @@ struct SvgTextCommonProps : SvgTextCommonPropsT<SvgTextCommonProps, SvgGroupComm
   std::string alignmentBaseline;
   RNSVG::SVGLength verticalAlign{0, winrt::RNSVG::LengthType::Unknown};
 };
+#endif
 
 struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
  public:
+  TextView() = default;
+
+#ifdef USE_FABRIC
   TextView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
+
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
+  virtual void UpdateProperties(
+      const winrt::Microsoft::ReactNative::IComponentProps &props,
+      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+      bool forceUpdate = true,
+      bool invalidate = true) noexcept;
+#else
+  // IRenderablePaper
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
 
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> X() { return m_x; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> Y() { return m_y; }
@@ -51,22 +74,20 @@ struct TextView : TextViewT<TextView, RNSVG::implementation::GroupView> {
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> DY() { return m_dy; }
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> Rotate() { return m_rotate; }
 
-  virtual void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true) noexcept;
+  // GroupView
   virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
-  com_ptr<SvgTextCommonProps> m_props;
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_x{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_y{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dx{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_dy{winrt::single_threaded_vector<RNSVG::SVGLength>()};
   Windows::Foundation::Collections::IVector<RNSVG::SVGLength> m_rotate{winrt::single_threaded_vector<RNSVG::SVGLength>()};
+
+#ifdef USE_FABRIC
+  com_ptr<SvgTextCommonProps> m_props;
+#endif
+
 };
 } // namespace winrt::RNSVG::implementation
 namespace winrt::RNSVG::factory_implementation {

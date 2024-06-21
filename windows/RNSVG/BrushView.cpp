@@ -7,9 +7,12 @@
 #include "D2DHelpers.h"
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 BrushView::BrushView(
     const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args)
     : base_type(args) {}
+#endif
 
 void BrushView::SaveDefinition() {
   if (auto const &root{SvgRoot()}) {

@@ -1,6 +1,9 @@
 #pragma once
 
+#ifdef USE_FABRIC
 #include "ImageProps.g.h"
+#endif
+
 #include "ImageView.g.h"
 #include "RenderableView.h"
 
@@ -10,6 +13,7 @@ namespace winrt::RNSVG::implementation {
 enum class ImageSourceType { Uri = 0, Download = 1, InlineData = 2 };
 enum class ImageSourceFormat { Bitmap = 0, Svg = 1 };
 
+#ifdef USE_FABRIC
 REACT_STRUCT(ImageSource)
 struct ImageSource {
   REACT_FIELD(uri)
@@ -65,35 +69,64 @@ struct ImageProps : ImagePropsT<ImageProps, SvgRenderableCommonProps> {
   REACT_FIELD(align)
   std::string align{""};
   REACT_FIELD(meetOrSlice)
-  RNSVG::MeetOrSlice meetOrSlice;
+  RNSVG::MeetOrSlice meetOrSlice{RNSVG::MeetOrSlice::Meet};
 };
+#else
+struct ImageSource {
+  std::string uri{""};
+  std::string method{""};
+  std::vector<std::pair<hstring, hstring>> headers{};
+  float width{0.0f};
+  float height{0.0f};
+  float scale{1.0f};
+  bool packagerAsset{false};
+  ImageSourceType type{ImageSourceType::Uri};
+  ImageSourceFormat format{ImageSourceFormat::Bitmap};
+};
+#endif
 
 struct ImageView : ImageViewT<ImageView, RNSVG::implementation::RenderableView> {
  public:
+  ImageView() = default;
+
+#ifdef USE_FABRIC
   ImageView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
+#else
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
+
+  // IRenderable
   void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
   void CreateResources();
   void Unload();
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
-  com_ptr<ImageProps> m_props;
-
+  RNSVG::SVGLength m_x{};
+  RNSVG::SVGLength m_y{};
+  RNSVG::SVGLength m_width{};
+  RNSVG::SVGLength m_height{};
+  ImageSource m_source{};
   ImageSourceType m_type{ImageSourceType::Uri};
   ImageSourceFormat m_format{ImageSourceFormat::Bitmap};
+
+#ifdef USE_FABRIC
+  com_ptr<ImageProps> m_props;
+#endif
 
   // preserveAspectRatio
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
 
-  //ImageSource m_source{};
   com_ptr<IWICBitmap> m_wicbitmap;
 
   Windows::Foundation::IAsyncAction LoadImageSourceAsync(bool invalidate);

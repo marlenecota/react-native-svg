@@ -1,10 +1,15 @@
 #pragma once
 
+#ifdef USE_FABRIC
 #include "DefsProps.g.h"
+#endif
+
 #include "DefsView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 REACT_STRUCT(DefsProps)
 struct DefsProps : DefsPropsT<DefsProps, SvgGroupCommonProps> {
   DefsProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -15,20 +20,27 @@ struct DefsProps : DefsPropsT<DefsProps, SvgGroupCommonProps> {
   REACT_SVG_NODE_COMMON_PROPS;
   REACT_SVG_RENDERABLE_COMMON_PROPS;
 };
+#endif
 
 struct DefsView : DefsViewT<DefsView, RNSVG::implementation::GroupView> {
  public:
+  DefsView() = default;
+
+#ifdef USE_FABRIC
   DefsView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
-  // RenderableView
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
-  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
+#endif
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+  // IRenderable
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 };
 } // namespace winrt::RNSVG::implementation
 

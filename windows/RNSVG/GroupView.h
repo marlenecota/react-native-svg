@@ -1,10 +1,13 @@
 #pragma once
 #include "GroupView.g.h"
 #include "RenderableView.h"
+
+#ifdef USE_FABRIC
 #include "SvgGroupCommonProps.g.h"
+#endif
 
 namespace winrt::RNSVG::implementation {
-
+#ifdef USE_FABRIC
 REACT_STRUCT(FontObject)
 struct FontObject {
   REACT_FIELD(fontStyle)
@@ -76,11 +79,31 @@ struct SvgGroupCommonProps
   std::string fontWeight;
   FontObject font;
 };
+#endif
 
 struct GroupView
     : GroupViewT<GroupView, RNSVG::implementation::RenderableView> {
  public:
+  GroupView() = default;
+#ifdef USE_FABRIC
   GroupView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
+
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
+  void UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate = true,
+    bool invalidate = true) noexcept override;
+#else
+  GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
+
+  Windows::Foundation::Collections::IVector<RNSVG::IRenderable> Children() { return m_children; }
+
+  // IRenderablePaper
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
 
   hstring FontFamily() { return m_fontFamily; }
   void FontFamily(hstring const &value) { m_fontFamily = value; }
@@ -91,34 +114,24 @@ struct GroupView
   hstring FontWeight() { return m_fontWeight; }
   void FontWeight(hstring const &value) { m_fontWeight = value; }
 
-  void UpdateProperties(
-      const winrt::Microsoft::ReactNative::IComponentProps &props,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-      bool forceUpdate = true,
-      bool invalidate = true) noexcept override;
-
-  virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context);
-
-  virtual void SaveDefinition();
-
+  // IRenderable
+  virtual void CreateResources();
   virtual void MergeProperties(RNSVG::RenderableView const &other);
-
+  virtual void SaveDefinition();
+  virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context);
+  virtual void Unload();
+  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
   void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
   virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  virtual void CreateResources();
-
-  virtual void Unload();
-
-  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
-
-  static void RegisterComponent(
-      const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric
-          &builder) noexcept;
-
  private:
   Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+
+#ifndef USE_FABRIC
+  Windows::Foundation::Collections::IVector<RNSVG::IRenderable> m_children{
+      winrt::single_threaded_vector<RNSVG::IRenderable>()};
+#endif
 
   float m_fontSize{12.0f};
   hstring m_fontFamily{L"Segoe UI"};

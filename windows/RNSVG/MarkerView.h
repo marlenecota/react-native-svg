@@ -1,11 +1,15 @@
 #pragma once
 
+#ifdef USE_FABRIC
 #include "MarkerProps.g.h"
+#endif
+
 #include "MarkerView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
 
+#ifdef USE_FABRIC
 REACT_STRUCT(MarkerProps)
 struct MarkerProps : MarkerPropsT<MarkerProps, SvgGroupCommonProps> {
   MarkerProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -41,23 +45,34 @@ struct MarkerProps : MarkerPropsT<MarkerProps, SvgGroupCommonProps> {
   REACT_FIELD(meetOrSlice)
   uint32_t meetOrSlice{0}; // RNSVG::MeetOrSlice::Meet
 };
+#endif
 
 struct MarkerView : MarkerViewT<MarkerView, RNSVG::implementation::GroupView> {
  public:
+  MarkerView() = default;
+
+#ifdef USE_FABRIC
   MarkerView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
-  // RenderableView
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+  
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
+#endif
+
+  // IRenderable
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
+
+#ifdef USE_FABRIC
   com_ptr<MarkerProps> m_props;
+#endif
+
 };
 } // namespace winrt::RNSVG::implementation
 

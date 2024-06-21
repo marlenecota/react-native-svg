@@ -7,6 +7,7 @@
 using namespace winrt;
 
 namespace winrt::RNSVG::implementation {
+#ifdef USE_FABRIC
 ClipPathProps::ClipPathProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
 void ClipPathProps::SetProp(
@@ -17,14 +18,6 @@ void ClipPathProps::SetProp(
 }
 
 ClipPathView::ClipPathView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
-
-void ClipPathView::UpdateProperties(
-    const winrt::Microsoft::ReactNative::IComponentProps &props,
-    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
-    bool forceUpdate,
-    bool invalidate) noexcept {
-  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
-}
 
 void ClipPathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
   builder.AddViewComponent(
@@ -37,4 +30,13 @@ void ClipPathView::RegisterComponent(const winrt::Microsoft::ReactNative::IReact
         });
       });
 }
+
+void ClipPathView::UpdateProperties(
+    const winrt::Microsoft::ReactNative::IComponentProps &props,
+    const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
+    bool forceUpdate,
+    bool invalidate) noexcept {
+  base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
+}
+#endif
 } // namespace winrt::RNSVG::implementation

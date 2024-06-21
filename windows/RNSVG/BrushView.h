@@ -6,8 +6,13 @@
 namespace winrt::RNSVG::implementation {
 struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
  public:
-  BrushView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
+  BrushView() = default;
 
+#ifdef USE_FABRIC
+  BrushView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
+#endif
+
+  // IRenderable
   void SaveDefinition();
 
   RNSVG::D2DBrush Brush() { return m_brush; }

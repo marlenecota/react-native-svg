@@ -5,6 +5,7 @@ namespace RNSVG
   [experimental]
   interface IRenderableFabric
   {
+    Microsoft.ReactNative.ComponentView SvgParent { get; };
     void UpdateProperties(Microsoft.ReactNative.IComponentProps props, Microsoft.ReactNative.IComponentProps oldProps, Boolean forceUpdate, Boolean invalidate);
   };
 

@@ -1,10 +1,15 @@
 #pragma once
+
+#ifdef USE_FABRIC
 #include "LinearGradientProps.g.h"
+#endif
+
 #include "LinearGradientView.g.h"
 #include "BrushView.h"
 
 namespace winrt::RNSVG::implementation {
 
+#ifdef USE_FABRIC
 REACT_STRUCT(LinearGradientProps)
 struct LinearGradientProps : LinearGradientPropsT<LinearGradientProps, SvgGroupCommonProps> {
   LinearGradientProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -31,26 +36,44 @@ struct LinearGradientProps : LinearGradientPropsT<LinearGradientProps, SvgGroupC
   REACT_FIELD(gradientTransform)
   std::optional<std::vector<float>> gradientTransform;
 };
+#endif
 
 struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::implementation::BrushView> {
  public:
+  LinearGradientView() = default;
+
+#ifdef USE_FABRIC
   LinearGradientView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
-  // RenderableView
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
+#else
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
+
+  // IRenderable
   void Unload();
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
+  RNSVG::SVGLength m_x1{};
+  RNSVG::SVGLength m_y1{};
+  RNSVG::SVGLength m_x2{};
+  RNSVG::SVGLength m_y2{};
   std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
-  com_ptr<LinearGradientProps> m_props;
 
+#ifdef USE_FABRIC
+  com_ptr<LinearGradientProps> m_props;
+#endif
+
+  // BrushView
   void CreateBrush();
   void UpdateBounds();
   void SetPoints(ID2D1LinearGradientBrush *brush, D2D1_RECT_F bounds);

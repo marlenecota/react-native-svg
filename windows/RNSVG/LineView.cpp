@@ -11,6 +11,8 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 LineProps::LineProps(const winrt::Microsoft::ReactNative::ViewProps &props) : base_type(props) {}
 
 void LineProps::SetProp(
@@ -22,6 +24,18 @@ void LineProps::SetProp(
 
 LineView::LineView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) : base_type(args) {}
 
+void LineView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
+  builder.AddViewComponent(
+      L"RNSVGLine", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
+        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::LineProps>(props);
+        });
+        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
+          return winrt::make<winrt::RNSVG::implementation::LineView>(args);
+        });
+      });
+}
+
 void LineView::UpdateProperties(
     const winrt::Microsoft::ReactNative::IComponentProps &props,
     const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
@@ -30,10 +44,37 @@ void LineView::UpdateProperties(
   auto lineProps = props.try_as<LineProps>();
   if (lineProps) {
     m_props = lineProps;
+
+    m_x1 = m_props->x1;
+    m_y1 = m_props->y1;
+    m_x2 = m_props->x2;
+    m_y2 = m_props->y2;
   }
 
   base_type::UpdateProperties(props, oldProps, forceUpdate, invalidate);
 }
+#else
+void LineView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
+  const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
+
+  for (auto const &pair : propertyMap) {
+    auto const &propertyName{pair.first};
+    auto const &propertyValue{pair.second};
+
+    if (propertyName == "x1") {
+      m_x1 = SVGLength::From(propertyValue);
+    } else if (propertyName == "y1") {
+      m_y1 = SVGLength::From(propertyValue);
+    } else if (propertyName == "x2") {
+      m_x2 = SVGLength::From(propertyValue);
+    } else if (propertyName == "y2") {
+      m_y2 = SVGLength::From(propertyValue);
+    }
+  }
+
+  __super::UpdateProperties(reader, forceUpdate, invalidate);
+}
+#endif
 
 void LineView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
@@ -59,18 +100,6 @@ void LineView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   sink->EndFigure(D2D1_FIGURE_END_OPEN);
 
   Geometry(make<RNSVG::implementation::D2DGeometry>(geometry.as<ID2D1Geometry>()));
-}
-
-void LineView::RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept {
-  builder.AddViewComponent(
-      L"RNSVGLine", [](winrt::Microsoft::ReactNative::IReactViewComponentBuilder const &builder) noexcept {
-        builder.SetCreateProps([](winrt::Microsoft::ReactNative::ViewProps props) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LineProps>(props);
-        });
-        builder.SetCreateComponentView([](const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args) noexcept {
-          return winrt::make<winrt::RNSVG::implementation::LineView>(args);
-        });
-      });
 }
 
 } // namespace winrt::RNSVG::implementation

@@ -4,12 +4,17 @@
 
 #include "SvgViewProps.g.h"
 
+#ifdef USE_FABRIC
 #include <JSValueComposition.h>
 #include "NativeModules.h"
+#endif
+
 #include "SVGLength.h"
 #include "Utils.h"
 
 namespace winrt::RNSVG::implementation {
+
+#ifdef USE_FABRIC
 REACT_STRUCT(SvgViewProps)
 struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
   SvgViewProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -42,49 +47,27 @@ struct SvgViewProps : SvgViewPropsT<SvgViewProps> {
  private:
   winrt::Microsoft::ReactNative::ViewProps m_props{nullptr};
 };
+#endif
 
 struct SvgView : SvgViewT<SvgView> {
  public:
-  SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args);
+  SvgView() = default;
 
-  RNSVG::GroupView Group() { return m_group; }
-  void Group(RNSVG::GroupView const &value) { m_group = value; }
+#ifdef USE_FABRIC
+  SvgView(const winrt::Microsoft::ReactNative::Composition::CreateCompositionComponentViewArgs &args);
 
   winrt::Windows::Foundation::Size ActualSize() noexcept;
 
-  RNSVG::D2DDevice Device() { return m_device; }
-
-  RNSVG::D2DDeviceContext DeviceContext() { return m_deviceContext; }
-
-  RNSVG::D2DGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
-  void Geometry(RNSVG::D2DGeometry const & /*value*/) {}
-
+  winrt::Microsoft::ReactNative::ComponentView SvgParent() { return Parent(); }
   winrt::Microsoft::ReactNative::Color CurrentColor() { return m_currentColor; }
 
-  bool IsResponsible() { return m_isResponsible; }
-  void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
-
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
-    return m_templates;
-  }
-  Windows::Foundation::Collections::IMap<hstring, RNSVG::IBrushView> Brushes() {
-    return m_brushes;
-  }
-
-  // IRenderable
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true);
-  void MergeProperties(RNSVG::IRenderable const &other);
-  void SaveDefinition();
-  void Unload();
-  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
-  void CreateResources();
-  void CreateGeometry(RNSVG::D2DDeviceContext const &deviceContext);
-  RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
-  
+
   // Overrides
   // IInternalCreateVisual
   winrt::Microsoft::ReactNative::Composition::Experimental::IVisual CreateInternalVisual();
@@ -104,14 +87,76 @@ struct SvgView : SvgViewT<SvgView> {
       uint32_t index) noexcept;
   void OnThemeChanged() noexcept;
 
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+#else
+  SvgView(winrt::Microsoft::ReactNative::IReactContext const &context);
+
+  xaml::FrameworkElement SvgParent() { return m_parent; }
+  void SvgParent(xaml::FrameworkElement const &value);
+
+  Windows::UI::Color CurrentColor() { return m_currentColor; }
+
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate = true, bool invalidate = true);
+
+  // Overrides
+  winrt::Windows::Foundation::Size MeasureOverride(winrt::Windows::Foundation::Size const &availableSize);
+  winrt::Windows::Foundation::Size ArrangeOverride(winrt::Windows::Foundation::Size const &finalSize);
+
+  void Panel_Loaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
+  void Panel_Unloaded(winrt::Windows::Foundation::IInspectable const &sender, xaml::RoutedEventArgs const &args);
+#endif
+
+  RNSVG::GroupView Group() { return m_group; }
+  void Group(RNSVG::GroupView const &value) { m_group = value; }
+
+  RNSVG::D2DDevice Device() { return m_device; }
+
+  RNSVG::D2DDeviceContext DeviceContext() { return m_deviceContext; }
+
+  RNSVG::D2DGeometry Geometry() { return m_group ? m_group.Geometry() : nullptr; }
+  void Geometry(RNSVG::D2DGeometry const & /*value*/) {}
+
+  bool IsResponsible() { return m_isResponsible; }
+  void IsResponsible(bool isResponsible) { m_isResponsible = isResponsible; }
+
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> Templates() {
+    return m_templates;
+  }
+  Windows::Foundation::Collections::IMap<hstring, RNSVG::IBrushView> Brushes() {
+    return m_brushes;
+  }
+
+  // IRenderable
+  void MergeProperties(RNSVG::IRenderable const &other);
+  void SaveDefinition();
+  void Unload();
+  void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
+  void CreateResources();
+  void CreateGeometry(RNSVG::D2DDeviceContext const &deviceContext);
+  RNSVG::IRenderable HitTest(Windows::Foundation::Point const & /*point*/) { return nullptr; }
+
   void Invalidate();
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
+#ifdef USE_FABRIC
+  winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};
+  winrt::Microsoft::ReactNative::Color m_currentColor{nullptr};
+  winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
+  winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
+#else
+  bool m_loaded{false};
+  xaml::FrameworkElement m_parent{nullptr};
+  xaml::Controls::Image m_image;
+  Windows::UI::Color m_currentColor{Colors::Black()};
+
+  xaml::FrameworkElement::Loaded_revoker m_panelLoadedRevoker{};
+  xaml::FrameworkElement::Unloaded_revoker m_panelUnloadedRevoker{};
+#endif
+  // Shared
+  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   bool m_hasRendered{false};
   bool m_isResponsible{false};
-  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
   RNSVG::D2DDevice m_device;
   RNSVG::D2DDeviceContext m_deviceContext;
   RNSVG::GroupView m_group{nullptr};
@@ -125,12 +170,7 @@ struct SvgView : SvgViewT<SvgView> {
   RNSVG::SVGLength m_width{0, RNSVG::LengthType::Unknown};
   RNSVG::SVGLength m_height{0, RNSVG::LengthType::Unknown};
   std::string m_align{""};
-  winrt::Microsoft::ReactNative::Composition::Experimental::ISpriteVisual m_visual{nullptr};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
-  winrt::Microsoft::ReactNative::Color m_currentColor{nullptr};
-  winrt::Microsoft::ReactNative::LayoutMetrics m_layoutMetrics{{0, 0, 0, 0}, 1.0};
-  winrt::Microsoft::ReactNative::Composition::Experimental::ICompositionContext m_compContext{nullptr};
-  winrt::Microsoft::UI::Composition::Compositor m_compositor{nullptr};
 
   Windows::Foundation::Collections::IMap<hstring, RNSVG::IRenderable> m_templates{
       winrt::single_threaded_map<hstring, RNSVG::IRenderable>()};

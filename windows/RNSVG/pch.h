@@ -29,8 +29,11 @@
 
 // Reference additional headers your project requires here
 #include <d2d1_3.h>
-//#include <hstring.h>
-//#include <restrictederrorinfo.h>
-//#include <winrt/Windows.Foundation.Collections.h>
-//#include <winrt/Windows.Foundation.h>
-//#include <UI.Xaml.Media.h>
+
+#ifndef USE_FABRIC
+#include <hstring.h>
+#include <restrictederrorinfo.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Foundation.h>
+#include <UI.Xaml.Media.h>
+#endif

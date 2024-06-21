@@ -1,9 +1,15 @@
 #pragma once
+
+#ifdef USE_FABRIC
 #include "TSpanProps.g.h"
+#endif
+
 #include "TSpanView.g.h"
 #include "TextView.h"
 
 namespace winrt::RNSVG::implementation {
+  
+#ifdef USE_FABRIC
 REACT_STRUCT(TSpanProps)
 struct TSpanProps : TSpanPropsT<TSpanProps, SvgTextCommonProps> {
   TSpanProps(const winrt::Microsoft::ReactNative::ViewProps &props);
@@ -19,22 +25,38 @@ struct TSpanProps : TSpanPropsT<TSpanProps, SvgTextCommonProps> {
   REACT_FIELD(content)
   std::string content{""};
 };
+#endif
 
 struct TSpanView : TSpanViewT<TSpanView, RNSVG::implementation::TextView> {
 public:
+  TSpanView() = default;
+
+#ifdef USE_FABRIC
   TSpanView(const winrt::Microsoft::ReactNative::CreateComponentViewArgs &args);
 
+  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
+
+  // IRenderableFabric
   void UpdateProperties(
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps,
       bool forceUpdate = true,
       bool invalidate = true) noexcept override;
+#else
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+#endif
+
+  // IRenderable
   virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  static void RegisterComponent(const winrt::Microsoft::ReactNative::IReactPackageBuilderFabric &builder) noexcept;
-
  private:
+  std::string m_content;
+
+#ifdef USE_FABRIC
   com_ptr<TSpanProps> m_props;
+#endif
+
 };
 } // namespace winrt::RNSVG::implementation
 
